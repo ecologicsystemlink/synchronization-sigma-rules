@@ -1,0 +1,27 @@
+- dataTypes:
+  - wineventlog
+  name: Mimikatz Use
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1003.002, T1003.004, T1003.001, T1003.006
+  adversary: UNKNOWN
+  description: This method detects mimikatz keywords in different Eventlogs (some
+    of them only appear in older Mimikatz version that are however still used by different
+    threat groups)
+  references:
+  - https://tools.thehacker.recipes/mimikatz/modules
+  where: (""safe("log.dpapi", "")::safe("log.masterkey", "")"" || ""safe("log.eoOeKiwi",
+    "")"" || ""safe("log.event", "")::safe("log.clear", "")"" || ""safe("log.event",
+    "")::safe("log.drop", "")"" || ""safe("log.gentilkiwiCom", "")"" || ""safe("log.kerberos",
+    "")::safe("log.golden", "")"" || ""safe("log.kerberos", "")::safe("log.ptc", "")""
+    || ""safe("log.kerberos", "")::safe("log.ptt", "")"" || ""safe("log.kerberos",
+    "")::safe("log.tgt", "")"" || ""safe("log.kiwi", "") safe("log.legit", "") safe("log.printer",
+    "")"" || ""safe("log.lsadump", "")::"" || ""safe("log.mimidrvSys", "")"" || ""\\safe("log.mimilibDll",
+    "")"" || ""safe("log.misc", "")::safe("log.printnightmare", "")"" || ""safe("log.misc",
+    "")::safe("log.shadowcopies", "")"" || ""safe("log.misc", "")::safe("log.skeleton",
+    "")"" || ""safe("log.privilege", "")::safe("log.backup", "")"" || ""safe("log.privilege",
+    "")::safe("log.debug", "")"" || ""safe("log.privilege", "")::safe("log.driver",
+    "")"" || ""safe("log.sekurlsa", "")::"") && !(safe("log.eventCode", 0.0) == double(15))

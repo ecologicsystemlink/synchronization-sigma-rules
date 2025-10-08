@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Microsoft Defender Blocked from Loading Unsigned DLL
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: Detects Code Integrity (CI) engine blocking Microsoft Defender's processes
+    (MpCmdRun and NisSrv) from loading unsigned DLLs which may be an attempt to sideload
+    arbitrary DLL
+  references:
+  - https://www.sentinelone.com/blog/living-off-windows-defender-lockbit-ransomware-sideloads-cobalt-strike-through-microsoft-security-tool
+  where: (safe("log.eventCode", 0.0) == double(11) || safe("log.eventCode", 0.0) ==
+    double(12)) && (safe("log.processPath", "").endsWith("\\MpCmdRun.exe") || safe("log.processPath",
+    "").endsWith("\\NisSrv.exe"))
