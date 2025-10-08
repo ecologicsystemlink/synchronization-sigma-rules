@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Dump Ntds.dit To Suspicious Location
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects potential abuse of ntdsutil to dump ntds.dit database to a
+    suspicious location
+  references:
+  - https://twitter.com/mgreen27/status/1558223256704122882
+  - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj574207(v=ws.11)
+  where: safe("log.providerName", "") == "ESENT" && safe("log.eventCode", 0.0) ==
+    double(325) && safe("log.data", "").contains("ntds.dit") && (safe("log.data",
+    "").contains(":\\ntds.dit") || safe("log.data", "").contains("\\Appdata\\") ||
+    safe("log.data", "").contains("\\Desktop\\") || safe("log.data", "").contains("\\Downloads\\")
+    || safe("log.data", "").contains("\\Perflogs\\") || safe("log.data", "").contains("\\Temp\\")
+    || safe("log.data", "").contains("\\Users\\Public\\"))

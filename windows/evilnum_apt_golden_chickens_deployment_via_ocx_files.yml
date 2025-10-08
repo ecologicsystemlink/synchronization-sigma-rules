@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: EvilNum APT Golden Chickens Deployment Via OCX Files
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.011
+  adversary: UNKNOWN
+  description: Detects Golden Chickens deployment method as used by Evilnum and described
+    in ESET July 2020 report
+  references:
+  - https://www.welivesecurity.com/2020/07/09/more-evil-deep-look-evilnum-toolset/
+  - https://app.any.run/tasks/33d37fdf-158d-4930-aa68-813e1d5eb8ba/
+  where: safe("log.commandLine", "").contains("regsvr32") && safe("log.commandLine",
+    "").contains("/s") && safe("log.commandLine", "").contains("/i") && safe("log.commandLine",
+    "").contains("\\AppData\\Roaming\\") && safe("log.commandLine", "").contains(".ocx")
