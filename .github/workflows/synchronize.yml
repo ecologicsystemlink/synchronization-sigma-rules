@@ -99,6 +99,10 @@ jobs:
             exit 1
           fi
           echo "Conversion completed successfully"
+      - name: Configure Git
+        run: |
+          git config --local user.name "${{ github.actor }}"
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Create batches and commit files
         if: steps.modified-files.outputs.skip_conversion == 'false'
@@ -108,10 +112,6 @@ jobs:
           split -l 10 modified_files.txt batch_
           echo "Batches created:"
           ls -la batch_*
-          
-          # Configure git
-          git config --local user.name "${{ github.actor }}"
-          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
           
           batch_count=1
           total_batches=$(ls batch_* | wc -l)
@@ -149,6 +149,7 @@ jobs:
           echo "All batches processed successfully"
 
       - name: Save new synchronization point
+        if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
           cd ${{ github.workspace }}/source-repo
           git rev-parse HEAD > ${{ github.workspace }}/.last_synced_commit
@@ -170,13 +171,19 @@ jobs:
         if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
           cd ${{ github.workspace }}
-          echo "Creating branch: ${{ steps.branch.outputs.BRANCH_NAME }}"
-          git checkout -b ${{ steps.branch.outputs.BRANCH_NAME }}
-          git push origin ${{ steps.branch.outputs.BRANCH_NAME }}
-          echo "Successfully pushed commits to branch"
-          echo "should_create_pr=true" >> $GITHUB_OUTPUT
-          echo "No changes to push, skipping branch creation"
-          echo "should_create_pr=false" >> $GITHUB_OUTPUT
+    
+          COMMITS_TO_PUSH=$(git rev-list --count origin/main..HEAD)
+          if [ "$COMMITS_TO_PUSH" -eq 0 ]; then
+            echo "No commits to push, skipping branch creation"
+            echo "should_create_pr=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found $COMMITS_TO_PUSH commits to push"
+            echo "Creating branch: ${{ steps.branch.outputs.BRANCH_NAME }}"
+            git checkout -b ${{ steps.branch.outputs.BRANCH_NAME }}
+            git push origin ${{ steps.branch.outputs.BRANCH_NAME }}
+            echo "Successfully pushed commits to branch"
+            echo "should_create_pr=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Pull Request
         if: steps.push-branch.outputs.should_create_pr == 'true'
