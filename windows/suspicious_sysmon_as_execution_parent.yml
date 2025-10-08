@@ -1,0 +1,26 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Sysmon as Execution Parent
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1068
+  adversary: UNKNOWN
+  description: Detects suspicious process executions in which Sysmon itself is the
+    parent of a process, which could be a sign of exploitation (e.g. CVE-2022-41120)
+  references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-41120
+  - https://twitter.com/filip_dragovic/status/1590052248260055041
+  - https://twitter.com/filip_dragovic/status/1590104354727436290
+  where: (safe("log.parentImage", "").endsWith("\\Sysmon.exe") || safe("log.parentImage",
+    "").endsWith("\\Sysmon64.exe")) && !(safe("log.image", "").startsWith("C:\\Users\\")
+    && safe("log.image", "").contains("\\AppData\\Local\\Temp\\") && (safe("log.image",
+    "").endsWith("\\Sysmon.exe") || safe("log.image", "").endsWith("\\Sysmon64.exe"))
+    || safe("log.image", "").contains(":\\Windows\\Sysmon.exe") || safe("log.image",
+    "").contains(":\\Windows\\Sysmon64.exe") || safe("log.image", "").contains(":\\Windows\\System32\\conhost.exe")
+    || safe("log.image", "").contains(":\\Windows\\System32\\WerFault.exe") || safe("log.image",
+    "").contains(":\\Windows\\System32\\WerFaultSecure.exe") || safe("log.image",
+    "").contains(":\\Windows\\System32\\wevtutil.exe") || safe("log.image", "").contains(":\\Windows\\SysWOW64\\wevtutil.exe")
+    || safe("log.image", "") == safe("log.nil", ""))
