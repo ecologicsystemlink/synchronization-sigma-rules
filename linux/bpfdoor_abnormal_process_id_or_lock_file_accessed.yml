@@ -14,4 +14,5 @@
   - https://www.sandflysecurity.com/blog/bpfdoor-an-evasive-linux-backdoor-technical-analysis/
   - https://www.elastic.co/security-labs/a-peek-behind-the-bpfdoor
   where: safe("log.type", "") == "PATH" && (safe("log.name", "") == "/var/run/haldrund.pid"
-    || safe("log.name", "") == "/var/run/xinetd.lock" || safe("log.name", "") == "/var/run/kdevrund.pid")
+    || safe("log.name", "") == "/var/run/xinetd.lock" || safe("log.name", "") == "/var/run/kdevrund.pid"
+    || safe("log.name", "") == "/var/run/kubernetes.pid")

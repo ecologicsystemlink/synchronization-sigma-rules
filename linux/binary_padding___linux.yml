@@ -13,6 +13,7 @@
     a junk data to file.
   references:
   - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1027.001/T1027.001.md
-  where: safe("log.type", "") == "EXECVE" && (""safe("log.truncate", "")"" && ""-safe("log.s",
-    "")"" || ""safe("log.dd", "")"" && ""safe("log.if", "")="" && !(""safe("log.of",
-    "")=""))
+  where: safe("log.type", "") == "EXECVE" && (safe("log.type", "") == "truncate" &&
+    safe("log.type", "") == "-s" && safe("log.type", "") == "-b" || safe("log.type",
+    "") == "dd" && safe("log.type", "") == "if=" && safe("log.type", "") == "de="
+    && !(safe("log.type", "") == "of="))
