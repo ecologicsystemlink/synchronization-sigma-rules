@@ -69,7 +69,37 @@ jobs:
             find . -name "*.yml" \( -path "*/rules/*" -o -path "*/rules-*/*" \) > ${{ github.workspace }}/modified_files.txt
           else
             echo "Looking for changes since ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}..."
-            git diff --name-only ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }} HEAD -- '*.yml' | grep -E '/(rules|rules-[^/]+)/' > ${{ github.workspace }}/modified_files.txt || true
+            
+            # Execute git diff and capture output
+            DIFF_OUTPUT=$(git diff --name-only ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }} HEAD -- '*.yml')
+            DIFF_EXIT=$?
+            
+            if [ $DIFF_EXIT -ne 0 ]; then
+              echo "Error: git diff command failed (exit code: $DIFF_EXIT)"
+              exit 1
+            fi
+            
+            if [ -z "$DIFF_OUTPUT" ]; then
+              echo "No .yml files modified since last sync"
+              touch ${{ github.workspace }}/modified_files.txt
+            else
+              echo "Found modified .yml files, filtering for rules directories..."
+              echo "$DIFF_OUTPUT"
+              
+              # Filter through grep and handle its exit codes properly
+              echo "$DIFF_OUTPUT" | grep -E '/(rules|rules-[^/]+)/' > ${{ github.workspace }}/modified_files.txt
+              GREP_EXIT=$?
+              
+              if [ $GREP_EXIT -eq 0 ]; then
+                echo "Found files matching rules directory pattern"
+              elif [ $GREP_EXIT -eq 1 ]; then
+                echo "No files found in rules directories - creating empty file"
+                touch ${{ github.workspace }}/modified_files.txt
+              else
+                echo "Error: grep command failed (exit code: $GREP_EXIT)"
+                exit 1
+              fi
+            fi
           fi
 
       - name: Validate modified files
