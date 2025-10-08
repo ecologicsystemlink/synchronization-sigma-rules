@@ -1,0 +1,14 @@
+- dataTypes:
+  - linux
+  name: Guacamole Two Users Sharing Session Anomaly
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1212
+  adversary: UNKNOWN
+  description: Detects suspicious session with two users present
+  references:
+  - https://research.checkpoint.com/2020/apache-guacamole-rce/
+  where: '""(2 safe("log.users", "") safe("log.now", "") safe("log.present", ""))""'

@@ -1,0 +1,19 @@
+- dataTypes:
+  - linux
+  name: Audio Capture
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Collection
+  technique: T1123
+  adversary: UNKNOWN
+  description: Detects attempts to record audio using the arecord and ecasound utilities.
+  references:
+  - https://linux.die.net/man/1/arecord
+  - https://linuxconfig.org/how-to-test-microphone-with-audio-linux-sound-architecture-alsa
+  - https://manpages.debian.org/unstable/ecasound/ecasound.1.en.html
+  - https://ecasound.seul.org/ecasound/Documentation/examples.html#fconversions
+  where: safe("log.type", "") == "EXECVE" && safe("log.a0", "") == "arecord" && safe("log.a1",
+    "") == "-vv" && safe("log.a2", "") == "-fdat" || safe("log.type", "") == "SYSCALL"
+    && safe("log.exe", "").endsWith("/ecasound") && safe("log.syscall", "") == "memfd_create"
