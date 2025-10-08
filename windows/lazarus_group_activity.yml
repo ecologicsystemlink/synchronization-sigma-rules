@@ -1,0 +1,29 @@
+- dataTypes:
+  - wineventlog
+  name: Lazarus Group Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059
+  adversary: UNKNOWN
+  description: Detects different process execution behaviors as described in various
+    threat reports on Lazarus group activity
+  references:
+  - https://securelist.com/lazarus-covets-covid-19-related-intelligence/99906/
+  - https://www.hvs-consulting.de/lazarus-report/
+  where: safe("log.commandLine", "").contains("reg.exe save hklm\\sam %temp%\\~reg_sam.save")
+    || safe("log.commandLine", "").contains("1q2w3e4r@#$@#$@#$") || safe("log.commandLine",
+    "").contains(" -hp1q2w3e4 ") || safe("log.commandLine", "").contains(".dat data03
+    10000 -p ") || safe("log.commandLine", "").contains("netstat -aon | find ") &&
+    safe("log.commandLine", "").contains("ESTA") && safe("log.commandLine", "").contains("
+    > %temp%\\~") || safe("log.commandLine", "").contains(".255 10 C:\\ProgramData\\IBM\\")
+    && safe("log.commandLine", "").contains(".DAT") || safe("log.commandLine", "").contains("
+    /c ") && safe("log.commandLine", "").contains(" -p 0x") && (safe("log.commandLine",
+    "").contains("C:\\ProgramData\\") || safe("log.commandLine", "").contains("C:\\RECYCLER\\"))
+    || safe("log.commandLine", "").contains("rundll32 ") && safe("log.commandLine",
+    "").contains("C:\\ProgramData\\") && (safe("log.commandLine", "").contains(".bin,")
+    || safe("log.commandLine", "").contains(".tmp,") || safe("log.commandLine", "").contains(".dat,")
+    || safe("log.commandLine", "").contains(".io,") || safe("log.commandLine", "").contains(".ini,")
+    || safe("log.commandLine", "").contains(".db,"))

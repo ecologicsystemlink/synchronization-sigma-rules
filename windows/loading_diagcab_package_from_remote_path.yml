@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Loading Diagcab Package From Remote Path
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects loading of diagcab packages from a remote path, as seen in
+    DogWalk vulnerability
+  references:
+  - https://twitter.com/nas_bench/status/1539679555908141061
+  - https://twitter.com/j00sean/status/1537750439701225472
+  where: safe("log.eventCode", 0.0) == double(101) && safe("log.packagePath", "").contains("\\\\")

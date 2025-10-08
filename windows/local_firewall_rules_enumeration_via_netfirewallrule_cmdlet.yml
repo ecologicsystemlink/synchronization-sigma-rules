@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Local Firewall Rules Enumeration Via NetFirewallRule Cmdlet
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Discovery
+  technique: T1518.001, T1016
+  adversary: UNKNOWN
+  description: Detects execution of "Get-NetFirewallRule" or "Show-NetFirewallRule"
+    to enumerate the local firewall rules on a host.
+  references:
+  - https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallrule?view=windowsserver2022-ps
+  - https://learn.microsoft.com/en-us/powershell/module/netsecurity/show-netfirewallrule?view=windowsserver2022-ps
+  where: safe("log.payload", "").contains("Get-NetFirewallRule") || safe("log.payload",
+    "").contains("Show-NetFirewallRule") || safe("log.contextInfo", "").contains("Get-NetFirewallRule")
+    || safe("log.contextInfo", "").contains("Show-NetFirewallRule")

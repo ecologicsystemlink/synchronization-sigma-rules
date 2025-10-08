@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: InstallerFileTakeOver LPE CVE-2021-41379 File Create Event
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1068
+  adversary: UNKNOWN
+  description: Detects signs of the exploitation of LPE CVE-2021-41379 that include
+    an msiexec process that creates an elevation_service.exe file
+  references:
+  - https://web.archive.org/web/20220421061949/https://github.com/klinix5/InstallerFileTakeOver
+  - https://www.zerodayinitiative.com/advisories/ZDI-21-1308/
+  where: safe("log.image", "").endsWith("\\msiexec.exe") && safe("log.targetFileName",
+    "").startsWith("C:\\Program Files (x86)\\Microsoft\\Edge\\Application") && safe("log.targetFileName",
+    "").endsWith("\\elevation_service.exe")
