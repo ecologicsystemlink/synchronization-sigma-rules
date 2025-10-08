@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: WMI Event Subscription
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1546.003
+  adversary: UNKNOWN
+  description: Detects creation of WMI event subscription persistence method
+  references:
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon#event-id-19-wmievent-wmieventfilter-activity-detected
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon#event-id-20-wmievent-wmieventconsumer-activity-detected
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon#event-id-21-wmievent-wmieventconsumertofilter-activity-detected
+  where: safe("log.eventCode", 0.0) == double(19) || safe("log.eventCode", 0.0) ==
+    double(20) || safe("log.eventCode", 0.0) == double(21)
