@@ -87,7 +87,7 @@ jobs:
               echo "$DIFF_OUTPUT"
               
               # Filter through grep and handle its exit codes properly
-              echo "$DIFF_OUTPUT" | grep -E '/(rules|rules-[^/]+)/' > ${{ github.workspace }}/modified_files.txt
+              echo "$DIFF_OUTPUT" | grep -E '^rules/|/rules/|rules-[^/]+/' > ${{ github.workspace }}/modified_files.txt
               GREP_EXIT=$?
               
               if [ $GREP_EXIT -eq 0 ]; then
