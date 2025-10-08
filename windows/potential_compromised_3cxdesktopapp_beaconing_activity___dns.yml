@@ -1,0 +1,29 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Compromised 3CXDesktopApp Beaconing Activity - DNS
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects potential beaconing activity to domains related to 3CX 3CXDesktopApp
+    compromise
+  references:
+  - https://www.reddit.com/r/crowdstrike/comments/125r3uu/20230329_situational_awareness_crowdstrike/
+  where: safe("log.queryName", "").contains("akamaicontainer.com") || safe("log.queryName",
+    "").contains("akamaitechcloudservices.com") || safe("log.queryName", "").contains("azuredeploystore.com")
+    || safe("log.queryName", "").contains("azureonlinecloud.com") || safe("log.queryName",
+    "").contains("azureonlinestorage.com") || safe("log.queryName", "").contains("dunamistrd.com")
+    || safe("log.queryName", "").contains("glcloudservice.com") || safe("log.queryName",
+    "").contains("journalide.org") || safe("log.queryName", "").contains("msedgepackageinfo.com")
+    || safe("log.queryName", "").contains("msedgeupdate.net") || safe("log.queryName",
+    "").contains("msstorageazure.com") || safe("log.queryName", "").contains("msstorageboxes.com")
+    || safe("log.queryName", "").contains("officeaddons.com") || safe("log.queryName",
+    "").contains("officestoragebox.com") || safe("log.queryName", "").contains("pbxcloudeservices.com")
+    || safe("log.queryName", "").contains("pbxphonenetwork.com") || safe("log.queryName",
+    "").contains("pbxsources.com") || safe("log.queryName", "").contains("qwepoi123098.com")
+    || safe("log.queryName", "").contains("sbmsa.wiki") || safe("log.queryName", "").contains("sourceslabs.com")
+    || safe("log.queryName", "").contains("visualstudiofactory.com") || safe("log.queryName",
+    "").contains("zacharryblogs.com")
