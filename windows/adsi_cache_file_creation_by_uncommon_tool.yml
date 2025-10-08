@@ -1,0 +1,30 @@
+- dataTypes:
+  - wineventlog
+  name: ADSI-Cache File Creation By Uncommon Tool
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1001.003
+  adversary: UNKNOWN
+  description: Detects the creation of an "Active Directory Schema Cache File" (.sch)
+    file by an uncommon tool.
+  references:
+  - https://medium.com/@ivecodoe/detecting-ldapfragger-a-newly-released-cobalt-strike-beacon-using-ldap-for-c2-communication-c274a7f00961
+  - https://blog.fox-it.com/2020/03/19/ldapfragger-command-and-control-over-ldap-attributes/
+  - https://github.com/fox-it/LDAPFragger
+  where: safe("log.targetFileName", "").contains("\\Local\\Microsoft\\Windows\\SchCache\\")
+    && safe("log.targetFileName", "").endsWith(".sch") && !(safe("log.image", "").endsWith(":\\Program
+    Files\\Cylance\\Desktop\\CylanceSvc.exe") || safe("log.image", "").endsWith(":\\Windows\\CCM\\CcmExec.exe")
+    || safe("log.image", "").endsWith(":\\windows\\system32\\dllhost.exe") || safe("log.image",
+    "").endsWith(":\\Windows\\system32\\dsac.exe") || safe("log.image", "").endsWith(":\\Windows\\system32\\efsui.exe")
+    || safe("log.image", "").endsWith(":\\windows\\system32\\mmc.exe") || safe("log.image",
+    "").endsWith(":\\windows\\system32\\svchost.exe") || safe("log.image", "").endsWith(":\\Windows\\System32\\wbem\\WmiPrvSE.exe")
+    || safe("log.image", "").endsWith(":\\windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe")
+    || safe("log.image", "").contains(":\\Windows\\ccmsetup\\autoupgrade\\ccmsetup")
+    || safe("log.image", "").contains(":\\Program Files\\SentinelOne\\Sentinel Agent")
+    || safe("log.image", "").contains(":\\Program Files\\") && safe("log.image", "").contains("\\Microsoft
+    Office") && safe("log.image", "").endsWith("\\OUTLOOK.EXE")) && !(safe("log.image",
+    "").endsWith("\\LANDesk\\LDCLient\\ldapwhoami.exe") || safe("log.image", "").endsWith(":\\Program
+    Files\\Citrix\\Receiver StoreFront\\Services\\DefaultDomainServices\\Citrix.DeliveryServices.DomainServices.ServiceHost.exe"))
