@@ -1,0 +1,16 @@
+- dataTypes:
+  - apache
+  name: Apache Segmentation Fault
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Impact
+  technique: T1499.004
+  adversary: UNKNOWN
+  description: Detects a segmentation fault error message caused by a crashing apache
+    worker process
+  references:
+  - http://www.securityfocus.com/infocus/1633
+  where: '""safe("log.exit", "") safe("log.signal", "") safe("log.segmentation", "")
+    safe("log.fault", "")""'

@@ -1,0 +1,16 @@
+- dataTypes:
+  - generic
+  name: APT40 Dropbox Tool User Agent
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Exfiltration
+  technique: T1071.001, T1567.002
+  adversary: UNKNOWN
+  description: Detects suspicious user agent string of APT40 Dropbox tool
+  references:
+  - Internal research from Florian Roth
+  where: safe("log.cUseragent", "") == "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36
+    (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36" && safe("log.csHost",
+    "") == "api.dropbox.com"

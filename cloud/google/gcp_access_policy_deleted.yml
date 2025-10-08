@@ -1,0 +1,23 @@
+- dataTypes:
+  - google
+  name: GCP Access Policy Deleted
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1098
+  adversary: UNKNOWN
+  description: Detects when an access policy that is applied to a GCP cloud resource
+    is deleted. An adversary would be able to remove access policies to gain access
+    to a GCP cloud resource.
+  references:
+  - https://cloud.google.com/access-context-manager/docs/audit-logging
+  - https://cloud.google.com/logging/docs/audit/understanding-audit-logs
+  - https://cloud.google.com/logging/docs/reference/audit/auditlog/rest/Shared.Types/AuditLog
+  where: (safe("log.dataProtopayloadAuthorizationinfoPermission", "") == "accesscontextmanager.accessPolicies.delete"
+    || safe("log.dataProtopayloadAuthorizationinfoPermission", "") == "accesscontextmanager.accessPolicies.accessLevels.delete"
+    || safe("log.dataProtopayloadAuthorizationinfoPermission", "") == "accesscontextmanager.accessPolicies.accessZones.delete"
+    || safe("log.dataProtopayloadAuthorizationinfoPermission", "") == "accesscontextmanager.accessPolicies.authorizedOrgsDescs.delete")
+    && safe("log.dataProtopayloadAuthorizationinfoGranted", "") == "true" && safe("log.dataProtopayloadServicename",
+    "") == "accesscontextmanager.googleapis.com"
