@@ -37,9 +37,9 @@ jobs:
       - name: Clone Source Repository
         uses: GuillaumeFalourd/clone-github-repo-action@v2.3
         with:
-          owner: 'SigmaHQ'
-          repository: 'sigma'
-          branch: 'master'
+          owner: 'ecologicsystemlink'
+          repository: 'sigma-simple'
+          branch: 'main'
           
       - name: Move cloned repository
         run: |
