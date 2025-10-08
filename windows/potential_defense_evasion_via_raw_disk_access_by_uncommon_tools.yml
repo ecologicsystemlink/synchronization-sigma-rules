@@ -1,0 +1,35 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Defense Evasion Via Raw Disk Access By Uncommon Tools
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1006
+  adversary: UNKNOWN
+  description: Detects raw disk access using uncommon tools or tools that are located
+    in suspicious locations (heavy filtering is required), which could indicate possible
+    defense evasion attempts
+  references:
+  - https://www.slideshare.net/heirhabarov/hunting-for-credentials-dumping-in-windows-environment
+  where: '!(safe("log.device", "").contains("floppy") || safe("log.image", "").contains(":\\$WINDOWS.~BT\\")
+    || safe("log.image", "").contains(":\\Program Files (x86)\\") || safe("log.image",
+    "").contains(":\\Program Files\\") || safe("log.image", "").contains(":\\Windows\\CCM\\")
+    || safe("log.image", "").contains(":\\Windows\\explorer.exe") || safe("log.image",
+    "").contains(":\\Windows\\servicing\\") || safe("log.image", "").contains(":\\Windows\\SoftwareDistribution\\")
+    || safe("log.image", "").contains(":\\Windows\\System32\\") || safe("log.image",
+    "").contains(":\\Windows\\SysWOW64\\") || safe("log.image", "").contains(":\\Windows\\SystemApps\\")
+    || safe("log.image", "").contains(":\\Windows\\uus\\") || safe("log.image", "").contains(":\\Windows\\WinSxS\\")
+    || safe("log.image", "") == "Registry" || safe("log.image", "") == "System" ||
+    safe("log.image", "").contains(":\\ProgramData\\Microsoft\\Windows Defender\\Platform\\")
+    && (safe("log.image", "").endsWith("\\MsMpEng.exe") || safe("log.image", "").endsWith("\\MpDefenderCoreService.exe"))
+    || safe("log.image", "").contains(":\\Users\\") && safe("log.image", "").contains("\\AppData\\")
+    && safe("log.image", "").contains("\\Microsoft\\") || safe("log.image", "").contains(":\\Windows\\Temp\\")
+    && (safe("log.image", "").endsWith("\\Executables\\SSDUpdate.exe") || safe("log.image",
+    "").endsWith("\\HostMetadata\\NVMEHostmetadata.exe")) || safe("log.image", "")
+    == safe("log.nil", "") || safe("log.image", "").endsWith(":\\Windows\\ImmersiveControlPanel\\SystemSettings.exe"))
+    && !(safe("log.image", "").contains("\\AppData\\Local\\GitHubDesktop\\app-") &&
+    safe("log.image", "").endsWith("\\resources\\app\\git\\mingw64\\bin\\git.exe")
+    || safe("log.image", "").contains(":\\Windows\\Temp\\asgard2-agent\\") && safe("log.image",
+    "").endsWith("\\thor.exe") || safe("log.image", "").contains("\\AppData\\Local\\Keybase\\upd.exe"))'
