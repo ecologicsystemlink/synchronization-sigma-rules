@@ -1,0 +1,19 @@
+- dataTypes:
+  - generic
+  name: CVE-2020-10148 SolarWinds Orion API Auth Bypass
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects CVE-2020-10148 SolarWinds Orion API authentication bypass attempts
+  references:
+  - https://kb.cert.org/vuls/id/843464
+  where: (safe("log.csUriQuery", "").contains("/WebResource.axd") || safe("log.csUriQuery",
+    "").contains("/ScriptResource.axd") || safe("log.csUriQuery", "").contains("/i18n.ashx")
+    || safe("log.csUriQuery", "").contains("/Skipi18n")) && (safe("log.csUriQuery",
+    "").contains("/SolarWinds/") || safe("log.csUriQuery", "").contains("/api/"))
+    && !(safe("log.csUriQuery", "").contains("Orion/Skipi18n/Profiler/") || safe("log.csUriQuery",
+    "").contains("css.i18n.ashx") || safe("log.csUriQuery", "").contains("js.i18n.ashx"))

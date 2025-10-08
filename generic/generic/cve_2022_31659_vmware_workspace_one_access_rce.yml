@@ -1,0 +1,15 @@
+- dataTypes:
+  - generic
+  name: CVE-2022-31659 VMware Workspace ONE Access RCE
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects possible exploitation of VMware Workspace ONE Access Admin
+    Remote Code Execution vulnerability as described in CVE-2022-31659
+  references:
+  - https://petrusviet.medium.com/dancing-on-the-architecture-of-vmware-workspace-one-access-eng-ad592ae1b6dd
+  where: safe("log.csMethod", "") == "POST" && safe("log.csUriQuery", "").contains("/SAAS/jersey/manager/api/migrate/tenant")
