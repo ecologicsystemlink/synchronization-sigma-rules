@@ -1,0 +1,14 @@
+- dataTypes:
+  - wineventlog
+  name: New BITS Job Created Via Bitsadmin
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Persistence
+  technique: T1197
+  adversary: UNKNOWN
+  description: Detects the creation of a new bits job by Bitsadmin
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1197/T1197.md
+  where: safe("log.eventCode", 0.0) == double(3) && safe("log.processpath", "").endsWith("\\bitsadmin.exe")
