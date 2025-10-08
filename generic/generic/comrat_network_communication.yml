@@ -1,0 +1,14 @@
+- dataTypes:
+  - generic
+  name: ComRAT Network Communication
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1071.001
+  adversary: UNKNOWN
+  description: Detects Turla ComRAT network communication.
+  references:
+  - https://www.welivesecurity.com/wp-content/uploads/2020/05/ESET_Turla_ComRAT.pdf
+  where: safe("log.cUri", "").contains("/index/index.php?h=")

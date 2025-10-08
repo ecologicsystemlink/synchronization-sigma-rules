@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Emotet Rundll32 Execution
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.011
+  adversary: UNKNOWN
+  description: Detecting Emotet DLL loading by looking for rundll32.exe processes
+    with command lines ending in ,RunDLL or ,Control_RunDLL
+  references:
+  - https://paste.cryptolaemus.com/emotet/2020/12/22/emotet-malware-IoCs_12-22-20.html
+  - https://cyber.wtf/2021/11/15/guess-whos-back/
+  where: (safe("log.image", "").endsWith("\\rundll32.exe") || safe("log.originalFileName",
+    "") == "RUNDLL32.EXE") && (safe("log.commandLine", "").endsWith(",RunDLL") ||
+    safe("log.commandLine", "").endsWith(",Control_RunDLL")) && !(safe("log.commandLine",
+    "").endsWith(".dll,Control_RunDLL") || safe("log.commandLine", "").endsWith(".dll\"),safe("log.controlRundll",
+    "")" || CommandLine endsWith ".safe("log.dll", "")',safe("log.controlRundll",
+    "")" || ParentImage endsWith "\\safe("log.trackerExe", "")")

@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Potential CSharp Streamer RAT Loading .NET Executable Image
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1219.002
+  adversary: UNKNOWN
+  description: Detects potential CSharp Streamer RAT loading .NET executable image
+    by using the default file name and path associated with the tool.
+  references:
+  - https://thedfirreport.com/2024/06/10/icedid-brings-screenconnect-and-csharp-streamer-to-alphv-ransomware-deployment/#detections
+  - https://cyber.wtf/2023/12/06/the-csharp-streamer-rat/
+  where: safe("log.imageLoaded", "").matches("\\\\AppData\\\\Local\\\\Temp\\\\dat[0-9A-Z]{4}\\.tmp")

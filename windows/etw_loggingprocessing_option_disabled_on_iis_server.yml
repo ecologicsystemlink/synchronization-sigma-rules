@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: ETW Logging/Processing Option Disabled On IIS Server
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1562.002, T1505.004
+  adversary: UNKNOWN
+  description: Detects changes to of the IIS server configuration in order to disable/remove
+    the ETW logging/processing option.
+  references:
+  - https://learn.microsoft.com/en-us/iis/manage/provisioning-and-managing-iis/configure-logging-in-iis
+  - https://www.microsoft.com/en-us/security/blog/2022/12/12/iis-modules-the-evolution-of-web-shells-and-how-to-detect-them/
+  - https://learn.microsoft.com/en-us/iis/configuration/system.applicationhost/sites/sitedefaults/logfile/
+  where: safe("log.eventCode", 0.0) == double(29) && safe("log.configuration", "").endsWith("@logTargetW3C")
+    && safe("log.oldValue", "").contains("ETW") && !(safe("log.newValue", "").contains("ETW"))

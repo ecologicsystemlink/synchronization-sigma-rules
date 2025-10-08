@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: File Was Not Allowed To Run
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1204.002, T1059.001, T1059.003, T1059.005, T1059.006, T1059.007
+  adversary: UNKNOWN
+  description: Detect run not allowed files. Applocker is a very useful tool, especially
+    on servers where unprivileged users have access. For example terminal servers.
+    You need configure applocker and log collect to receive these events.
+  references:
+  - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/windows-defender-application-control/applocker/what-is-applocker
+  - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/windows-defender-application-control/applocker/using-event-viewer-with-applocker
+  - https://nxlog.co/documentation/nxlog-user-guide/applocker.html
+  where: safe("log.eventCode", 0.0) == double(8004) || safe("log.eventCode", 0.0)
+    == double(8007) || safe("log.eventCode", 0.0) == double(8022) || safe("log.eventCode",
+    0.0) == double(8025)

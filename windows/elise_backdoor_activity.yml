@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Elise Backdoor Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.003
+  adversary: UNKNOWN
+  description: Detects Elise backdoor activity used by APT32
+  references:
+  - https://community.rsa.com/community/products/netwitness/blog/2018/02/13/lotus-blossom-continues-asean-targeting
+  - https://web.archive.org/web/20200302083912/https://www.accenture.com/t20180127T003755Z_w_/us-en/_acnmedia/PDF-46/Accenture-Security-Dragonfish-Threat-Analysis.pdf
+  where: safe("log.image", "").endsWith("\\Microsoft\\Network\\svchost.exe") || safe("log.commandLine",
+    "").contains("\\Windows\\Caches\\NavShExt.dll") && safe("log.commandLine", "").contains("/c
+    del") || (safe("log.commandLine", "").endsWith("\\AppData\\Roaming\\MICROS~1\\Windows\\Caches\\NavShExt.dll")
+    || safe("log.commandLine", "").endsWith("\\AppData\\Roaming\\Microsoft\\Windows\\Caches\\NavShExt.dll"))
+    && safe("log.commandLine", "").contains(",Setting")

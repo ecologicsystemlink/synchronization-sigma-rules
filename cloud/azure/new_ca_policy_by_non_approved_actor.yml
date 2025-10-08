@@ -1,0 +1,14 @@
+- dataTypes:
+  - azure
+  name: New CA Policy by Non-approved Actor
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1548
+  adversary: UNKNOWN
+  description: Monitor and alert on conditional access changes.
+  references:
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-infrastructure
+  where: safe("log.propertiesMessage", "") == "Add conditional access policy"

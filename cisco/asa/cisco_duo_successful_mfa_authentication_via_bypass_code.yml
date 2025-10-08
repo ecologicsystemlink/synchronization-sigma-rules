@@ -1,0 +1,22 @@
+- dataTypes:
+  - firewall-cisco-asa
+  name: Cisco Duo Successful MFA Authentication Via Bypass Code
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects when a successful MFA authentication occurs due to the use
+    of a bypass code. A bypass code is a temporary passcode created by an administrator
+    for a specific user to access a Duo-protected application. These are generally
+    used as "backup codes," so that enrolled users who are having problems with their
+    mobile devices (e.g., mobile service is disrupted, the device is lost or stolen,
+    etc.) or who temporarily can't use their enrolled devices (on a plane without
+    mobile data services) can still access their Duo-protected systems.
+  references:
+  - https://duo.com/docs/adminapi#logs
+  - https://help.duo.com/s/article/6327?language=en_US
+  where: safe("log.eventType", "") == "authentication" && safe("log.reason", "") ==
+    "bypass_user"

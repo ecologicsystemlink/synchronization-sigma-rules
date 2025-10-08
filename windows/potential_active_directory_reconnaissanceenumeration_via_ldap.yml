@@ -1,0 +1,60 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Active Directory Reconnaissance/Enumeration Via LDAP
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Discovery
+  technique: T1069.002, T1087.002, T1482
+  adversary: UNKNOWN
+  description: Detects potential Active Directory enumeration via LDAP
+  references:
+  - https://techcommunity.microsoft.com/t5/microsoft-defender-for-endpoint/hunting-for-reconnaissance-activities-using-ldap-search-filters/ba-p/824726
+  - https://github.com/PowerShellMafia/PowerSploit/blob/d943001a7defb5e0d1657085a77a0e78609be58f/Recon/PowerView.ps1
+  - https://github.com/BloodHoundAD/SharpHound3/blob/7d96b991b1887ff50349ce59c80980bc0d95c86a/SharpHound3/LdapBuilder.cs
+  - https://medium.com/falconforce/falconfriday-detecting-active-directory-data-collection-0xff21-c22d1a57494c
+  - https://github.com/fox-it/BloodHound.py/blob/d65eb614831cd30f26028ccb072f5e77ca287e0b/bloodhound/ad/domain.py#L427
+  - https://ipurple.team/2024/07/15/sharphound-detection/
+  where: safe("log.eventCode", 0.0) == double(30) && (safe("log.searchFilter", "").contains("(groupType:1.2.840.113556.1.4.803:=2147483648)")
+    || safe("log.searchFilter", "").contains("(groupType:1.2.840.113556.1.4.803:=2147483656)")
+    || safe("log.searchFilter", "").contains("(groupType:1.2.840.113556.1.4.803:=2147483652)")
+    || safe("log.searchFilter", "").contains("(groupType:1.2.840.113556.1.4.803:=2147483650)")
+    || safe("log.searchFilter", "").contains("(sAMAccountType=805306369)") || safe("log.searchFilter",
+    "").contains("(sAMAccountType=805306368)") || safe("log.searchFilter", "").contains("(sAMAccountType=536870913)")
+    || safe("log.searchFilter", "").contains("(sAMAccountType=536870912)") || safe("log.searchFilter",
+    "").contains("(sAMAccountType=268435457)") || safe("log.searchFilter", "").contains("(sAMAccountType=268435456)")
+    || safe("log.searchFilter", "").contains("(objectCategory=groupPolicyContainer)")
+    || safe("log.searchFilter", "").contains("(objectCategory=organizationalUnit)")
+    || safe("log.searchFilter", "").contains("(objectCategory=nTDSDSA)") || safe("log.searchFilter",
+    "").contains("(objectCategory=server)") || safe("log.searchFilter", "").contains("(objectCategory=domain)")
+    || safe("log.searchFilter", "").contains("(objectCategory=person)") || safe("log.searchFilter",
+    "").contains("(objectCategory=group)") || safe("log.searchFilter", "").contains("(objectCategory=user)")
+    || safe("log.searchFilter", "").contains("(objectClass=trustedDomain)") || safe("log.searchFilter",
+    "").contains("(objectClass=computer)") || safe("log.searchFilter", "").contains("(objectClass=server)")
+    || safe("log.searchFilter", "").contains("(objectClass=group)") || safe("log.searchFilter",
+    "").contains("(objectClass=user)") || safe("log.searchFilter", "").contains("(primaryGroupID=521)")
+    || safe("log.searchFilter", "").contains("(primaryGroupID=516)") || safe("log.searchFilter",
+    "").contains("(primaryGroupID=515)") || safe("log.searchFilter", "").contains("(primaryGroupID=512)")
+    || safe("log.searchFilter", "").contains("Domain Admins") || safe("log.searchFilter",
+    "").contains("objectGUID=*") || safe("log.searchFilter", "").contains("(schemaIDGUID=*)")
+    || safe("log.searchFilter", "").contains("admincount=1")) && !(safe("log.eventCode",
+    0.0) == double(30) && (safe("log.searchFilter", "").matches(".*\\(domainSid=.*\\).*")
+    || safe("log.searchFilter", "").matches(".*\\(objectSid=.*\\).*"))) || safe("log.eventCode",
+    0.0) == double(30) && (safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=4194304)")
+    || safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=2097152)")
+    || safe("log.searchFilter", "").contains("!(userAccountControl:1.2.840.113556.1.4.803:=1048574)")
+    || safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=524288)")
+    || safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=65536)")
+    || safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=8192)")
+    || safe("log.searchFilter", "").contains("(userAccountControl:1.2.840.113556.1.4.803:=544)")
+    || safe("log.searchFilter", "").contains("!(UserAccountControl:1.2.840.113556.1.4.803:=2)")
+    || safe("log.searchFilter", "").contains("msDS-AllowedToActOnBehalfOfOtherIdentity")
+    || safe("log.searchFilter", "").contains("msDS-AllowedToDelegateTo") || safe("log.searchFilter",
+    "").contains("msDS-GroupManagedServiceAccount") || safe("log.searchFilter", "").contains("(accountExpires=9223372036854775807)")
+    || safe("log.searchFilter", "").contains("(accountExpires=0)") || safe("log.searchFilter",
+    "").contains("(adminCount=1)") || safe("log.searchFilter", "").contains("ms-MCS-AdmPwd"))
+    || safe("log.eventCode", 0.0) == double(30) && safe("log.searchFilter", "") ==
+    "(objectclass=*)" && (safe("log.distinguishedName", "").contains("CN=Domain Admins")
+    || safe("log.distinguishedName", "").contains("CN=Enterprise Admins") || safe("log.distinguishedName",
+    "").contains("CN=Group Policy Creator Owners"))

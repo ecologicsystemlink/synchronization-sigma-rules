@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: Eventlog Cleared
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1070.001
+  adversary: UNKNOWN
+  description: One of the Windows Eventlogs has been cleared. e.g. caused by "wevtutil
+    cl" command execution
+  references:
+  - https://twitter.com/deviouspolack/status/832535435960209408
+  - https://www.hybrid-analysis.com/sample/027cc450ef5f8c5f653329641ec1fed91f694e0d229928963b30f6b0d7d3a745?environmentId=100
+  where: safe("log.eventCode", 0.0) == double(104) && safe("log.providerName", "")
+    == "Microsoft-Windows-Eventlog" && !(safe("log.channel", "") == "Microsoft-Windows-PowerShell/Operational"
+    || safe("log.channel", "") == "Microsoft-Windows-Sysmon/Operational" || safe("log.channel",
+    "") == "PowerShellCore/Operational" || safe("log.channel", "") == "Security" ||
+    safe("log.channel", "") == "System" || safe("log.channel", "") == "Windows PowerShell")

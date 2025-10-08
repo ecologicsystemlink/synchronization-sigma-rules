@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: LockerGoga Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Impact
+  technique: T1486
+  adversary: UNKNOWN
+  description: Detects LockerGoga ransomware activity via specific command line.
+  references:
+  - https://medium.com/@malwaredancer/lockergoga-input-arguments-ipc-communication-and-others-bd4e5a7ba80a
+  - https://blog.f-secure.com/analysis-of-lockergoga-ransomware/
+  - https://www.carbonblack.com/blog/tau-threat-intelligence-notification-lockergoga-ransomware/
+  where: safe("log.commandLine", "").contains("-i SM-tgytutrc -s")

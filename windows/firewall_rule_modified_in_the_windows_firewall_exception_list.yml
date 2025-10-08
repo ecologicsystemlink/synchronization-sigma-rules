@@ -1,0 +1,22 @@
+- dataTypes:
+  - wineventlog
+  name: Firewall Rule Modified In The Windows Firewall Exception List
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1562.004
+  adversary: UNKNOWN
+  description: Detects when a rule has been modified in the Windows firewall exception
+    list
+  references:
+  - https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/dd364427(v=ws.10)
+  where: (safe("log.eventCode", 0.0) == double(2005) || safe("log.eventCode", 0.0)
+    == double(2073)) && !(safe("log.applicationPath", "").endsWith("\\AppData\\local\\microsoft\\teams\\current\\teams.exe")
+    || safe("log.applicationPath", "").endsWith("\\AppData\\Local\\Keybase\\keybase.exe")
+    || safe("log.applicationPath", "").endsWith("\\AppData\\Local\\Programs\\Messenger\\Messenger.exe")
+    || safe("log.applicationPath", "").contains(":\\Users\\") && safe("log.applicationPath",
+    "").contains("\\AppData\\Local\\Programs\\Opera\\") && safe("log.applicationPath",
+    "").contains("\\opera.exe") || safe("log.applicationPath", "").contains(":\\Users\\")
+    && safe("log.applicationPath", "").contains("\\AppData\\Local\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"))

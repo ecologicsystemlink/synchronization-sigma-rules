@@ -1,0 +1,17 @@
+- dataTypes:
+  - linux
+  name: Disabling Security Tools - Builtin
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1562.004
+  adversary: UNKNOWN
+  description: Detects disabling security tools
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1562.004/T1562.004.md
+  where: '""safe("log.stopping", "") safe("log.iptables", "")"" || ""safe("log.stopping",
+    "") safe("log.ip6tables", "")"" || ""safe("log.stopping", "") safe("log.firewalld",
+    "")"" || ""safe("log.stopping", "") safe("log.cbdaemon", "")"" || ""safe("log.stopping",
+    "") safe("log.falconSensor", "")""'

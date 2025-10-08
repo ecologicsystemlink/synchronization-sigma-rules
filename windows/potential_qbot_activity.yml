@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: Potential QBot Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.005
+  adversary: UNKNOWN
+  description: Detects potential QBot activity by looking for process executions used
+    previously by QBot
+  references:
+  - https://twitter.com/killamjr/status/1179034907932315648
+  - https://app.any.run/tasks/2e0647b7-eb86-4f72-904b-d2d0ecac07d1/
+  where: safe("log.parentImage", "").endsWith("\\WinRAR.exe") && safe("log.image",
+    "").endsWith("\\wscript.exe") || safe("log.commandLine", "").contains(" /c ping.exe
+    -n 6 127.0.0.1 & type ") || safe("log.commandLine", "").contains("regsvr32.exe")
+    && safe("log.commandLine", "").contains("C:\\ProgramData") && safe("log.commandLine",
+    "").contains(".tmp")

@@ -1,0 +1,16 @@
+- dataTypes:
+  - generic
+  name: Bitbucket Full Data Export Triggered
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Collection
+  technique: T1213.003
+  adversary: UNKNOWN
+  description: Detects when full data export is attempted.
+  references:
+  - https://confluence.atlassian.com/bitbucketserver/audit-log-events-776640423.html
+  - https://confluence.atlassian.com/adminjiraserver0811/importing-and-exporting-data-1019391889.html
+  where: safe("log.auditTypeCategory", "") == "Data pipeline" && safe("log.auditTypeAction",
+    "") == "Full data export triggered"

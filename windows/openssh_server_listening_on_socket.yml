@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: OpenSSH Server Listening On Socket
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1021.004
+  adversary: UNKNOWN
+  description: Detects scenarios where an attacker enables the OpenSSH server and
+    server starts to listening on SSH socket.
+  references:
+  - https://github.com/mdecrevoisier/EVTX-to-MITRE-Attack/tree/master/TA0008-Lateral%20Movement/T1021.004-Remote%20Service%20SSH
+  - https://winaero.com/enable-openssh-server-windows-10/
+  - https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
+  - https://virtualizationreview.com/articles/2020/05/21/ssh-server-on-windows-10.aspx
+  - https://medium.com/threatpunter/detecting-adversary-tradecraft-with-image-load-event-logging-and-eql-8de93338c16
+  where: safe("log.eventCode", 0.0) == double(4) && safe("log.process", "") == "sshd"
+    && safe("log.payload", "").startsWith("Server listening on ")

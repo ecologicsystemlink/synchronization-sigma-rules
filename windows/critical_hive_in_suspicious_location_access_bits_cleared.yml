@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: Critical Hive In Suspicious Location Access Bits Cleared
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1003.002
+  adversary: UNKNOWN
+  description: Detects events from the Kernel-General ETW indicating that the access
+    bits of a hive with a system like hive name located in the temp directory have
+    been reset. This occurs when an application tries to access a hive and the hive
+    has not be recognized since the last 7 days (by default). Registry hive dumping
+    utilities such as QuarksPwDump were seen emitting this behavior.
+  references:
+  - https://github.com/nasbench/Misc-Research/blob/b20da2336de0f342d31ef4794959d28c8d3ba5ba/ETW/Microsoft-Windows-Kernel-General.md
+  where: safe("log.eventCode", 0.0) == double(16) && safe("log.providerName", "")
+    == "Microsoft-Windows-Kernel-General" && (safe("log.hiveName", "").contains("\\Temp\\SAM")
+    || safe("log.hiveName", "").contains("\\Temp\\SECURITY"))

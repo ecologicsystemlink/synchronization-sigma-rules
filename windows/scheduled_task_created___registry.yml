@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Scheduled Task Created - Registry
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: T1053.005
+  adversary: UNKNOWN
+  description: Detects the creation of a scheduled task via Registry keys.
+  references:
+  - https://center-for-threat-informed-defense.github.io/summiting-the-pyramid/analytics/task_scheduling/
+  - https://posts.specterops.io/abstracting-scheduled-tasks-3b6451f6a1c5
+  where: safe("log.targetObject", "").contains("\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\")
+    || safe("log.targetObject", "").contains("\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\")

@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: Sitecore Pre-Auth RCE CVE-2021-42237
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects exploitation attempts of Sitecore Experience Platform Pre-Auth
+    RCE CVE-2021-42237 found in Report.ashx
+  references:
+  - https://blog.assetnote.io/2021/11/02/sitecore-rce/
+  - https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1000776
+  where: safe("log.csMethod", "") == "POST" && safe("log.csUriQuery", "").contains("/sitecore/shell/ClientBin/Reporting/Report.ashx")
+    && safe("log.scStatus", "") == 200

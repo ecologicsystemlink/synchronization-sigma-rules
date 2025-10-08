@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: DHCP Server Error Failed Loading the CallOut DLL
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: This rule detects a DHCP server error in which a specified Callout
+    DLL (in registry) could not be loaded
+  references:
+  - https://blog.3or.de/mimilib-dhcp-server-callout-dll-injection.html
+  - https://technet.microsoft.com/en-us/library/cc726884(v=ws.10).aspx
+  - https://msdn.microsoft.com/de-de/library/windows/desktop/aa363389(v=vs.85).aspx
+  where: (safe("log.eventCode", 0.0) == double(1031) || safe("log.eventCode", 0.0)
+    == double(1032) || safe("log.eventCode", 0.0) == double(1034)) && safe("log.providerName",
+    "") == "Microsoft-Windows-DHCP-Server"

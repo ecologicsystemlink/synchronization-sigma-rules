@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: OilRig APT Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1053.005, T1543.003, T1112, T1071.004
+  adversary: UNKNOWN
+  description: Detects OilRig activity as reported by Nyotron in their March 2018
+    report
+  references:
+  - https://web.archive.org/web/20180402134442/https://nyotron.com/wp-content/uploads/2018/03/Nyotron-OilRig-Malware-Report-March-2018C.pdf
+  where: safe("log.commandLine", "").contains("SC Scheduled Scan") && safe("log.commandLine",
+    "").contains("\\microsoft\\Taskbar\\autoit3.exe") || safe("log.image", "").contains("\\Windows\\Temp\\DB\\")
+    && safe("log.image", "").endsWith(".exe") || safe("log.image", "") == "C:\\Windows\\system32\\Service.exe"
+    && (safe("log.commandLine", "").contains("i") || safe("log.commandLine", "").contains("u"))
+    || safe("log.parentImage", "").endsWith("\\local\\microsoft\\Taskbar\\autoit3.exe")
+    && safe("log.commandLine", "").contains("nslookup.exe") && safe("log.commandLine",
+    "").contains("-q=TXT")

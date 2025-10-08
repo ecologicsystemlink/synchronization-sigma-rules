@@ -1,0 +1,26 @@
+- dataTypes:
+  - generic
+  name: MITRE BZAR Indicators for Execution
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1047, T1053.002, T1569.002
+  adversary: UNKNOWN
+  description: Windows DCE-RPC functions which indicate an execution techniques on
+    the remote system. All credit for the Zeek mapping of the suspicious endpoint/operation
+    field goes to MITRE
+  references:
+  - https://github.com/mitre-attack/bzar#indicators-for-attck-execution
+  where: safe("log.endpoint", "") == "JobAdd" && safe("log.operation", "") == "atsvc"
+    || safe("log.endpoint", "") == "ITaskSchedulerService" && safe("log.operation",
+    "") == "SchRpcEnableTask" || safe("log.endpoint", "") == "ITaskSchedulerService"
+    && safe("log.operation", "") == "SchRpcRegisterTask" || safe("log.endpoint", "")
+    == "ITaskSchedulerService" && safe("log.operation", "") == "SchRpcRun" || safe("log.endpoint",
+    "") == "IWbemServices" && safe("log.operation", "") == "ExecMethod" || safe("log.endpoint",
+    "") == "IWbemServices" && safe("log.operation", "") == "ExecMethodAsync" || safe("log.endpoint",
+    "") == "svcctl" && safe("log.operation", "") == "CreateServiceA" || safe("log.endpoint",
+    "") == "svcctl" && safe("log.operation", "") == "CreateServiceW" || safe("log.endpoint",
+    "") == "svcctl" && safe("log.operation", "") == "StartServiceA" || safe("log.endpoint",
+    "") == "svcctl" && safe("log.operation", "") == "StartServiceW"

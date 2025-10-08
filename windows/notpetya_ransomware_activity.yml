@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: NotPetya Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.011, T1070.001, T1003.001
+  adversary: UNKNOWN
+  description: Detects NotPetya ransomware activity in which the extracted passwords
+    are passed back to the main module via named pipe, the file system journal of
+    drive C is deleted and Windows eventlogs are cleared using wevtutil
+  references:
+  - https://securelist.com/schroedingers-petya/78870/
+  - https://www.hybrid-analysis.com/sample/64b0b58a2c030c77fdb2b537b2fcc4af432bc55ffb36599a31d418c7c69e94b1?environmentId=100
+  where: 'safe("log.commandLine", "").contains("wevtutil cl Application & fsutil usn
+    deletejournal /D C:") || safe("log.commandLine", "").contains("dllhost.dat %WINDIR%\\ransoms")
+    || safe("log.image", "").endsWith("\\rundll32.exe") && (safe("log.commandLine",
+    "").endsWith(".dat,#1") || safe("log.commandLine", "").endsWith(".dat #1") ||
+    safe("log.commandLine", "").endsWith(".zip.dll\"),#1") || ""\\perfc.dat""'

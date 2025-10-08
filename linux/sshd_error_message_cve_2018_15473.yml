@@ -1,0 +1,17 @@
+- dataTypes:
+  - linux
+  name: SSHD Error Message CVE-2018-15473
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1589
+  adversary: UNKNOWN
+  description: Detects exploitation attempt using public exploit code for CVE-2018-15473
+  references:
+  - https://github.com/Rhynorater/CVE-2018-15473-Exploit
+  where: '""safe("log.error", ""): safe("log.bufferGetRet", ""): safe("log.trying",
+    "") safe("log.to", "") safe("log.get", "") safe("log.more", "") safe("log.bytes",
+    "") 1907 safe("log.than", "") safe("log.in", "") safe("log.buffer", "") 308 [safe("log.preauth",
+    "")]""'

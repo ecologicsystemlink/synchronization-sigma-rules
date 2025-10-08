@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: Volume Shadow Copy Mount
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1003.002
+  adversary: UNKNOWN
+  description: Detects volume shadow copy mount via Windows event log
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1003.002/T1003.002.md#atomic-test-3---esentutlexe-sam-copy
+  where: safe("log.providerName", "") == "Microsoft-Windows-Ntfs" && safe("log.eventCode",
+    0.0) == double(98) && safe("log.deviceName", "").contains("HarddiskVolumeShadowCopy")

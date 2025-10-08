@@ -1,0 +1,14 @@
+- dataTypes:
+  - wineventlog
+  name: Certificate Private Key Acquired
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1649
+  adversary: UNKNOWN
+  description: Detects when an application acquires a certificate private key
+  references:
+  - https://www.splunk.com/en_us/blog/security/breaking-the-chain-defending-against-certificate-services-abuse.html
+  where: safe("log.eventCode", 0.0) == double(70)

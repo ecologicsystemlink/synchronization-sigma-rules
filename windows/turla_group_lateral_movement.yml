@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Turla Group Lateral Movement
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059, T1021.002, T1083, T1135
+  adversary: UNKNOWN
+  description: Detects automated lateral movement by Turla group
+  references:
+  - https://securelist.com/the-epic-turla-operation/65545/
+  where: safe("log.commandLine", "").startsWith("net use \\\\%DomainController%\\C$
+    \")safe("log.p", "")@safe("log.ssw0rd", "")\" " || safe("log.commandLine", "").matches("dir
+    c:\\\\.*\\.doc.* /s") || safe("log.commandLine", "").matches("dir %TEMP%\\\\.*\\.exe")

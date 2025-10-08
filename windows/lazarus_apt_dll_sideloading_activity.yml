@@ -1,0 +1,22 @@
+- dataTypes:
+  - wineventlog
+  name: Lazarus APT DLL Sideloading Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: Detects sideloading of trojanized DLLs used in Lazarus APT campaign
+    in the case of a Spanish aerospace company
+  references:
+  - https://www.welivesecurity.com/en/eset-research/lazarus-luring-employees-trojanized-coding-challenges-case-spanish-aerospace-company/
+  - https://www.bleepingcomputer.com/news/security/lazarus-hackers-breach-aerospace-firm-with-new-lightlesscan-malware/
+  where: safe("log.image", "") == "C:\\ProgramShared\\PresentationHost.exe" && safe("log.imageLoaded",
+    "") == ":\\ProgramShared\\mscoree.dll" || safe("log.image", "") == "C:\\ProgramData\\Adobe\\colorcpl.exe"
+    && safe("log.imageLoaded", "") == "C:\\ProgramData\\Adobe\\colorui.dll" || safe("log.image",
+    "") == "C:\\ProgramData\\Oracle\\Java\\fixmapi.exe" && safe("log.imageLoaded",
+    "") == "C:\\ProgramData\\Oracle\\Java\\mapistub.dll" || safe("log.image", "")
+    == "C:\\ProgramData\\Adobe\\ARM\\tabcal.exe" && safe("log.imageLoaded", "") ==
+    "C:\\ProgramData\\Adobe\\ARM\\HID.dll"

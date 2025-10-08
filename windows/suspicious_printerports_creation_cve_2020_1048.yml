@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious PrinterPorts Creation (CVE-2020-1048)
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects new commands that add new printer port which point to suspicious
+    file
+  references:
+  - https://windows-internals.com/printdemon-cve-2020-1048/
+  where: safe("log.commandLine", "").contains("Add-PrinterPort -Name") && (safe("log.commandLine",
+    "").contains(".exe") || safe("log.commandLine", "").contains(".dll") || safe("log.commandLine",
+    "").contains(".bat")) || safe("log.commandLine", "").contains("Generic / Text
+    Only")

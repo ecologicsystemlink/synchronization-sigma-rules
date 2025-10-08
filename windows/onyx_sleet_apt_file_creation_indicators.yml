@@ -1,0 +1,14 @@
+- dataTypes:
+  - wineventlog
+  name: Onyx Sleet APT File Creation Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects file creation activity that is related to Onyx Sleet APT activity
+  references:
+  - https://www.microsoft.com/en-us/security/blog/2023/10/18/multiple-north-korean-threat-actors-exploiting-the-teamcity-cve-2023-42793-vulnerability/
+  where: safe("log.targetFileName", "").endsWith(":\\Windows\\ADFS\\bg\\inetmgr.exe")

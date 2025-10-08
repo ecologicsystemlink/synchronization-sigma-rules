@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Diamond Sleet APT DNS Communication Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects DNS queries related to Diamond Sleet APT activity
+  references:
+  - https://www.microsoft.com/en-us/security/blog/2023/10/18/multiple-north-korean-threat-actors-exploiting-the-teamcity-cve-2023-42793-vulnerability/
+  where: safe("log.queryName", "").contains("3dkit.org") || safe("log.queryName",
+    "").contains("dersmarketim.com") || safe("log.queryName", "").contains("galerielamy.com")
+    || safe("log.queryName", "").contains("olidhealth.com")

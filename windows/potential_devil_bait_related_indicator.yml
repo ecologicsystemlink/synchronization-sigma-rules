@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Devil Bait Related Indicator
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects the creation of ".xml" and ".txt" files in folders of the "\AppData\Roaming\Microsoft"
+    directory by uncommon processes. This behavior was seen common across different
+    Devil Bait samples and stages as described by the NCSC
+  references:
+  - https://www.ncsc.gov.uk/static-assets/documents/malware-analysis-reports/devil-bait/NCSC-MAR-Devil-Bait.pdf
+  where: (safe("log.image", "").endsWith("\\schtasks.exe") || safe("log.image", "").endsWith("\\wscript.exe")
+    || safe("log.image", "").endsWith("\\mshta.exe")) && safe("log.targetFileName",
+    "").contains("\\AppData\\Roaming\\Microsoft\\") && (safe("log.targetFileName",
+    "").endsWith(".txt") || safe("log.targetFileName", "").endsWith(".xml"))

@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: MSSQL Extended Stored Procedure Backdoor Maggie
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1546
+  adversary: UNKNOWN
+  description: This rule detects the execution of the extended storage procedure backdoor
+    named Maggie in the context of Microsoft SQL server
+  references:
+  - https://medium.com/@DCSO_CyTec/mssql-meet-maggie-898773df3b01
+  where: safe("log.providerName", "") == "MSSQLSERVER" && safe("log.eventCode", 0.0)
+    == double(8128) && safe("log.message", "").contains("maggie")

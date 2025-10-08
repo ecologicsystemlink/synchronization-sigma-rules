@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: Okta Admin Functions Access Through Proxy
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects access to Okta admin functions through proxy.
+  references:
+  - https://www.beyondtrust.com/blog/entry/okta-support-unit-breach
+  - https://dataconomy.com/2023/10/23/okta-data-breach/
+  - https://blog.cloudflare.com/how-cloudflare-mitigated-yet-another-okta-compromise/
+  where: safe("log.debugContextDebugdataRequesturi", "").contains("admin") && safe("log.securityContextIsproxy",
+    "") == "true"

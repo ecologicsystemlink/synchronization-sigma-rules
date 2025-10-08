@@ -1,0 +1,29 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Emotet Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001, T1027
+  adversary: UNKNOWN
+  description: Detects all Emotet like process executions that are not covered by
+    the more generic rules
+  references:
+  - https://app.any.run/tasks/e13ab713-64cf-4b23-ad93-6dceaa5429ac/
+  - https://app.any.run/tasks/81f3c28c-c686-425d-8a2b-a98198d244e1/
+  - https://app.any.run/tasks/97f875e8-0e08-4328-815f-055e971ba754/
+  - https://app.any.run/tasks/84fc9b4a-ea2b-47b1-8aa6-9014402dfb56/
+  where: (safe("log.commandLine", "").matches(".* -e.* PAA.*") || safe("log.commandLine",
+    "").contains("JABlAG4AdgA6AHUAcwBlAHIAcAByAG8AZgBpAGwAZQ") || safe("log.commandLine",
+    "").contains("QAZQBuAHYAOgB1AHMAZQByAHAAcgBvAGYAaQBsAGUA") || safe("log.commandLine",
+    "").contains("kAGUAbgB2ADoAdQBzAGUAcgBwAHIAbwBmAGkAbABlA") || safe("log.commandLine",
+    "").contains("IgAoACcAKgAnACkAOwAkA") || safe("log.commandLine", "").contains("IAKAAnACoAJwApADsAJA")
+    || safe("log.commandLine", "").contains("iACgAJwAqACcAKQA7ACQA") || safe("log.commandLine",
+    "").contains("JABGAGwAeAByAGgAYwBmAGQ") || safe("log.commandLine", "").contains("PQAkAGUAbgB2ADoAdABlAG0AcAArACgA")
+    || safe("log.commandLine", "").contains("0AJABlAG4AdgA6AHQAZQBtAHAAKwAoA") ||
+    safe("log.commandLine", "").contains("9ACQAZQBuAHYAOgB0AGUAbQBwACsAKA")) && !(safe("log.commandLine",
+    "").contains("fAAgAEMAbwBuAHYAZQByAHQAVABvAC0ASgBzAG8AbgAgAC0ARQByAHIAbwByAEEAYwB0AGkAbwBuACAAUwBpAGwAZQBuAHQAbAB5AEMAbwBuAHQAaQBuAHUAZQ")
+    || safe("log.commandLine", "").contains("wAIABDAG8AbgB2AGUAcgB0AFQAbwAtAEoAcwBvAG4AIAAtAEUAcgByAG8AcgBBAGMAdABpAG8AbgAgAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUA")
+    || safe("log.commandLine", "").contains("8ACAAQwBvAG4AdgBlAHIAdABUAG8ALQBKAHMAbwBuACAALQBFAHIAcgBvAHIAQQBjAHQAaQBvAG4AIABTAGkAbABlAG4AdABsAHkAQwBvAG4AdABpAG4AdQBlA"))

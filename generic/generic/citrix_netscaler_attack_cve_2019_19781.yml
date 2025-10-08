@@ -1,0 +1,21 @@
+- dataTypes:
+  - generic
+  name: Citrix Netscaler Attack CVE-2019-19781
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects CVE-2019-19781 exploitation attempt against Citrix Netscaler,
+    Application Delivery Controller and Citrix Gateway Attack
+  references:
+  - https://support.citrix.com/article/CTX267679
+  - https://support.citrix.com/article/CTX267027
+  - https://isc.sans.edu/diary/25686
+  - https://twitter.com/mpgn_x64/status/1216787131210829826
+  - https://github.com/x1sec/CVE-2019-19781/blob/25f7ab97275b2d41800bb3414dac8ca3a78af7e5/CVE-2019-19781-DFIR.md
+  where: safe("log.csUriQuery", "").contains("/../vpns/") || safe("log.csUriQuery",
+    "").endsWith("/vpns/cfg/smb.conf") || safe("log.csUriQuery", "").contains("/vpns/portal/scripts/")
+    && safe("log.csUriQuery", "").contains(".pl")

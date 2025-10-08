@@ -1,0 +1,27 @@
+- dataTypes:
+  - wineventlog
+  name: WannaCry Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Discovery
+  technique: T1210, T1083, T1222.001, T1486, T1490
+  adversary: UNKNOWN
+  description: Detects WannaCry ransomware activity
+  references:
+  - https://www.hybrid-analysis.com/sample/ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa?environmentId=100
+  where: safe("log.image", "").endsWith("\\tasksche.exe") || safe("log.image", "").endsWith("\\mssecsvc.exe")
+    || safe("log.image", "").endsWith("\\taskdl.exe") || safe("log.image", "").endsWith("\\taskhsvc.exe")
+    || safe("log.image", "").endsWith("\\taskse.exe") || safe("log.image", "").endsWith("\\111.exe")
+    || safe("log.image", "").endsWith("\\lhdfrgui.exe") || safe("log.image", "").endsWith("\\linuxnew.exe")
+    || safe("log.image", "").endsWith("\\wannacry.exe") || safe("log.image", "").contains("WanaDecryptor")
+    || safe("log.commandLine", "").contains("icacls") && safe("log.commandLine", "").contains("/grant")
+    && safe("log.commandLine", "").contains("Everyone:F") && safe("log.commandLine",
+    "").contains("/T") && safe("log.commandLine", "").contains("/C") && safe("log.commandLine",
+    "").contains("/Q") || safe("log.commandLine", "").contains("bcdedit") && safe("log.commandLine",
+    "").contains("/set") && safe("log.commandLine", "").contains("{default}") && safe("log.commandLine",
+    "").contains("recoveryenabled") && safe("log.commandLine", "").contains("no")
+    || safe("log.commandLine", "").contains("wbadmin") && safe("log.commandLine",
+    "").contains("delete") && safe("log.commandLine", "").contains("catalog") && safe("log.commandLine",
+    "").contains("-quiet") || safe("log.commandLine", "").contains("@Please_Read_Me@.txt")

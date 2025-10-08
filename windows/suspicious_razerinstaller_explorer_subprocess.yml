@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious RazerInstaller Explorer Subprocess
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1553
+  adversary: UNKNOWN
+  description: Detects a explorer.exe sub process of the RazerInstaller software which
+    can be invoked from the installer to select a different installation folder but
+    can also be exploited to escalate privileges to LOCAL SYSTEM
+  references:
+  - https://twitter.com/j0nh4t/status/1429049506021138437
+  - https://streamable.com/q2dsji
+  where: safe("log.parentImage", "").endsWith("\\RazerInstaller.exe") && (safe("log.integrityLevel",
+    "") == "System" || safe("log.integrityLevel", "") == "S-1-16-16384") && !(safe("log.image",
+    "").startsWith("C:\\Windows\\Installer\\Razer\\Installer\\"))

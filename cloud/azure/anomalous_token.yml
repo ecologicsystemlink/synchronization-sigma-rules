@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: Anomalous Token
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1528
+  adversary: UNKNOWN
+  description: Indicates that there are abnormal characteristics in the token such
+    as an unusual token lifetime or a token that is played from an unfamiliar location.
+  references:
+  - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks#anomalous-token
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-user-accounts#unusual-sign-ins
+  where: safe("log.riskeventtype", "") == "anomalousToken"

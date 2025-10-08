@@ -1,0 +1,16 @@
+- dataTypes:
+  - firewall-cisco-asa
+  name: Cisco Clear Logs
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1070.003
+  adversary: UNKNOWN
+  description: Clear command history in network OS which is used for defense evasion
+  references:
+  - https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus5000/sw/command/reference/sysmgmt/n5k-sysmgmt-cr/n5k-sm_cmds_c.html
+  - https://www.cisco.com/c/en/us/td/docs/ios/12_2sr/12_2sra/feature/guide/srmgtint.html#wp1127609
+  where: '""safe("log.clear", "") safe("log.logging", "")"" || ""safe("log.clear",
+    "") safe("log.archive", "")""'

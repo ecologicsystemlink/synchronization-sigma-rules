@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: USB Device Plugged
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1200
+  adversary: UNKNOWN
+  description: Detects plugged/unplugged USB devices
+  references:
+  - https://df-stream.com/2014/01/the-windows-7-event-log-and-usb-device/
+  - https://www.techrepublic.com/article/how-to-track-down-usb-flash-drive-usage-in-windows-10s-event-viewer/
+  where: safe("log.eventCode", 0.0) == double(2003) || safe("log.eventCode", 0.0)
+    == double(2100) || safe("log.eventCode", 0.0) == double(2102)

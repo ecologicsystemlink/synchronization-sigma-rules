@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Potential ACTINIUM Persistence Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1053, T1053.005
+  adversary: UNKNOWN
+  description: Detects specific process parameters as used by ACTINIUM scheduled task
+    persistence creation.
+  references:
+  - https://www.microsoft.com/security/blog/2022/02/04/actinium-targets-ukrainian-organizations
+  where: safe("log.commandLine", "").contains("schtasks") && safe("log.commandLine",
+    "").contains("create") && safe("log.commandLine", "").contains("wscript") && safe("log.commandLine",
+    "").contains(" /e:vbscript")

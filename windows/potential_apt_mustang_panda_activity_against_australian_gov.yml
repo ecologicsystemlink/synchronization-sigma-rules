@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Potential APT Mustang Panda Activity Against Australian Gov
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects specific command line execution used by Mustang Panda in a
+    targeted attack against the Australian government as reported by Lab52
+  references:
+  - https://lab52.io/blog/new-mustang-pandas-campaing-against-australia/
+  where: safe("log.commandLine", "").contains("copy SolidPDFCreator.dll") && safe("log.commandLine",
+    "").contains("C:\\Users\\Public\\Libraries\\PhotoTvRHD\\SolidPDFCreator.dll")
+    || safe("log.commandLine", "").contains("reg ") && safe("log.commandLine", "").contains("\\Windows\\CurrentVersion\\Run")
+    && safe("log.commandLine", "").contains("SolidPDF") && safe("log.commandLine",
+    "").contains("C:\\Users\\Public\\Libraries\\PhotoTvRHD\\")

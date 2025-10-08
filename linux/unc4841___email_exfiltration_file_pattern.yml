@@ -1,0 +1,15 @@
+- dataTypes:
+  - linux
+  name: UNC4841 - Email Exfiltration File Pattern
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects filename pattern of email related data used by UNC4841 for
+    staging and exfiltration
+  references:
+  - https://www.mandiant.com/resources/blog/barracuda-esg-exploited-globally
+  where: safe("log.targetFileName", "").matches("/mail/tmp/[a-zA-Z0-9]{3}[0-9]{3}\\.tar\\.gz")

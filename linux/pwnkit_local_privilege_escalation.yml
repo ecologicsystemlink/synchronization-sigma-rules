@@ -1,0 +1,18 @@
+- dataTypes:
+  - linux
+  name: PwnKit Local Privilege Escalation
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1548.001
+  adversary: UNKNOWN
+  description: Detects potential PwnKit exploitation CVE-2021-4034 in auth logs
+  references:
+  - https://twitter.com/wdormann/status/1486161836961579020
+  where: '""safe("log.pkexec", "")"" && ""safe("log.the", "") safe("log.value", "")
+    safe("log.for", "") safe("log.environment", "") safe("log.variable", "") safe("log.xAUTHORITY",
+    "") contains safe("log.suspicious", "") safe("log.content", "")"" && ""[safe("log.uSER",
+    "")=safe("log.root", "")] [safe("log.tTY", "")=/safe("log.dev", "")/safe("log.pts",
+    "")/0]""'

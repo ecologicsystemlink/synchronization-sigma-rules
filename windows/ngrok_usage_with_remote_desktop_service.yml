@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Ngrok Usage with Remote Desktop Service
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1090
+  adversary: UNKNOWN
+  description: Detects cases in which ngrok, a reverse proxy tool, forwards events
+    to the local RDP port, which could be a sign of malicious behaviour
+  references:
+  - https://twitter.com/tekdefense/status/1519711183162556416?s=12&t=OTsHCBkQOTNs1k3USz65Zg
+  - https://ngrok.com/
+  where: safe("log.eventCode", 0.0) == double(21) && safe("log.address", "").contains("16777216")

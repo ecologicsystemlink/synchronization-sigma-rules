@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: ADS Zone.Identifier Deleted
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1070.004
+  adversary: UNKNOWN
+  description: Detects the deletion of the "Zone.Identifier" ADS. Attackers can leverage
+    this in order to bypass security restrictions that make use of the ADS such as
+    Microsoft Office apps.
+  references:
+  - https://securityliterate.com/how-malware-abuses-the-zone-identifier-to-circumvent-detection-and-analysis/
+  where: safe("log.targetFileName", "").endsWith(":Zone.Identifier")

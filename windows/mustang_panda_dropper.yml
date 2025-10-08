@@ -1,0 +1,22 @@
+- dataTypes:
+  - wineventlog
+  name: Mustang Panda Dropper
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1587.001
+  adversary: UNKNOWN
+  description: Detects specific process parameters as used by Mustang Panda droppers
+  references:
+  - https://app.any.run/tasks/7ca5661d-a67b-43ec-98c1-dd7a8103c256/
+  - https://app.any.run/tasks/b12cccf3-1c22-4e28-9d3e-c7a6062f3914/
+  - https://www.anomali.com/blog/china-based-apt-mustang-panda-targets-minority-groups-public-and-private-sector-organizations
+  where: safe("log.commandLine", "").contains("Temp\\wtask.exe /create") || safe("log.commandLine",
+    "").contains("%windir:~-3,1%%PUBLIC:~-9,1%") || safe("log.commandLine", "").contains("/tn
+    \")safe("log.security", "") safe("log.script", "") " || CommandLine contains "%safe("log.windir",
+    ""):~-1,1%" || CommandLine contains "/safe("log.e", ""):safe("log.vbscript", "")"
+    && CommandLine contains "safe("log.c", ""):\\safe("log.users", "")\\" && CommandLine
+    contains ".safe("log.txt", "")" && CommandLine contains "/safe("log.f", "")" ||
+    Image endsWith "safe("log.temp", "")\\safe("log.winwshExe", "")"

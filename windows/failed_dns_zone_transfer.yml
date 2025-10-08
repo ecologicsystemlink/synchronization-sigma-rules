@@ -1,0 +1,14 @@
+- dataTypes:
+  - wineventlog
+  name: Failed DNS Zone Transfer
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1590.002
+  adversary: UNKNOWN
+  description: Detects when a DNS zone transfer failed.
+  references:
+  - https://kb.eventtracker.com/evtpass/evtpages/EventId_6004_Microsoft-Windows-DNS-Server-Service_65410.asp
+  where: safe("log.eventCode", 0.0) == double(6004)

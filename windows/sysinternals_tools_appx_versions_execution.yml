@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Sysinternals Tools AppX Versions Execution
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects execution of Sysinternals tools via an AppX package. Attackers
+    could install the Sysinternals Suite to get access to tools such as psexec and
+    procdump to avoid detection based on System paths
+  references:
+  - Internal Research
+  where: safe("log.eventCode", 0.0) == double(201) && (safe("log.imageName", "") ==
+    "procdump.exe" || safe("log.imageName", "") == "psloglist.exe" || safe("log.imageName",
+    "") == "psexec.exe" || safe("log.imageName", "") == "livekd.exe" || safe("log.imageName",
+    "") == "ADExplorer.exe")

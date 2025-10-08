@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Fireball Archer Install
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1218.011
+  adversary: UNKNOWN
+  description: Detects Archer malware invocation via rundll32
+  references:
+  - https://www.virustotal.com/en/file/9b4971349ae85aa09c0a69852ed3e626c954954a3927b3d1b6646f139b930022/analysis/
+  - https://www.hybrid-analysis.com/sample/9b4971349ae85aa09c0a69852ed3e626c954954a3927b3d1b6646f139b930022?environmentId=100
+  where: safe("log.commandLine", "").contains("rundll32.exe") && safe("log.commandLine",
+    "").contains("InstallArcherSvc")

@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Potential EmpireMonkey Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.010
+  adversary: UNKNOWN
+  description: Detects potential EmpireMonkey APT activity
+  references:
+  - https://securelist.com/fin7-5-the-infamous-cybercrime-rig-fin7-continues-its-activities/90703/
+  - https://malpedia.caad.fkie.fraunhofer.de/actor/anthropoid_spider
+  where: safe("log.commandLine", "").contains("/e:jscript") && safe("log.commandLine",
+    "").contains("\\Local\\Temp\\Errors.bat")

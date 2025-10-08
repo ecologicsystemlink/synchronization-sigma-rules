@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Local Privilege Escalation Indicator TabTip
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1557.001
+  adversary: UNKNOWN
+  description: Detects the invocation of TabTip via CLSID as seen when JuicyPotatoNG
+    is used on a system in brute force mode
+  references:
+  - https://github.com/antonioCoco/JuicyPotatoNG
+  where: safe("log.providerName", "") == "Microsoft-Windows-DistributedCOM" && safe("log.eventCode",
+    0.0) == double(10001) && safe("log.param1", "") == "C:\\Program Files\\Common
+    Files\\microsoft shared\\ink\\TabTip.exe" && safe("log.param2", "") == 2147943140
+    && safe("log.param3", "") == "{054AAE20-4BEA-4347-8A35-64A533254A9D}"

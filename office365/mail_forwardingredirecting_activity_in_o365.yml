@@ -1,0 +1,24 @@
+- dataTypes:
+  - o365
+  name: Mail Forwarding/Redirecting Activity In O365
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Exfiltration
+  technique: T1020
+  adversary: UNKNOWN
+  description: Detects email forwarding or redirecting acitivty in O365 Audit logs.
+  references:
+  - https://redcanary.com/blog/email-forwarding-rules/
+  - https://github.com/PwC-IR/Business-Email-Compromise-Guide/blob/fe29ce06aef842efe4eb448c26bbe822bf5b895d/PwC-Business_Email_Compromise-Guide.pdf
+  where: safe("log.operation", "").contains("UpdateInboxRules") && (safe("log.operationProperties",
+    "").contains("Forward") || safe("log.operationProperties", "").contains("Recipients"))
+    || safe("log.operation", "").contains("Set-Mailbox") && (safe("log.parameters",
+    "").contains("ForwardingSmtpAddress") || safe("log.parameters", "").contains("ForwardingAddress"))
+    || (safe("log.operation", "").contains("New-InboxRule") || safe("log.operation",
+    "").contains("Set-InboxRule")) && (safe("log.parameters", "").contains("ForwardAsAttachmentTo")
+    || safe("log.parameters", "").contains("ForwardingAddress") || safe("log.parameters",
+    "").contains("ForwardingSmtpAddress") || safe("log.parameters", "").contains("ForwardTo")
+    || safe("log.parameters", "").contains("RedirectTo") || safe("log.parameters",
+    "").contains("RedirectToRecipients"))

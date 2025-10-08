@@ -1,0 +1,28 @@
+- dataTypes:
+  - wineventlog
+  name: Forest Blizzard APT - File Creation Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1562.002
+  adversary: UNKNOWN
+  description: Detects the creation of specific files inside of ProgramData directory.
+    These files were seen being created by Forest Blizzard as described by MSFT.
+  references:
+  - https://www.microsoft.com/en-us/security/blog/2024/04/22/analyzing-forest-blizzards-custom-post-compromise-tool-for-exploiting-cve-2022-38028-to-obtain-credentials/
+  where: (safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Microsoft\\v")
+    || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Adobe\\v") || safe("log.targetFileName",
+    "").startsWith("C:\\ProgramData\\Comms\\v") || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Intel\\v")
+    || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Kaspersky Lab\\v")
+    || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Bitdefender\\v")
+    || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\ESET\\v") || safe("log.targetFileName",
+    "").startsWith("C:\\ProgramData\\NVIDIA\\v") || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\UbiSoft\\v")
+    || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\Steam\\v")) &&
+    (safe("log.targetFileName", "").contains("\\prnms003.inf_") || safe("log.targetFileName",
+    "").contains("\\prnms009.inf_")) || safe("log.targetFileName", "").startsWith("C:\\ProgramData\\")
+    && (safe("log.targetFileName", "").endsWith(".save") || safe("log.targetFileName",
+    "").endsWith("\\doit.bat") || safe("log.targetFileName", "").endsWith("\\execute.bat")
+    || safe("log.targetFileName", "").endsWith("\\servtask.bat") || safe("log.targetFileName",
+    "").contains("\\wayzgoose") && safe("log.targetFileName", "").endsWith(".dll"))

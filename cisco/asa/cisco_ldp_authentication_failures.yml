@@ -1,0 +1,16 @@
+- dataTypes:
+  - firewall-cisco-asa
+  name: Cisco LDP Authentication Failures
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Persistence
+  technique: T1078, T1110, T1557
+  adversary: UNKNOWN
+  description: Detects LDP failures which may be indicative of brute force attacks
+    to manipulate MPLS labels
+  references:
+  - https://www.blackhat.com/presentations/bh-usa-03/bh-us-03-convery-franz-v3.pdf
+  where: '""safe("log.lDP", "")"" && (""safe("log.socketTcpPacketMd5AuthenFail", "")""
+    || ""safe("log.tCPMD5AuthenFail", "")"")'

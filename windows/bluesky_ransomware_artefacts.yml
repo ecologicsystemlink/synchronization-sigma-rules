@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: BlueSky Ransomware Artefacts
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Impact
+  technique: T1486
+  adversary: UNKNOWN
+  description: Detect access to files and shares with names and extensions used by
+    BlueSky ransomware which could indicate a current or previous encryption attempt.
+  references:
+  - https://unit42.paloaltonetworks.com/bluesky-ransomware/
+  where: (safe("log.eventCode", 0.0) == double(4663) || safe("log.eventCode", 0.0)
+    == double(4656)) && (safe("log.objectName", "").endsWith(".bluesky") || safe("log.objectName",
+    "").contains("DECRYPT FILES BLUESKY")) || safe("log.eventCode", 0.0) == double(5145)
+    && (safe("log.relativeTargetName", "").endsWith(".bluesky") || safe("log.relativeTargetName",
+    "").contains("DECRYPT FILES BLUESKY"))

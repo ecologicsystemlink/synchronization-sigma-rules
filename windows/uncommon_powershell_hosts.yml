@@ -1,0 +1,22 @@
+- dataTypes:
+  - wineventlog
+  name: Uncommon PowerShell Hosts
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects alternate PowerShell hosts potentially bypassing detections
+    looking for powershell.exe
+  references:
+  - https://threathunterplaybook.com/hunts/windows/190815-RemoteServiceInstallation/notebook.html
+  where: safe("log.data", "").contains("HostApplication=") && !(safe("log.data", "").matches(".*HostApplication=.:/Windows/System32/WindowsPowerShell/v1\\.0/powershell.*")
+    || safe("log.data", "").matches(".*HostApplication=.:/Windows/SysWOW64/WindowsPowerShell/v1\\.0/powershell.*")
+    || safe("log.data", "").matches(".*HostApplication=.:\\\\Windows\\\\System32\\\\sdiagnhost\\.exe.*")
+    || safe("log.data", "").matches(".*HostApplication=.:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1\\.0\\\\powershell.*")
+    || safe("log.data", "").matches(".*HostApplication=.:\\\\Windows\\\\SysWOW64\\\\sdiagnhost\\.exe.*")
+    || safe("log.data", "").matches(".*HostApplication=.:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1\\.0\\\\powershell.*")
+    || safe("log.data", "").contains("HostApplication=powershell")) && !(safe("log.data",
+    "").contains("Citrix\\ConfigSync\\ConfigSync.ps1"))

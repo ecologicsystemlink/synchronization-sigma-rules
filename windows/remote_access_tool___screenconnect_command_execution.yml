@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Remote Access Tool - ScreenConnect Command Execution
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: T1059.003
+  adversary: UNKNOWN
+  description: Detects command execution via ScreenConnect RMM
+  references:
+  - https://www.huntandhackett.com/blog/revil-the-usage-of-legitimate-remote-admin-tooling
+  - https://github.com/SigmaHQ/sigma/pull/4467
+  where: safe("log.providerName", "") == "ScreenConnect" && safe("log.eventCode",
+    0.0) == double(200) && safe("log.data", "").contains("Executed command of length")

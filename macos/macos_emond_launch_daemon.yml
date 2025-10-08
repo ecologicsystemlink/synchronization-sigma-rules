@@ -1,0 +1,17 @@
+- dataTypes:
+  - macos
+  name: MacOS Emond Launch Daemon
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1546.014
+  adversary: UNKNOWN
+  description: Detects additions to the Emond Launch Daemon that adversaries may use
+    to gain persistence and elevate privileges.
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1546.014/T1546.014.md
+  - https://posts.specterops.io/leveraging-emond-on-macos-for-persistence-a040a2785124
+  where: safe("log.targetFileName", "").contains("/etc/emond.d/rules/") && safe("log.targetFileName",
+    "").endsWith(".plist") || safe("log.targetFileName", "").contains("/private/var/db/emondClients/")

@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: ProxyLogon MSExchange OabVirtualDirectory
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1587.001
+  adversary: UNKNOWN
+  description: Detects specific patterns found after a successful ProxyLogon exploitation
+    in relation to a Commandlet invocation of Set-OabVirtualDirectory
+  references:
+  - https://bi-zone.medium.com/hunting-down-ms-exchange-attacks-part-1-proxylogon-cve-2021-26855-26858-27065-26857-6e885c5f197c
+  where: '""safe("log.oabVirtualDirectory", "")"" && "" -safe("log.externalUrl", "")
+    "" && (""safe("log.eval", "")(safe("log.request", "")"" || ""safe("log.http",
+    "")://safe("log.f", "")/<safe("log.script", "")"" || ""\"unsafe\"};"" || ""safe("log.function",
+    "") safe("log.pageLoad", "")()"")'

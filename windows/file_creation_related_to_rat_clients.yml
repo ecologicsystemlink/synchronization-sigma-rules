@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: File Creation Related To RAT Clients
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: File .conf created related to VenomRAT, AsyncRAT and Lummac samples
+    observed in the wild.
+  references:
+  - https://www.virustotal.com/gui/file/c9f9f193409217f73cc976ad078c6f8bf65d3aabcf5fad3e5a47536d47aa6761
+  - https://www.virustotal.com/gui/file/e96a0c1bc5f720d7f0a53f72e5bb424163c943c24a437b1065957a79f5872675
+  where: safe("log.targetFileName", "").contains("\\AppData\\Roaming\\") && (safe("log.targetFileName",
+    "").contains("\\mydata\\") || safe("log.targetFileName", "").contains("\\datalogs\\")
+    || safe("log.targetFileName", "").contains("\\hvnc\\") || safe("log.targetFileName",
+    "").contains("\\dcrat\\")) && (safe("log.targetFileName", "").endsWith("\\datalogs.conf")
+    || safe("log.targetFileName", "").endsWith("\\hvnc.conf") || safe("log.targetFileName",
+    "").endsWith("\\dcrat.conf"))

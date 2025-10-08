@@ -1,0 +1,15 @@
+- dataTypes:
+  - generic
+  name: Windows WebDAV User Agent
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1071.001
+  adversary: UNKNOWN
+  description: Detects WebDav DownloadCradle
+  references:
+  - https://mgreen27.github.io/posts/2018/04/02/DownloadCradle.html
+  where: safe("log.cUseragent", "").startsWith("Microsoft-WebDAV-MiniRedir/") && safe("log.csMethod",
+    "") == "GET"

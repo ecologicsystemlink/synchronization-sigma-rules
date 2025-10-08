@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Potential KamiKakaBot Activity - Lure Document Execution
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1059
+  adversary: UNKNOWN
+  description: Detects the execution of a Word document via the WinWord Start Menu
+    shortcut. This behavior was observed being used by KamiKakaBot samples in order
+    to initiate the 2nd stage of the infection.
+  references:
+  - https://www.nextron-systems.com/2024/03/22/unveiling-kamikakabot-malware-analysis/
+  where: safe("log.image", "").endsWith("\\cmd.exe") && safe("log.commandLine", "").contains("/c
+    ") && safe("log.commandLine", "").contains(".lnk ~") && safe("log.commandLine",
+    "").contains("Start Menu\\Programs\\Word") && safe("log.commandLine", "").endsWith(".doc")

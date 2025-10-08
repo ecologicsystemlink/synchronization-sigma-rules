@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Defrag Deactivation
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1053.005
+  adversary: UNKNOWN
+  description: Detects the deactivation and disabling of the Scheduled defragmentation
+    task as seen by Slingshot APT group
+  references:
+  - https://securelist.com/apt-slingshot/84312/
+  where: safe("log.image", "").endsWith("\\schtasks.exe") && (safe("log.commandLine",
+    "").contains("/delete") || safe("log.commandLine", "").contains("/change")) &&
+    safe("log.commandLine", "").contains("/TN") && safe("log.commandLine", "").contains("\\Microsoft\\Windows\\Defrag\\ScheduledDefrag")

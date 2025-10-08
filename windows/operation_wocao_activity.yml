@@ -1,0 +1,23 @@
+- dataTypes:
+  - wineventlog
+  name: Operation Wocao Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Discovery
+  technique: T1012, T1036.004, T1027, T1053.005, T1059.001
+  adversary: UNKNOWN
+  description: Detects activity mentioned in Operation Wocao report
+  references:
+  - https://www.fox-it.com/en/news/whitepapers/operation-wocao-shining-a-light-on-one-of-chinas-hidden-hacking-groups/
+  - https://twitter.com/SBousseaden/status/1207671369963646976
+  where: safe("log.commandLine", "").contains("checkadmin.exe 127.0.0.1 -all") ||
+    safe("log.commandLine", "").contains("netsh advfirewall firewall add rule name=powershell
+    dir=in") || safe("log.commandLine", "").contains("cmd /c powershell.exe -ep bypass
+    -file c:\\s.ps1") || safe("log.commandLine", "").contains("/tn win32times /f")
+    || safe("log.commandLine", "").contains("create win32times binPath=") || safe("log.commandLine",
+    "").contains("\\c$\\windows\\system32\\devmgr.dll") || safe("log.commandLine",
+    "").contains(" -exec bypass -enc JgAg") || safe("log.commandLine", "").matches(".*type
+    .*keepass\\\\KeePass\\.config\\.xml.*") || safe("log.commandLine", "").contains("iie.exe
+    iie.txt") || safe("log.commandLine", "").matches(".*reg query HKEY_CURRENT_USER\\\\Software\\\\.*\\\\PuTTY\\\\Sessions\\\\.*")

@@ -1,0 +1,22 @@
+- dataTypes:
+  - wineventlog
+  name: Sysmon Configuration Error
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1564
+  adversary: UNKNOWN
+  description: Detects when an adversary is trying to hide it's action from Sysmon
+    logging based on error messages
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1562.001/T1562.001.md
+  - https://talesfrominfosec.blogspot.com/2017/12/killing-sysmon-silently.html
+  where: '(safe("log.description", "").contains("Failed to open service configuration
+    with error") || safe("log.description", "").contains("Failed to connect to the
+    driver to update configuration")) && !(safe("log.description", "").contains("Failed
+    to open service configuration with error") && safe("log.description", "").contains("Last
+    error: The media is write protected.") || safe("log.description", "").contains("Failed
+    to open service configuration with error 19") || safe("log.description", "").contains("Failed
+    to open service configuration with error 93"))'

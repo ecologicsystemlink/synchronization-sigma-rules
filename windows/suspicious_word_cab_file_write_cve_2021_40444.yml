@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Word Cab File Write CVE-2021-40444
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1587
+  adversary: UNKNOWN
+  description: Detects file creation patterns noticeable during the exploitation of
+    CVE-2021-40444
+  references:
+  - https://twitter.com/RonnyTNL/status/1436334640617373699?s=20
+  - https://twitter.com/vanitasnk/status/1437329511142420483?s=21
+  where: (safe("log.image", "").endsWith("\\winword.exe") && safe("log.targetFileName",
+    "").contains("\\Windows\\INetCache") && safe("log.targetFileName", "").endsWith(".cab")
+    || safe("log.image", "").endsWith("\\winword.exe") && safe("log.targetFileName",
+    "").contains("\\AppData\\Local\\Temp\\") && safe("log.targetFileName", "").contains(".inf"))
+    && !(safe("log.targetFileName", "").startsWith("C:\\Users\\") && safe("log.targetFileName",
+    "").contains("AppData\\Local\\Temp") && safe("log.targetFileName", "").endsWith("\\Content.inf"))

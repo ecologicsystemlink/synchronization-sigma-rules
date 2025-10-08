@@ -1,0 +1,34 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Appended Extension
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Impact
+  technique: T1486
+  adversary: UNKNOWN
+  description: Detects file renames where the target filename uses an uncommon double
+    extension. Could indicate potential ransomware activity renaming files and adding
+    a custom extension to the encrypted files, such as ".jpg.crypted", ".docx.locky",
+    etc.
+  references:
+  - https://app.any.run/tasks/d66ead5a-faf4-4437-93aa-65785afaf9e5/
+  - https://blog.cyble.com/2022/08/10/onyx-ransomware-renames-its-leak-site-to-vsop/
+  where: (safe("origin.filename", "").endsWith(".doc") || safe("origin.filename",
+    "").endsWith(".docx") || safe("origin.filename", "").endsWith(".jpeg") || safe("origin.filename",
+    "").endsWith(".jpg") || safe("origin.filename", "").endsWith(".lnk") || safe("origin.filename",
+    "").endsWith(".pdf") || safe("origin.filename", "").endsWith(".png") || safe("origin.filename",
+    "").endsWith(".pst") || safe("origin.filename", "").endsWith(".rtf") || safe("origin.filename",
+    "").endsWith(".xls") || safe("origin.filename", "").endsWith(".xlsx")) && (safe("log.targetFileName",
+    "").contains(".doc.") || safe("log.targetFileName", "").contains(".docx.") ||
+    safe("log.targetFileName", "").contains(".jpeg.") || safe("log.targetFileName",
+    "").contains(".jpg.") || safe("log.targetFileName", "").contains(".lnk.") || safe("log.targetFileName",
+    "").contains(".pdf.") || safe("log.targetFileName", "").contains(".png.") || safe("log.targetFileName",
+    "").contains(".pst.") || safe("log.targetFileName", "").contains(".rtf.") || safe("log.targetFileName",
+    "").contains(".xls.") || safe("log.targetFileName", "").contains(".xlsx.")) &&
+    !(safe("log.targetFileName", "").endsWith(".backup") || safe("log.targetFileName",
+    "").endsWith(".bak") || safe("log.targetFileName", "").endsWith(".old") || safe("log.targetFileName",
+    "").endsWith(".orig") || safe("log.targetFileName", "").endsWith(".temp") || safe("log.targetFileName",
+    "").endsWith(".tmp")) && !(safe("log.targetFileName", "").contains(":\\ProgramData\\Anaconda3\\")
+    && safe("log.targetFileName", "").endsWith(".c~"))

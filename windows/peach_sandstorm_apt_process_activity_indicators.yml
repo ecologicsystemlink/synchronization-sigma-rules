@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: Peach Sandstorm APT Process Activity Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects process creation activity related to Peach Sandstorm APT
+  references:
+  - https://twitter.com/MsftSecIntel/status/1737895710169628824
+  - https://www.virustotal.com/gui/file/364275326bbfc4a3b89233dabdaf3230a3d149ab774678342a40644ad9f8d614/details
+  where: safe("log.commandLine", "").contains("QP's*(58vaP!tF4")

@@ -1,0 +1,15 @@
+- dataTypes:
+  - linux
+  name: Linux Doas Conf File Creation
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1548
+  adversary: UNKNOWN
+  description: Detects the creation of doas.conf file in linux host platform.
+  references:
+  - https://research.splunk.com/endpoint/linux_doas_conf_file_creation/
+  - https://www.makeuseof.com/how-to-install-and-use-doas/
+  where: safe("log.targetFileName", "").endsWith("/etc/doas.conf")

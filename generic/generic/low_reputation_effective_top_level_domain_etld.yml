@@ -1,0 +1,24 @@
+- dataTypes:
+  - generic
+  name: Low Reputation Effective Top-Level Domain (eTLD)
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1071.004
+  adversary: UNKNOWN
+  description: Detects DNS queries to domains within known low reputation eTLDs. This
+    rule uses AlphaSOC's threat intelligence data and is updated on a monthly basis.
+  references:
+  - https://feeds.alphasoc.net/bad-etlds.txt
+  where: safe("log.query", "").endsWith(".duckdns.org") || safe("log.query", "").endsWith(".top")
+    || safe("log.query", "").endsWith(".ddns.net") || safe("log.query", "").endsWith(".gl.at.ply.gg")
+    || safe("log.query", "").endsWith(".portmap.io") || safe("log.query", "").endsWith(".icu")
+    || safe("log.query", "").endsWith(".zapto.org") || safe("log.query", "").endsWith(".live")
+    || safe("log.query", "").endsWith(".hopto.org") || safe("log.query", "").endsWith(".portmap.host")
+    || safe("log.query", "").endsWith(".sbs") || safe("log.query", "").endsWith(".sytes.net")
+    || safe("log.query", "").endsWith(".click") || safe("log.query", "").endsWith(".ydns.eu")
+    || safe("log.query", "").endsWith(".site") || safe("log.query", "").endsWith(".cloud")
+    || safe("log.query", "").endsWith(".no-ip.org") || safe("log.query", "").endsWith(".kozow.com")
+    || safe("log.query", "").endsWith(".lat") || safe("log.query", "").endsWith(".pro")

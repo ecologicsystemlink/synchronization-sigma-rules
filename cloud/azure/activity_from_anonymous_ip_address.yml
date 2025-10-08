@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: Activity From Anonymous IP Address
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1078
+  adversary: UNKNOWN
+  description: Identifies that users were active from an IP address that has been
+    identified as an anonymous proxy IP address.
+  references:
+  - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks#activity-from-anonymous-ip-address
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-user-accounts#unusual-sign-ins
+  where: safe("log.riskeventtype", "") == "riskyIPAddress"
