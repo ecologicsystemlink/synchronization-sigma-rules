@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: Anonymous IP Address
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1528
+  adversary: UNKNOWN
+  description: Indicates sign-ins from an anonymous IP address, for example, using
+    an anonymous browser or VPN.
+  references:
+  - https://learn.microsoft.com/en-us/graph/api/resources/riskdetection?view=graph-rest-1.0
+  - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks#anonymous-ip-address
+  where: safe("log.riskeventtype", "") == "anonymizedIPAddress"

@@ -1,0 +1,21 @@
+- dataTypes:
+  - azure
+  name: Azure Active Directory Hybrid Health AD FS New Server
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1578
+  adversary: UNKNOWN
+  description: This detection uses azureactivity logs (Administrative category) to
+    identify the creation or update of a server instance in an Azure AD Hybrid health
+    AD FS service. A threat actor can create a new AD Health ADFS service and create
+    a fake server instance to spoof AD FS signing logs. There is no need to compromise
+    an on-prem AD FS server. This can be done programmatically via HTTP requests to
+    Azure.
+  references:
+  - https://o365blog.com/post/hybridhealthagent/
+  where: safe("log.categoryValue", "") == "Administrative" && safe("log.resourceProviderValue",
+    "") == "Microsoft.ADHybridHealthService" && safe("log.resourceId", "").contains("AdFederationService")
+    && safe("log.operationNameValue", "") == "Microsoft.ADHybridHealthService/services/servicemembers/action"

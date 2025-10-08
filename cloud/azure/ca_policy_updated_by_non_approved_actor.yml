@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: CA Policy Updated by Non Approved Actor
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1548, T1556
+  adversary: UNKNOWN
+  description: Monitor and alert on conditional access changes. Is Initiated by (actor)
+    approved to make changes? Review Modified Properties and compare "old" vs "new"
+    value.
+  references:
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-infrastructure#conditional-access
+  where: safe("log.propertiesMessage", "") == "Update conditional access policy"
