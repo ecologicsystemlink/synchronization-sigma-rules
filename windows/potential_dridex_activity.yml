@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Dridex Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Discovery
+  technique: T1055, T1135, T1033
+  adversary: UNKNOWN
+  description: Detects potential Dridex acitvity via specific process patterns
+  references:
+  - https://app.any.run/tasks/993daa5e-112a-4ff6-8b5a-edbcec7c7ba3
+  - https://redcanary.com/threat-detection-report/threats/dridex/
+  where: safe("log.image", "").endsWith("\\svchost.exe") && safe("log.commandLine",
+    "").contains("C:\\Users\\") && safe("log.commandLine", "").contains("\\Desktop\\")
+    && !(safe("log.parentImage", "").startsWith("C:\\Windows\\System32\\")) || safe("log.parentImage",
+    "").endsWith("\\excel.exe") && safe("log.image", "").endsWith("\\regsvr32.exe")
+    && (safe("log.commandLine", "").contains(" -s ") || safe("log.commandLine", "").contains("\\AppData\\Local\\Temp\\"))
+    && !(safe("log.commandLine", "").contains(".dll")) || safe("log.parentImage",
+    "").endsWith("\\svchost.exe") && (safe("log.image", "").endsWith("\\whoami.exe")
+    && safe("log.commandLine", "").contains(" /all") || (safe("log.image", "").endsWith("\\net.exe")
+    || safe("log.image", "").endsWith("\\net1.exe")) && safe("log.commandLine", "").contains("
+    view"))

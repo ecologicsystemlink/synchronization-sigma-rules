@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: Account Created And Deleted Within A Close Time Frame
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1078
+  adversary: UNKNOWN
+  description: Detects when an account was created and deleted in a short period of
+    time.
+  references:
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-user-accounts#short-lived-accounts
+  where: (safe("log.propertiesMessage", "") == "Add user" || safe("log.propertiesMessage",
+    "") == "Delete user") && safe("log.status", "") == "Success"

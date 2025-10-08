@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Access Token Abuse
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1134.001
+  adversary: UNKNOWN
+  description: Detects potential token impersonation and theft. Example, when using
+    "DuplicateToken(Ex)" and "ImpersonateLoggedOnUser" with the "LOGON32_LOGON_NEW_CREDENTIALS
+    flag".
+  references:
+  - https://www.elastic.co/fr/blog/how-attackers-abuse-access-token-manipulation
+  - https://www.manageengine.com/log-management/cyber-security/access-token-manipulation.html
+  where: safe("log.eventCode", 0.0) == double(4624) && safe("log.logonType", "") ==
+    9 && safe("log.logonProcessName", "") == "Advapi" && safe("log.authenticationPackageName",
+    "") == "Negotiate" && safe("log.impersonationLevel", "") == "%%1833"

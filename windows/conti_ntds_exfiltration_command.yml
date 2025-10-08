@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Conti NTDS Exfiltration Command
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Collection
+  technique: T1560
+  adversary: UNKNOWN
+  description: Detects a command used by conti to exfiltrate NTDS
+  references:
+  - https://twitter.com/vxunderground/status/1423336151860002816?s=20
+  - https://www.virustotal.com/gui/file/03e9b8c2e86d6db450e5eceec057d7e369ee2389b9daecaf06331a95410aa5f8/detection
+  where: safe("log.commandLine", "").contains("7za.exe") && safe("log.commandLine",
+    "").contains("\\C$\\temp\\log.zip")

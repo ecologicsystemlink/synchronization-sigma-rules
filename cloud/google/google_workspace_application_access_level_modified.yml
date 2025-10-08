@@ -1,0 +1,19 @@
+- dataTypes:
+  - google
+  name: Google Workspace Application Access Level Modified
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1098.003
+  adversary: UNKNOWN
+  description: Detects when an access level is changed for a Google workspace application.
+    An access level is part of BeyondCorp Enterprise which is Google Workspace's way
+    of enforcing Zero Trust model. An adversary would be able to remove access levels
+    to gain easier access to Google workspace resources.
+  references:
+  - https://developers.google.com/admin-sdk/reports/v1/appendix/activity/admin-application-settings
+  - https://support.google.com/a/answer/9261439
+  where: safe("log.eventservice", "") == "admin.googleapis.com" && safe("log.eventname",
+    "") == "CHANGE_APPLICATION_SETTING" && safe("log.settingName", "").startsWith("ContextAwareAccess")

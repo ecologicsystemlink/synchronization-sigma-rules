@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: DarkGate - Autoit3.EXE File Creation By Uncommon Process
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1105, T1059
+  adversary: UNKNOWN
+  description: Detects the usage of curl.exe, KeyScramblerLogon, or other non-standard/suspicious
+    processes used to create Autoit3.exe. This activity has been associated with DarkGate
+    malware, which uses Autoit3.exe to execute shellcode that performs process injection
+    and connects to the DarkGate command-and-control server. Curl, KeyScramblerLogon,
+    and these other processes consitute non-standard and suspicious ways to retrieve
+    the Autoit3 executable.
+  references:
+  - https://github.security.telekom.com/2023/08/darkgate-loader.html
+  - https://www.kroll.com/en/insights/publications/cyber/microsoft-teams-used-as-initial-access-for-darkgate-malware
+  - https://github.com/pr0xylife/DarkGate/tree/main
+  where: (safe("log.image", "").endsWith("\\Autoit3.exe") || safe("log.image", "").endsWith("\\curl.exe")
+    || safe("log.image", "").endsWith("\\ExtExport.exe") || safe("log.image", "").endsWith("\\KeyScramblerLogon.exe")
+    || safe("log.image", "").endsWith("\\wmprph.exe")) && safe("log.targetFileName",
+    "").endsWith("\\Autoit3.exe")

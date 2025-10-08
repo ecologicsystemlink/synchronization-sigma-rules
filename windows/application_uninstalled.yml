@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Application Uninstalled
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Impact
+  technique: T1489
+  adversary: UNKNOWN
+  description: An application has been removed. Check if it is critical.
+  references:
+  - https://github.com/nasbench/EVTX-ETW-Resources/blob/f1b010ce0ee1b71e3024180de1a3e67f99701fe4/ETWProvidersManifests/Windows11/22H2/W11_22H2_Pro_20221220_22621.963/WEPExplorer/Microsoft-Windows-MsiServer.xml
+  - https://learn.microsoft.com/en-us/windows/win32/msi/event-logging
+  where: safe("log.providerName", "") == "MsiInstaller" && (safe("log.eventCode",
+    0.0) == double(1034) || safe("log.eventCode", 0.0) == double(11724))

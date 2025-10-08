@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: FunkLocker Ransomware File Creation
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1486
+  adversary: UNKNOWN
+  description: Detects the creation of files with the ".funksec" extension, which
+    is appended to encrypted files by the FunkLocker ransomware.
+  references:
+  - https://www.broadcom.com/support/security-center/protection-bulletin/funksec-ransomware
+  - https://www.pcrisk.com/removal-guides/31853-funklocker-funksec-ransomware
+  where: safe("log.targetFileName", "").endsWith(".funksec")

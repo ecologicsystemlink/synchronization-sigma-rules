@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: DarkGate - Drop DarkGate Loader In C:\Temp Directory
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1059
+  adversary: UNKNOWN
+  description: Detects attackers attempting to save, decrypt and execute the DarkGate
+    Loader in C:\temp folder.
+  references:
+  - https://www.bleepingcomputer.com/news/security/hackers-exploit-windows-smartscreen-flaw-to-drop-darkgate-malware/
+  - https://www.trendmicro.com/en_us/research/24/c/cve-2024-21412--darkgate-operators-exploit-microsoft-windows-sma.html
+  where: safe("log.targetFileName", "").contains(":\\temp\\") && (safe("log.targetFileName",
+    "").endsWith(".au3") || safe("log.targetFileName", "").endsWith("\\autoit3.exe"))
+    || safe("log.image", "").contains(":\\temp\\") && (safe("log.image", "").endsWith(".au3")
+    || safe("log.image", "").endsWith("\\autoit3.exe"))

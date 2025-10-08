@@ -1,0 +1,20 @@
+- dataTypes:
+  - generic
+  name: DNS Query to External Service Interaction Domains
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190, T1595.002
+  adversary: UNKNOWN
+  description: Detects suspicious DNS queries to external service interaction domains
+    often used for out-of-band interactions after successful RCE
+  references:
+  - https://twitter.com/breakersall/status/1533493587828260866
+  where: safe("log.query", "").contains(".interact.sh") || safe("log.query", "").contains(".oast.pro")
+    || safe("log.query", "").contains(".oast.live") || safe("log.query", "").contains(".oast.site")
+    || safe("log.query", "").contains(".oast.online") || safe("log.query", "").contains(".oast.fun")
+    || safe("log.query", "").contains(".oast.me") || safe("log.query", "").contains(".burpcollaborator.net")
+    || safe("log.query", "").contains(".oastify.com") || safe("log.query", "").contains(".canarytokens.com")
+    || safe("log.query", "").contains(".requestbin.net") || safe("log.query", "").contains(".dnslog.cn")

@@ -1,0 +1,23 @@
+- dataTypes:
+  - wineventlog
+  name: SOURGUM Actor Behaviours
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1546, T1546.015
+  adversary: UNKNOWN
+  description: Suspicious behaviours related to an actor tracked by Microsoft as SOURGUM
+  references:
+  - https://www.virustotal.com/gui/file/c299063e3eae8ddc15839767e83b9808fd43418dc5a1af7e4f44b97ba53fbd3d/detection
+  - https://github.com/Azure/Azure-Sentinel/blob/43e9be273dca321295190bfc4902858e009d4a35/Detections/MultipleDataSources/SOURGUM_IOC.yaml
+  - https://www.microsoft.com/security/blog/2021/07/15/protecting-customers-from-a-private-sector-offensive-actor-using-0-day-exploits-and-devilstongue-malware/
+  where: safe("log.image", "").contains("windows\\system32\\Physmem.sys") || safe("log.image",
+    "").contains("Windows\\system32\\ime\\SHARED\\WimBootConfigurations.ini") || safe("log.image",
+    "").contains("Windows\\system32\\ime\\IMEJP\\WimBootConfigurations.ini") || safe("log.image",
+    "").contains("Windows\\system32\\ime\\IMETC\\WimBootConfigurations.ini") || (safe("log.image",
+    "").contains("windows\\system32\\filepath2") || safe("log.image", "").contains("windows\\system32\\ime"))
+    && safe("log.commandLine", "").contains("reg add") && (safe("log.commandLine",
+    "").contains("HKEY_LOCAL_MACHINE\\software\\classes\\clsid\\{7c857801-7381-11cf-884d-00aa004b2e24}\\inprocserver32")
+    || safe("log.commandLine", "").contains("HKEY_LOCAL_MACHINE\\software\\classes\\clsid\\{cf4cc405-e2c5-4ddd-b3ce-5e7582d8c9fa}\\inprocserver32"))

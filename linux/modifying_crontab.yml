@@ -1,0 +1,14 @@
+- dataTypes:
+  - linux
+  name: Modifying Crontab
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1053.003
+  adversary: UNKNOWN
+  description: Detects suspicious modification of crontab file.
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1053.003/T1053.003.md
+  where: '""safe("log.rEPLACE", "")""'

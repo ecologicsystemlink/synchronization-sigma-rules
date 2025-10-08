@@ -1,0 +1,28 @@
+- dataTypes:
+  - wineventlog
+  name: ADFS Database Named Pipe Connection By Uncommon Tool
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Collection
+  technique: T1005
+  adversary: UNKNOWN
+  description: Detects suspicious local connections via a named pipe to the AD FS
+    configuration database (Windows Internal Database). Used to access information
+    such as the AD FS configuration settings which contains sensitive information
+    used to sign SAML tokens.
+  references:
+  - https://github.com/Azure/Azure-Sentinel/blob/f99542b94afe0ad2f19a82cc08262e7ac8e1428e/Detections/SecurityEvent/ADFSDBNamedPipeConnection.yaml
+  - https://o365blog.com/post/adfs/
+  - https://github.com/Azure/SimuLand
+  where: safe("log.pipeName", "") == "\\MICROSOFT##WID\\tsql\\query" && !(safe("log.image",
+    "").endsWith(":\\Windows\\System32\\mmc.exe") || safe("log.image", "").endsWith(":\\Windows\\system32\\svchost.exe")
+    || safe("log.image", "").endsWith(":\\Windows\\System32\\wsmprovhost.exe") ||
+    safe("log.image", "").endsWith(":\\Windows\\SysWOW64\\mmc.exe") || safe("log.image",
+    "").endsWith(":\\Windows\\SysWOW64\\wsmprovhost.exe") || safe("log.image", "").endsWith(":\\Windows\\WID\\Binn\\sqlwriter.exe")
+    || safe("log.image", "").endsWith("\\AzureADConnect.exe") || safe("log.image",
+    "").endsWith("\\Microsoft.Identity.Health.Adfs.PshSurrogate.exe") || safe("log.image",
+    "").endsWith("\\Microsoft.IdentityServer.ServiceHost.exe") || safe("log.image",
+    "").endsWith("\\Microsoft.Tri.Sensor.exe") || safe("log.image", "").endsWith("\\sqlservr.exe")
+    || safe("log.image", "").endsWith("\\tssdis.exe"))

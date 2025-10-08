@@ -1,0 +1,20 @@
+- dataTypes:
+  - o365
+  name: Azure Login Bypassing Conditional Access Policies
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1078
+  adversary: UNKNOWN
+  description: Detects a successful login to the Microsoft Intune Company Portal which
+    could allow bypassing Conditional Access Policies and InTune device trust using
+    a tool like TokenSmith.
+  references:
+  - https://labs.jumpsec.com/tokensmith-bypassing-intune-compliant-device-conditional-access/
+  - https://github.com/JumpsecLabs/TokenSmith
+  where: safe("log.operation", "") == "UserLoggedIn" && safe("log.applicationId",
+    "") == "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223" && safe("resultStatus", "") == "Success"
+    && safe("log.requestType", "") == "Cmsi:Cmsi" && !(safe("log.objectId", "") ==
+    "0000000a-0000-0000-c000-000000000000")

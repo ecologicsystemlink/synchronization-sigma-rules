@@ -1,0 +1,19 @@
+- dataTypes:
+  - generic
+  name: Atlassian Bitbucket Command Injection Via Archive API
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects attempts to exploit the Atlassian Bitbucket Command Injection
+    CVE-2022-36804
+  references:
+  - https://twitter.com/_0xf4n9x_/status/1572052954538192901
+  - https://www.rapid7.com/blog/post/2022/09/20/cve-2022-36804-easily-exploitable-vulnerability-in-atlassian-bitbucket-server-and-data-center/
+  - https://confluence.atlassian.com/bitbucketserver/bitbucket-server-and-data-center-advisory-2022-08-24-1155489835.html
+  - https://blog.assetnote.io/2022/09/14/rce-in-bitbucket-server/
+  where: safe("log.csUriQuery", "").contains("/rest/api/latest/projects/") && safe("log.csUriQuery",
+    "").contains("prefix=") && safe("log.csUriQuery", "").contains("%00--exec")

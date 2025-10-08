@@ -1,0 +1,64 @@
+- dataTypes:
+  - linux
+  name: Equation Group Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.004
+  adversary: UNKNOWN
+  description: Detects suspicious shell commands used in various Equation Group scripts
+    and tools
+  references:
+  - https://medium.com/@shadowbrokerss/dont-forget-your-base-867d304a94b1
+  where: '""safe("log.chown", "") safe("log.root", "").*safe("log.chmod", "") 4777
+    "" || ""safe("log.cp", "") /safe("log.bin", "")/safe("log.sh", "") .;safe("log.chown",
+    "")"" || ""safe("log.chmod", "") 4777 /safe("log.tmp", "")/.safe("log.scsi", "")/safe("log.dev",
+    "")/safe("log.bin", "")/safe("log.gsh", "")"" || ""safe("log.chown", "") safe("log.root",
+    ""):safe("log.root", "") /safe("log.tmp", "")/.safe("log.scsi", "")/safe("log.dev",
+    "")/safe("log.bin", "")/"" || ""safe("log.chown", "") safe("log.root", ""):safe("log.root",
+    "") safe("log.x", "");"" || ""/safe("log.bin", "")/safe("log.telnet", "") safe("log.locip",
+    "") safe("log.locport", "") < /safe("log.dev", "")/safe("log.console", "") | /safe("log.bin",
+    "")/safe("log.sh", "")"" || ""/safe("log.tmp", "")/safe("log.ratload", "")"" ||
+    ""safe("log.ewok", "") -safe("log.t", "") "" || ""safe("log.xspy", "") -safe("log.display",
+    "") "" || ""safe("log.cat", "") > /safe("log.dev", "")/safe("log.tcp", "")/127.0.0.1/80
+    <<safe("log.eND", "")"" || ""safe("log.rm", "") -safe("log.f", "") /safe("log.current",
+    "")/safe("log.tmp", "")/safe("log.ftshellLatest", "")"" || ""safe("log.ghost",
+    "").* -safe("log.v", "") "" || "" --safe("log.wipe", "") > /safe("log.dev", "")/safe("log.null",
+    "")"" || ""safe("log.ping", "") -safe("log.c", "") 2 .*; safe("log.grep", "")
+    .* /safe("log.proc", "")/safe("log.net", "")/safe("log.arp", "") >/safe("log.tmp",
+    "")/safe("log.gx", "")"" || ""safe("log.iptables", "") .* safe("log.oUTPUT", "")
+    -safe("log.p", "") safe("log.tcp", "") -safe("log.d", "") 127.0.0.1 --safe("log.tcpFlags",
+    "") safe("log.rST", "") safe("log.rST", "") -safe("log.j", "") safe("log.dROP",
+    "");"" || ""> /safe("log.var", "")/safe("log.log", "")/safe("log.audit", "")/safe("log.auditLog",
+    ""); safe("log.rm", "") -safe("log.f", "") ."" || ""safe("log.cp", "") /safe("log.var",
+    "")/safe("log.log", "")/safe("log.audit", "")/safe("log.auditLog", "") .safe("log.tmp",
+    "")"" || ""safe("log.sh", "") >/safe("log.dev", "")/safe("log.tcp", "")/.* <&1
+    2>&1"" || ""safe("log.ncat", "") -safe("log.vv", "") -safe("log.l", "") -safe("log.p",
+    "") .* <"" || ""safe("log.nc", "") -safe("log.vv", "") -safe("log.l", "") -safe("log.p",
+    "") .* <"" || ""< /safe("log.dev", "")/safe("log.console", "") | safe("log.uudecode",
+    "") && safe("log.uncompress", "")"" || ""safe("log.sendmail", "") -safe("log.osendmail",
+    "");safe("log.chmod", "") +safe("log.x", "") safe("log.sendmail", "")"" || ""/safe("log.usr",
+    "")/safe("log.bin", "")/safe("log.wget", "") -safe("log.o", "") /safe("log.tmp",
+    "")/safe("log.a", "") safe("log.http", "").* && safe("log.chmod", "") 755 /safe("log.tmp",
+    "")/safe("log.cron", "")"" || ""safe("log.chmod", "") 666 /safe("log.var", "")/safe("log.run",
+    "")/safe("log.utmp", "")~"" || ""safe("log.chmod", "") 700 safe("log.nscd", "")
+    safe("log.crond", "")"" || ""safe("log.cp", "") /safe("log.etc", "")/safe("log.shadow",
+    "") /safe("log.tmp", "")/."" || ""</safe("log.dev", "")/safe("log.console", "")
+    |safe("log.uudecode", "") > /safe("log.dev", "")/safe("log.null", "") 2>&1 &&
+    safe("log.uncompress", "")"" || ""safe("log.chmod", "") 700 safe("log.jp", "")&&safe("log.netstat",
+    "") -safe("log.an", "")|safe("log.grep", "")"" || ""safe("log.uudecode", "") >
+    /safe("log.dev", "")/safe("log.null", "") 2>&1 && safe("log.uncompress", "") -safe("log.f",
+    "") .* && safe("log.chmod", "") 755"" || ""safe("log.chmod", "") 700 safe("log.crond",
+    "")"" || ""safe("log.wget", "") safe("log.http", "").*; safe("log.chmod", "")
+    +safe("log.x", "") /safe("log.tmp", "")/safe("log.sendmail", "")"" || ""safe("log.chmod",
+    "") 700 safe("log.fp", "") safe("log.sendmail", "") safe("log.pt", "")"" || ""safe("log.chmod",
+    "") 755 /safe("log.usr", "")/safe("log.vmsys", "")/safe("log.bin", "")/safe("log.pipe",
+    "")"" || ""safe("log.chmod", "") -safe("log.r", "") 755 /safe("log.usr", "")/safe("log.vmsys",
+    "")"" || ""safe("log.chmod", "") 755 $safe("log.opbin", "")/.*safe("log.tunnel",
+    "")"" || ""safe("log.chmod", "") 700 safe("log.sendmail", "")"" || ""safe("log.chmod",
+    "") 0700 safe("log.sendmail", "")"" || ""/safe("log.usr", "")/safe("log.bin",
+    "")/safe("log.wget", "") safe("log.http", "").*safe("log.sendmail", "");safe("log.chmod",
+    "") +safe("log.x", "") safe("log.sendmail", "");"" || ""&& safe("log.telnet",
+    "") .* 2>&1 </safe("log.dev", "")/safe("log.console", "")""'

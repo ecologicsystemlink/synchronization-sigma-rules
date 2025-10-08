@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Qakbot Regsvr32 Calc Pattern
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects a specific command line of "regsvr32" where the "calc" keyword
+    is used in conjunction with the "/s" flag. This behavior is often seen used by
+    Qakbot
+  references:
+  - https://github.com/pr0xylife/Qakbot/
+  where: safe("log.image", "").endsWith("\\regsvr32.exe") && (safe("log.commandLine",
+    "").contains(" -s") || safe("log.commandLine", "").contains(" /s") || safe("log.commandLine",
+    "").contains(" –s") || safe("log.commandLine", "").contains(" —s") || safe("log.commandLine",
+    "").contains(" ―s")) && safe("log.commandLine", "").endsWith(" calc")

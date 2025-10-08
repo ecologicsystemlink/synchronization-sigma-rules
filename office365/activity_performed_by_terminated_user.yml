@@ -1,0 +1,20 @@
+- dataTypes:
+  - o365
+  name: Activity Performed by Terminated User
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Impact
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects when a Microsoft Cloud App Security reported for users whose
+    account were terminated in Azure AD, but still perform activities in other platforms
+    such as AWS or Salesforce. This is especially relevant for users who use another
+    account to manage resources, since these accounts are often not terminated when
+    a user leaves the company.
+  references:
+  - https://learn.microsoft.com/en-us/defender-cloud-apps/anomaly-detection-policy
+  - https://learn.microsoft.com/en-us/defender-cloud-apps/policy-template-reference
+  where: safe("log.eventsource", "") == "SecurityComplianceCenter" && safe("log.eventname",
+    "") == "Activity performed by terminated user" && safe("log.status", "") == "success"

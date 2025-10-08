@@ -1,0 +1,14 @@
+- dataTypes:
+  - wineventlog
+  name: Leviathan Registry Key Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1547.001
+  adversary: UNKNOWN
+  description: Detects registry key used by Leviathan APT in Malaysian focused campaign
+  references:
+  - https://www.elastic.co/blog/advanced-techniques-used-in-malaysian-focused-apt-campaign
+  where: safe("log.targetObject", "").contains("\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\ntkd")

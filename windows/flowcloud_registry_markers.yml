@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: FlowCloud Registry Markers
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1112
+  adversary: UNKNOWN
+  description: Detects FlowCloud malware registry markers from threat group TA410.
+    The malware stores its configuration in the registry alongside drivers utilized
+    by the malware's keylogger components.
+  references:
+  - https://www.proofpoint.com/us/blog/threat-insight/ta410-group-behind-lookback-attacks-against-us-utilities-sector-returns-new
+  where: safe("log.targetObject", "").contains("\\HARDWARE\\{2DB80286-1784-48b5-A751-B6ED1F490303}")
+    || safe("log.targetObject", "").contains("\\HARDWARE\\{804423C2-F490-4ac3-BFA5-13DEDE63A71A}")
+    || safe("log.targetObject", "").contains("\\HARDWARE\\{A5124AF5-DF23-49bf-B0ED-A18ED3DEA027}")
+    || safe("log.targetObject", "").contains("\\SYSTEM\\Setup\\PrintResponsor\\")

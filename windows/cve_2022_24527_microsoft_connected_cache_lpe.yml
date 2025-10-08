@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: CVE-2022-24527 Microsoft Connected Cache LPE
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects files created during the local privilege exploitation of CVE-2022-24527
+    Microsoft Connected Cache
+  references:
+  - https://www.rapid7.com/blog/post/2022/04/12/cve-2022-24527-microsoft-connected-cache-local-privilege-escalation-fixed/
+  where: safe("log.targetFileName", "").endsWith("WindowsPowerShell\\Modules\\webAdministration\\webAdministration.psm1")
+    && !(safe("log.user", "").contains("AUTHORI") || safe("log.user", "").contains("AUTORI"))

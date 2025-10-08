@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: FoggyWeb Backdoor DLL Loading
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1587
+  adversary: UNKNOWN
+  description: Detects DLL hijacking technique used by NOBELIUM in their FoggyWeb
+    backdoor. Which loads a malicious version of the expected "version.dll" dll
+  references:
+  - https://www.microsoft.com/security/blog/2021/09/27/foggyweb-targeted-nobelium-malware-leads-to-persistent-backdoor/
+  where: safe("log.imageLoaded", "") == "C:\\Windows\\ADFS\\version.dll"

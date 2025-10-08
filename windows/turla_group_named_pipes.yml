@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Turla Group Named Pipes
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1106
+  adversary: UNKNOWN
+  description: Detects a named pipe used by Turla group samples
+  references:
+  - Internal Research
+  where: safe("log.pipeName", "") == "\\atctl" || safe("log.pipeName", "") == "\\comnap"
+    || safe("log.pipeName", "") == "\\iehelper" || safe("log.pipeName", "") == "\\sdlrpc"
+    || safe("log.pipeName", "") == "\\userpipe"

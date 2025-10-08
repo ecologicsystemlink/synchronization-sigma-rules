@@ -1,0 +1,56 @@
+- dataTypes:
+  - wineventlog
+  name: Mint Sandstorm - AsperaFaspex Suspicious Process Execution
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects suspicious execution from AsperaFaspex as seen used by Mint
+    Sandstorm
+  references:
+  - https://www.microsoft.com/en-us/security/blog/2023/04/18/nation-state-threat-actor-mint-sandstorm-refines-tradecraft-to-attack-high-value-targets/
+  where: safe("log.parentImage", "").contains("aspera") && safe("log.parentImage",
+    "").contains("\\ruby") && ((safe("log.image", "").endsWith("\\powershell.exe")
+    || safe("log.image", "").endsWith("\\powershell_ise.exe")) && (safe("log.commandLine",
+    "").contains(" echo ") || safe("log.commandLine", "").contains("-dumpmode") ||
+    safe("log.commandLine", "").contains("-ssh") || safe("log.commandLine", "").contains(".dmp")
+    || safe("log.commandLine", "").contains("add-MpPreference") || safe("log.commandLine",
+    "").contains("adscredentials") || safe("log.commandLine", "").contains("bitsadmin")
+    || safe("log.commandLine", "").contains("certutil") || safe("log.commandLine",
+    "").contains("csvhost.exe") || safe("log.commandLine", "").contains("DownloadFile")
+    || safe("log.commandLine", "").contains("DownloadString") || safe("log.commandLine",
+    "").contains("dsquery") || safe("log.commandLine", "").contains("ekern.exe") ||
+    safe("log.commandLine", "").contains("FromBase64String") || safe("log.commandLine",
+    "").contains("iex ") || safe("log.commandLine", "").contains("iex(") || safe("log.commandLine",
+    "").contains("Invoke-Expression") || safe("log.commandLine", "").contains("Invoke-WebRequest")
+    || safe("log.commandLine", "").contains("localgroup administrators") || safe("log.commandLine",
+    "").contains("net group") || safe("log.commandLine", "").contains("net user")
+    || safe("log.commandLine", "").contains("o365accountconfiguration") || safe("log.commandLine",
+    "").contains("query session") || safe("log.commandLine", "").contains("samaccountname=")
+    || safe("log.commandLine", "").contains("set-MpPreference") || safe("log.commandLine",
+    "").contains("svhost.exe") || safe("log.commandLine", "").contains("System.IO.Compression")
+    || safe("log.commandLine", "").contains("System.IO.MemoryStream") || safe("log.commandLine",
+    "").contains("usoprivate") || safe("log.commandLine", "").contains("usoshared")
+    || safe("log.commandLine", "").contains("whoami") || safe("log.commandLine", "").matches("[-/–][Ee^]{1,2}[ncodema^]*\\s[A-Za-z0-9+/=]{15,}"))
+    || safe("log.commandLine", "").contains("lsass") && (safe("log.commandLine", "").contains("procdump")
+    || safe("log.commandLine", "").contains("tasklist") || safe("log.commandLine",
+    "").contains("findstr")) || safe("log.image", "").endsWith("\\wget.exe") && safe("log.commandLine",
+    "").contains("http") || safe("log.image", "").endsWith("\\curl.exe") && safe("log.commandLine",
+    "").contains("http") || safe("log.commandLine", "").contains("E:jscript") || safe("log.commandLine",
+    "").contains("e:vbscript") || safe("log.commandLine", "").contains("localgroup
+    Administrators") && safe("log.commandLine", "").contains("/add") || safe("log.commandLine",
+    "").contains("net") && safe("log.commandLine", "").contains("user") && safe("log.commandLine",
+    "").contains("/add") || safe("log.commandLine", "").contains("reg add") && safe("log.commandLine",
+    "").contains("DisableAntiSpyware") && safe("log.commandLine", "").contains("\\Microsoft\\Windows
+    Defender") || safe("log.commandLine", "").contains("reg add") && safe("log.commandLine",
+    "").contains("DisableRestrictedAdmin") && safe("log.commandLine", "").contains("CurrentControlSet\\Control\\Lsa")
+    || safe("log.commandLine", "").contains("wmic") && safe("log.commandLine", "").contains("process
+    call create") || safe("log.commandLine", "").contains("wmic") && safe("log.commandLine",
+    "").contains("delete") && safe("log.commandLine", "").contains("shadowcopy") ||
+    safe("log.commandLine", "").contains("vssadmin") && safe("log.commandLine", "").contains("delete")
+    && safe("log.commandLine", "").contains("shadows") || safe("log.commandLine",
+    "").contains("wbadmin") && safe("log.commandLine", "").contains("delete") && safe("log.commandLine",
+    "").contains("catalog"))

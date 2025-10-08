@@ -1,0 +1,24 @@
+- dataTypes:
+  - generic
+  name: Potential Operation Triangulation C2 Beaconing Activity - DNS
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects potential beaconing activity to domains used in 0day attacks
+    on iOS devices and revealed by Kaspersky and the FSB
+  references:
+  - https://securelist.com/operation-triangulation/109842/
+  - https://www-fsb-ru.translate.goog/fsb/press/message/single.htm!id=10439739@fsbMessage.html?_x_tr_sch=http&_x_tr_sl=ru&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp
+  where: safe("log.query", "") == "addatamarket.net" || safe("log.query", "") == "ans7tv.net"
+    || safe("log.query", "") == "anstv.net" || safe("log.query", "") == "backuprabbit.com"
+    || safe("log.query", "") == "businessvideonews.com" || safe("log.query", "") ==
+    "cloudsponcer.com" || safe("log.query", "") == "datamarketplace.net" || safe("log.query",
+    "") == "growthtransport.com" || safe("log.query", "") == "mobilegamerstats.com"
+    || safe("log.query", "") == "snoweeanalytics.com" || safe("log.query", "") ==
+    "tagclick-cdn.com" || safe("log.query", "") == "topographyupdates.com" || safe("log.query",
+    "") == "unlimitedteacup.com" || safe("log.query", "") == "virtuallaughing.com"
+    || safe("log.query", "") == "web-trackers.com"

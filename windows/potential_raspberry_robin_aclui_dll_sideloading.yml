@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Raspberry Robin Aclui Dll SideLoading
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: Detects potential sideloading of malicious "aclui.dll" by OleView.This
+    behavior was observed in Raspberry-Robin variants reported by chekpoint research
+    on Feburary 2024.
+  references:
+  - https://research.checkpoint.com/2024/raspberry-robin-keeps-riding-the-wave-of-endless-1-days/
+  - https://globetech.biz/index.php/2023/05/19/evading-edr-by-dll-sideloading-in-csharp/
+  - https://decoded.avast.io/threatintel/apt-treasure-trove-avast-suspects-chinese-apt-group-mustang-panda-is-collecting-data-from-burmese-government-agencies-and-opposition-groups/
+  - https://www.hexacorn.com/blog/2016/03/10/beyond-good-ol-run-key-part-36/
+  - https://strontic.github.io/xcyclopedia/library/aclui.dll-F883E9CA757B622B032FDCA5BF33D0DF.html
+  where: safe("log.image", "").endsWith("\\OleView.exe") && safe("log.imageLoaded",
+    "").endsWith("\\aclui.dll") && !(safe("log.image", "").startsWith("C:\\Program
+    Files (x86)\\Windows Kits\\") || safe("log.image", "").startsWith("C:\\Program
+    Files\\Microsoft SDKs\\") || safe("log.signed", "") == "true") && !(safe("log.image",
+    "").contains("\\Windows Resource Kit\\"))

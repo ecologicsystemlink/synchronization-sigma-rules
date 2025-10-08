@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Remote WMI ActiveScriptEventConsumers Activity
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1546.003
+  adversary: UNKNOWN
+  description: Detect potential adversaries leveraging WMI ActiveScriptEventConsumers
+    remotely to move laterally in a network. This event is best correlated and used
+    as an enrichment to determine the potential lateral movement activity.
+  references:
+  - https://threathunterplaybook.com/hunts/windows/200902-RemoteWMIActiveScriptEventConsumers/notebook.html
+  where: safe("log.eventCode", 0.0) == double(4624) && safe("log.logonType", "") ==
+    3 && safe("log.processName", "").endsWith("scrcons.exe") && !(safe("log.targetLogonId",
+    "") == "0x3e7")

@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: Access To Chromium Browsers Sensitive Files By Uncommon Applications
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1003
+  adversary: UNKNOWN
+  description: Detects file access requests to chromium based browser sensitive files
+    by uncommon processes. Could indicate potential attempt of stealing sensitive
+    information.
+  references:
+  - Internal Research
+  where: (safe("log.fileName", "").contains("\\User Data\\Default\\Cookies") || safe("log.fileName",
+    "").contains("\\User Data\\Default\\History") || safe("log.fileName", "").contains("\\User
+    Data\\Default\\Network\\Cookies") || safe("log.fileName", "").contains("\\User
+    Data\\Default\\Web Data")) && !(safe("log.image", "") == "System" || safe("log.image",
+    "").startsWith("C:\\Program Files (x86)\\") || safe("log.image", "").startsWith("C:\\Program
+    Files\\") || safe("log.image", "").startsWith("C:\\Windows\\system32\\") || safe("log.image",
+    "").startsWith("C:\\Windows\\SysWOW64\\")) && !(safe("log.image", "").startsWith("C:\\ProgramData\\Microsoft\\Windows
+    Defender\\") && (safe("log.image", "").endsWith("\\MpCopyAccelerator.exe") ||
+    safe("log.image", "").endsWith("\\MsMpEng.exe")))

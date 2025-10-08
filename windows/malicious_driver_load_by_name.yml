@@ -1,0 +1,62 @@
+- dataTypes:
+  - wineventlog
+  name: Malicious Driver Load By Name
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1543.003, T1068
+  adversary: UNKNOWN
+  description: Detects loading of known malicious drivers via the file name of the
+    drivers.
+  references:
+  - https://loldrivers.io/
+  where: safe("log.imageLoaded", "").endsWith("\\wfshbr64.sys") || safe("log.imageLoaded",
+    "").endsWith("\\ktmutil7odm.sys") || safe("log.imageLoaded", "").endsWith("\\ktes.sys")
+    || safe("log.imageLoaded", "").endsWith("\\a26363e7b02b13f2b8d697abb90cd5c3.sys")
+    || safe("log.imageLoaded", "").endsWith("\\kt2.sys") || safe("log.imageLoaded",
+    "").endsWith("\\4748696211bd56c2d93c21cab91e82a5.sys") || safe("log.imageLoaded",
+    "").endsWith("\\malicious.sys") || safe("log.imageLoaded", "").endsWith("\\a236e7d654cd932b7d11cb604629a2d0.sys")
+    || safe("log.imageLoaded", "").endsWith("\\spwizimgvt.sys") || safe("log.imageLoaded",
+    "").endsWith("\\c94f405c5929cfcccc8ad00b42c95083.sys") || safe("log.imageLoaded",
+    "").endsWith("\\fur.sys") || safe("log.imageLoaded", "").endsWith("\\wantd.sys")
+    || safe("log.imageLoaded", "").endsWith("\\windbg.sys") || safe("log.imageLoaded",
+    "").endsWith("\\4118b86e490aed091b1a219dba45f332.sys") || safe("log.imageLoaded",
+    "").endsWith("\\gmer64.sys") || safe("log.imageLoaded", "").endsWith("\\1fc7aeeff3ab19004d2e53eae8160ab1.sys")
+    || safe("log.imageLoaded", "").endsWith("\\poortry2.sys") || safe("log.imageLoaded",
+    "").endsWith("\\wintapix.sys") || safe("log.imageLoaded", "").endsWith("\\daxin_blank6.sys")
+    || safe("log.imageLoaded", "").endsWith("\\6771b13a53b9c7449d4891e427735ea2.sys")
+    || safe("log.imageLoaded", "").endsWith("\\blacklotus_driver.sys") || safe("log.imageLoaded",
+    "").endsWith("\\air_system10.sys") || safe("log.imageLoaded", "").endsWith("\\dkrtk.sys")
+    || safe("log.imageLoaded", "").endsWith("\\7.sys") || safe("log.imageLoaded",
+    "").endsWith("\\sense5ext.sys") || safe("log.imageLoaded", "").endsWith("\\ktgn.sys")
+    || safe("log.imageLoaded", "").endsWith("\\ndislan.sys") || safe("log.imageLoaded",
+    "").endsWith("\\nlslexicons0024uvn.sys") || safe("log.imageLoaded", "").endsWith("\\be6318413160e589080df02bb3ca6e6a.sys")
+    || safe("log.imageLoaded", "").endsWith("\\4.sys") || safe("log.imageLoaded",
+    "").endsWith("\\wantd_2.sys") || safe("log.imageLoaded", "").endsWith("\\e29f6311ae87542b3d693c1f38e4e3ad.sys")
+    || safe("log.imageLoaded", "").endsWith("\\daxin_blank3.sys") || safe("log.imageLoaded",
+    "").endsWith("\\gftkyj64.sys") || safe("log.imageLoaded", "").endsWith("\\daxin_blank2.sys")
+    || safe("log.imageLoaded", "").endsWith("\\wantd_4.sys") || safe("log.imageLoaded",
+    "").endsWith("\\reddriver.sys") || safe("log.imageLoaded", "").endsWith("\\834761775.sys")
+    || safe("log.imageLoaded", "").endsWith("\\mlgbbiicaihflrnh.sys") || safe("log.imageLoaded",
+    "").endsWith("\\mjj0ge.sys") || safe("log.imageLoaded", "").endsWith("\\daxin_blank.sys")
+    || safe("log.imageLoaded", "").endsWith("\\daxin_blank5.sys") || safe("log.imageLoaded",
+    "").endsWith("\\poortry1.sys") || safe("log.imageLoaded", "").endsWith("\\msqpq.sys")
+    || safe("log.imageLoaded", "").endsWith("\\mimidrv.sys") || safe("log.imageLoaded",
+    "").endsWith("\\e939448b28a4edc81f1f974cebf6e7d2.sys") || safe("log.imageLoaded",
+    "").endsWith("\\prokiller64.sys") || safe("log.imageLoaded", "").endsWith("\\nodedriver.sys")
+    || safe("log.imageLoaded", "").endsWith("\\wantd_3.sys") || safe("log.imageLoaded",
+    "").endsWith("\\lctka.sys") || safe("log.imageLoaded", "").endsWith("\\kapchelper_x64.sys")
+    || safe("log.imageLoaded", "").endsWith("\\daxin_blank4.sys") || safe("log.imageLoaded",
+    "").endsWith("\\a9df5964635ef8bd567ae487c3d214c4.sys") || safe("log.imageLoaded",
+    "").endsWith("\\wantd_6.sys") || safe("log.imageLoaded", "").endsWith("\\ntbios.sys")
+    || safe("log.imageLoaded", "").endsWith("\\wantd_5.sys") || safe("log.imageLoaded",
+    "").endsWith("\\pciecubed.sys") || safe("log.imageLoaded", "").endsWith("\\mimikatz.sys")
+    || safe("log.imageLoaded", "").endsWith("\\nqrmq.sys") || safe("log.imageLoaded",
+    "").endsWith("\\2.sys") || safe("log.imageLoaded", "").endsWith("\\poortry.sys")
+    || safe("log.imageLoaded", "").endsWith("\\ntbios_2.sys") || safe("log.imageLoaded",
+    "").endsWith("\\fgme.sys") || safe("log.imageLoaded", "").endsWith("\\telephonuafy.sys")
+    || safe("log.imageLoaded", "").endsWith("\\typelibde.sys") || safe("log.imageLoaded",
+    "").endsWith("\\daxin_blank1.sys") || safe("log.imageLoaded", "").endsWith("\\ef0e1725aaf0c6c972593f860531a2ea.sys")
+    || safe("log.imageLoaded", "").endsWith("\\5a4fe297c7d42539303137b6d75b150d.sys")

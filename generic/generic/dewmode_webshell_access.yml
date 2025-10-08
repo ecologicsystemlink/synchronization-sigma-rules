@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: DEWMODE Webshell Access
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1505.003
+  adversary: UNKNOWN
+  description: Detects access to DEWMODE webshell as described in FIREEYE report
+  references:
+  - https://www.mandiant.com/resources/blog/accellion-fta-exploited-for-data-theft-and-extortion
+  where: safe("log.csUriQuery", "").matches(".*.dwn=.*") && safe("log.csUriQuery",
+    "").contains("&fn=") && safe("log.csUriQuery", "").matches(".*\\.html..*") ||
+    safe("log.csUriQuery", "").contains("&dwn=") && safe("log.csUriQuery", "").matches(".*.fn=.*")
+    && safe("log.csUriQuery", "").matches(".*\\.html..*")

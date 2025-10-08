@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: StoneDrill Service Install
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1543.003
+  adversary: UNKNOWN
+  description: This method detects a service install of the malicious Microsoft Network
+    Realtime Inspection Service service described in StoneDrill report by Kaspersky
+  references:
+  - https://securelist.com/blog/research/77725/from-shamoon-to-stonedrill/
+  where: safe("log.providerName", "") == "Service Control Manager" && safe("log.eventCode",
+    0.0) == double(7045) && safe("log.serviceName", "") == "NtsSrv" && safe("log.imagePath",
+    "").endsWith(" LocalService")

@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: Equation Group C2 Communication
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1041
+  adversary: UNKNOWN
+  description: Detects communication to C2 servers mentioned in the operational notes
+    of the ShadowBroker leak of EquationGroup C2 tools
+  references:
+  - https://steemit.com/shadowbrokers/@theshadowbrokers/lost-in-translation
+  - https://medium.com/@msuiche/the-nsa-compromised-swift-network-50ec3000b195
+  where: safe("target.ip", "") == "69.42.98.86" || safe("target.ip", "") == "89.185.234.145"
+    || safe("origin.ip", "") == "69.42.98.86" || safe("origin.ip", "") == "89.185.234.145"

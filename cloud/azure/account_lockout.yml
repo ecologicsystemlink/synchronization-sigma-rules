@@ -1,0 +1,15 @@
+- dataTypes:
+  - azure
+  name: Account Lockout
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1110
+  adversary: UNKNOWN
+  description: Identifies user account which has been locked because the user tried
+    to sign in too many times with an incorrect user ID or password.
+  references:
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-privileged-accounts
+  where: safe("log.resultType", "") == 50053

@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: Creation of a Local Hidden User Account by Registry
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1136.001
+  adversary: UNKNOWN
+  description: Sysmon registry detection of a local hidden user account.
+  references:
+  - https://twitter.com/SBousseaden/status/1387530414185664538
+  where: safe("log.targetObject", "").contains("\\SAM\\SAM\\Domains\\Account\\Users\\Names\\")
+    && safe("log.targetObject", "").endsWith("$") && safe("log.image", "").endsWith("\\lsass.exe")

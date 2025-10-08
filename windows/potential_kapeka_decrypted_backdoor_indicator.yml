@@ -1,0 +1,23 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Kapeka Decrypted Backdoor Indicator
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects the presence of a file that is decrypted backdoor binary dropped
+    by the Kapeka Dropper, which disguises itself as a hidden file under a folder
+    named "Microsoft" within "CSIDL_COMMON_APPDATA" or "CSIDL_LOCAL_APPDATA", depending
+    on the process privileges. The file, typically 5-6 characters long with a random
+    combination of consonants and vowels followed by a ".wll" extension to pose as
+    a legitimate file to evade detection.
+  references:
+  - https://labs.withsecure.com/publications/kapeka
+  - https://app.any.run/tasks/1efb3ed4-cc0f-4690-a0ed-24516809bc72/
+  where: (safe("log.targetFileName", "").contains(":\\ProgramData\\") || safe("log.targetFileName",
+    "").contains("\\AppData\\Local\\")) && safe("log.targetFileName", "").matches("\\\\[a-zA-Z]{5,6}\\.wll")
+    || safe("log.targetFileName", "").endsWith("\\win32log.exe") || safe("log.targetFileName",
+    "").endsWith("\\crdss.exe")

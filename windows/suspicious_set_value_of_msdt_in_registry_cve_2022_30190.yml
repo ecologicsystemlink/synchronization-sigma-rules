@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Set Value of MSDT in Registry (CVE-2022-30190)
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1221
+  adversary: UNKNOWN
+  description: Detects set value ms-msdt MSProtocol URI scheme in Registry that could
+    be an attempt to exploit CVE-2022-30190.
+  references:
+  - https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-30190
+  - https://msrc-blog.microsoft.com/2022/05/30/guidance-for-cve-2022-30190-microsoft-support-diagnostic-tool-vulnerability/
+  where: safe("log.targetObject", "").startsWith("HKCR\\ms-msdt\\")

@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Maze Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1204.002, T1047, T1490
+  adversary: UNKNOWN
+  description: Detects specific process characteristics of Maze ransomware word document
+    droppers
+  references:
+  - https://www.fireeye.com/blog/threat-research/2020/05/tactics-techniques-procedures-associated-with-maze-ransomware-incidents.html
+  - https://app.any.run/tasks/51e7185c-52d7-4efb-ac0d-e86340053473/
+  - https://app.any.run/tasks/65a79440-373a-4725-8d74-77db9f2abda4/
+  where: safe("log.parentImage", "").endsWith("\\WINWORD.exe") && safe("log.image",
+    "").endsWith(".tmp") || safe("log.image", "").endsWith("\\wmic.exe") && safe("log.parentImage",
+    "").contains("\\Temp\\") && safe("log.commandLine", "").endsWith("shadowcopy delete")
+    || safe("log.commandLine", "").endsWith("shadowcopy delete") && safe("log.commandLine",
+    "").contains("\\..\\..\\system32")

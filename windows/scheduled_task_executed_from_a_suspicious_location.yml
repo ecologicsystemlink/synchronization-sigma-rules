@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Scheduled Task Executed From A Suspicious Location
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1053.005
+  adversary: UNKNOWN
+  description: Detects the execution of Scheduled Tasks where the Program being run
+    is located in a suspicious location or it's an unusale program to be run from
+    a Scheduled Task
+  references:
+  - Internal Research
+  where: safe("log.eventCode", 0.0) == double(129) && (safe("log.path", "").contains("C:\\Windows\\Temp\\")
+    || safe("log.path", "").contains("\\AppData\\Local\\Temp\\") || safe("log.path",
+    "").contains("\\Desktop\\") || safe("log.path", "").contains("\\Downloads\\")
+    || safe("log.path", "").contains("\\Users\\Public\\") || safe("log.path", "").contains("C:\\Temp\\"))

@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: PsExec Default Named Pipe
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: T1569.002
+  adversary: UNKNOWN
+  description: Detects PsExec service default pipe creation
+  references:
+  - https://www.jpcert.or.jp/english/pub/sr/ir_research.html
+  - https://jpcertcc.github.io/ToolAnalysisResultSheet
+  where: safe("log.pipeName", "") == "\\PSEXESVC"

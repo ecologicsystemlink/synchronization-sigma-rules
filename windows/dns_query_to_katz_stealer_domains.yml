@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: DNS Query To Katz Stealer Domains
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1071.004
+  adversary: UNKNOWN
+  description: Detects DNS queries to domains associated with Katz Stealer malware.
+    Katz Stealer is a malware variant that is known to be used for stealing sensitive
+    information from compromised systems. In Enterprise environments, DNS queries
+    to these domains may indicate potential malicious activity or compromise.
+  references:
+  - Internal Research
+  where: safe("log.queryName", "").contains("katz-panel.com") || safe("log.queryName",
+    "").contains("katz-stealer.com") || safe("log.queryName", "").contains("katzstealer.com")
+    || safe("log.queryName", "").contains("twist2katz.com")

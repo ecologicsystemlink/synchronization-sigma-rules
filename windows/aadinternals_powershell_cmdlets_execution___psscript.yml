@@ -1,0 +1,34 @@
+- dataTypes:
+  - wineventlog
+  name: AADInternals PowerShell Cmdlets Execution - PsScript
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects ADDInternals Cmdlet execution. A tool for administering Azure
+    AD and Office 365. Which can be abused by threat actors to attack Azure AD or
+    Office 365.
+  references:
+  - https://o365blog.com/aadinternals/
+  - https://github.com/Gerenios/AADInternals
+  where: safe("log.scriptBlockText", "").contains("Add-AADInt") || safe("log.scriptBlockText",
+    "").contains("ConvertTo-AADInt") || safe("log.scriptBlockText", "").contains("Disable-AADInt")
+    || safe("log.scriptBlockText", "").contains("Enable-AADInt") || safe("log.scriptBlockText",
+    "").contains("Export-AADInt") || safe("log.scriptBlockText", "").contains("Find-AADInt")
+    || safe("log.scriptBlockText", "").contains("Get-AADInt") || safe("log.scriptBlockText",
+    "").contains("Grant-AADInt") || safe("log.scriptBlockText", "").contains("Initialize-AADInt")
+    || safe("log.scriptBlockText", "").contains("Install-AADInt") || safe("log.scriptBlockText",
+    "").contains("Invoke-AADInt") || safe("log.scriptBlockText", "").contains("Join-AADInt")
+    || safe("log.scriptBlockText", "").contains("New-AADInt") || safe("log.scriptBlockText",
+    "").contains("Open-AADInt") || safe("log.scriptBlockText", "").contains("Read-AADInt")
+    || safe("log.scriptBlockText", "").contains("Register-AADInt") || safe("log.scriptBlockText",
+    "").contains("Remove-AADInt") || safe("log.scriptBlockText", "").contains("Reset-AADInt")
+    || safe("log.scriptBlockText", "").contains("Resolve-AADInt") || safe("log.scriptBlockText",
+    "").contains("Restore-AADInt") || safe("log.scriptBlockText", "").contains("Save-AADInt")
+    || safe("log.scriptBlockText", "").contains("Search-AADInt") || safe("log.scriptBlockText",
+    "").contains("Send-AADInt") || safe("log.scriptBlockText", "").contains("Set-AADInt")
+    || safe("log.scriptBlockText", "").contains("Start-AADInt") || safe("log.scriptBlockText",
+    "").contains("Unprotect-AADInt") || safe("log.scriptBlockText", "").contains("Update-AADInt")

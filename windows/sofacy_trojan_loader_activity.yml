@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Sofacy Trojan Loader Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.003, T1218.011
+  adversary: UNKNOWN
+  description: Detects Trojan loader activity as used by APT28
+  references:
+  - https://researchcenter.paloaltonetworks.com/2018/02/unit42-sofacy-attacks-multiple-government-entities/
+  - https://www.hybrid-analysis.com/sample/ff808d0a12676bfac88fd26f955154f8884f2bb7c534b9936510fd6296c543e8?environmentId=110
+  - https://twitter.com/ClearskySec/status/960924755355369472
+  where: 'safe("log.image", "").endsWith("\\rundll32.exe") && (safe("log.commandLine",
+    "").contains("%LOCALAPPDATA%") || safe("log.commandLine", "").contains("\\AppData\\Local\\"))
+    && (safe("log.commandLine", "").contains(".dat\")," || CommandLine endsWith ".safe("log.dll",
+    "") #1" || CommandLine endsWith ".safe("log.dll", "")\" #1" || safe("log.commandLine",
+    "").endsWith(".dll\"),#1") && !(CommandLine contains "\\safe("log.appData", "")\\safe("log.local",
+    "")\\safe("log.temp", "")\\")'

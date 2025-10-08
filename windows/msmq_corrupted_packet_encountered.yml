@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: MSMQ Corrupted Packet Encountered
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects corrupted packets sent to the MSMQ service. Could potentially
+    be a sign of CVE-2023-21554 exploitation
+  references:
+  - https://www.randori.com/blog/vulnerability-analysis-queuejumper-cve-2023-21554/
+  where: safe("log.providerName", "") == "MSMQ" && safe("log.eventCode", 0.0) == double(2027)
+    && safe("log.level", "") == 2

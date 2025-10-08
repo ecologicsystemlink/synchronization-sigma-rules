@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: Microsoft Office Trusted Location Updated
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1112
+  adversary: UNKNOWN
+  description: Detects changes to the registry keys related to "Trusted Location"
+    of Microsoft Office. Attackers might add additional trusted locations to avoid
+    macro security restrictions.
+  references:
+  - https://admx.help/?Category=Office2016&Policy=excel16.Office.Microsoft.Policies.Windows::L_TrustedLoc01
+  where: safe("log.targetObject", "").contains("Security\\Trusted Locations\\Location")
+    && safe("log.targetObject", "").endsWith("\\Path") && !(safe("log.image", "").contains(":\\Program
+    Files\\Common Files\\Microsoft Shared\\ClickToRun\\") && safe("log.image", "").endsWith("\\OfficeClickToRun.exe")
+    || safe("log.image", "").contains(":\\Program Files\\Microsoft Office\\") || safe("log.image",
+    "").contains(":\\Program Files (x86)\\Microsoft Office\\"))

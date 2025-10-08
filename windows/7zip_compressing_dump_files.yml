@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: 7Zip Compressing Dump Files
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Collection
+  technique: T1560.001
+  adversary: UNKNOWN
+  description: Detects execution of 7z in order to compress a file with a ".dmp"/".dump"
+    extension, which could be a step in a process of dump file exfiltration.
+  references:
+  - https://thedfirreport.com/2022/09/26/bumblebee-round-two/
+  where: (safe("log.description", "").contains("7-Zip") || safe("log.image", "").endsWith("\\7z.exe")
+    || safe("log.image", "").endsWith("\\7zr.exe") || safe("log.image", "").endsWith("\\7za.exe")
+    || safe("log.originalFileName", "") == "7z.exe" || safe("log.originalFileName",
+    "") == "7za.exe") && (safe("log.commandLine", "").contains(".dmp") || safe("log.commandLine",
+    "").contains(".dump") || safe("log.commandLine", "").contains(".hdmp"))

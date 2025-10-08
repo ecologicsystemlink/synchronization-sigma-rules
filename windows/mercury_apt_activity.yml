@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: MERCURY APT Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects suspicious command line patterns seen being used by MERCURY
+    APT
+  references:
+  - https://www.microsoft.com/security/blog/2022/08/25/mercury-leveraging-log4j-2-vulnerabilities-in-unpatched-systems-to-target-israeli-organizations/
+  where: safe("log.commandLine", "").contains("-exec bypass -w 1 -enc") && safe("log.commandLine",
+    "").contains("UwB0AGEAcgB0AC0ASgBvAGIAIAAtAFMAYwByAGkAcAB0AEIAbABvAGMAawAgAHsAKABzAGEAcABzACAAKAAiAHAA")

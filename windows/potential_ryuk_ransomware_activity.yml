@@ -1,0 +1,23 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Ryuk Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1547.001
+  adversary: UNKNOWN
+  description: Detects Ryuk ransomware activity
+  references:
+  - https://app.any.run/tasks/d860402c-3ff4-4c1f-b367-0237da714ed1/
+  - https://research.checkpoint.com/ryuk-ransomware-targeted-campaign-break/
+  where: safe("log.commandLine", "").contains("Microsoft\\Windows\\CurrentVersion\\Run")
+    && safe("log.commandLine", "").contains("C:\\users\\Public\\") || safe("log.commandLine",
+    "").contains("del /s /f /q c:\\") && safe("log.commandLine", "").contains("*.bac")
+    && safe("log.commandLine", "").contains("*.bak") && safe("log.commandLine", "").contains("*.bkf")
+    || (safe("log.image", "").endsWith("\\net.exe") || safe("log.image", "").endsWith("\\net1.exe"))
+    && safe("log.commandLine", "").contains(" stop ") && safe("log.commandLine", "").contains("
+    /y") && (safe("log.commandLine", "").contains("samss") || safe("log.commandLine",
+    "").contains("audioendpointbuilder") || safe("log.commandLine", "").contains("unistoresvc_")
+    || safe("log.commandLine", "").contains("AcrSch2Svc"))

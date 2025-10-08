@@ -1,0 +1,15 @@
+- dataTypes:
+  - azure
+  name: CA Policy Removed by Non Approved Actor
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1548, T1556
+  adversary: UNKNOWN
+  description: Monitor and alert on conditional access changes where non approved
+    actor removed CA Policy.
+  references:
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-infrastructure#conditional-access
+  where: safe("log.propertiesMessage", "") == "Delete conditional access policy"

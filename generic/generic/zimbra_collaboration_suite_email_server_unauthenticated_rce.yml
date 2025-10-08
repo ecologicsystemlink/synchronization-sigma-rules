@@ -1,0 +1,22 @@
+- dataTypes:
+  - generic
+  name: Zimbra Collaboration Suite Email Server Unauthenticated RCE
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects an attempt to leverage the vulnerable servlet "mboximport"
+    for an unauthenticated remote command injection
+  references:
+  - https://www.volexity.com/blog/2022/08/10/mass-exploitation-of-unauthenticated-zimbra-rce-cve-2022-27925/
+  - https://www.yang99.top/index.php/archives/82/
+  - https://github.com/vnhacker1337/CVE-2022-27925-PoC
+  where: safe("log.csMethod", "") == "POST" && safe("log.csUriQuery", "").contains("/service/extension/backup/mboximport?")
+    && safe("log.csUriQuery", "").contains("account-name") && safe("log.csUriQuery",
+    "").contains("ow") && safe("log.csUriQuery", "").contains("no-switch") && safe("log.csUriQuery",
+    "").contains("append") && (safe("log.scStatus", "") == 401 || safe("log.scStatus",
+    "") == 200) || safe("log.csUriQuery", "").contains("/zimbraAdmin/") && safe("log.csUriQuery",
+    "").endsWith(".jsp") && safe("log.scStatus", "").contains("200")

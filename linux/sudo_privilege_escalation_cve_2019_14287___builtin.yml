@@ -1,0 +1,16 @@
+- dataTypes:
+  - linux
+  name: Sudo Privilege Escalation CVE-2019-14287 - Builtin
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1068, T1548.003
+  adversary: UNKNOWN
+  description: Detects users trying to exploit sudo vulnerability reported in CVE-2019-14287
+  references:
+  - https://www.openwall.com/lists/oss-security/2019/10/14/1
+  - https://access.redhat.com/security/cve/cve-2019-14287
+  - https://twitter.com/matthieugarin/status/1183970598210412546
+  where: safe("log.uSER", "").startsWith("#-") || safe("log.uSER", "").matches("#.*4294967295")

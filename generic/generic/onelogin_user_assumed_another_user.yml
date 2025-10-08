@@ -1,0 +1,14 @@
+- dataTypes:
+  - generic
+  name: OneLogin User Assumed Another User
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Impact
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects when an user assumed another user account.
+  references:
+  - https://developers.onelogin.com/api-docs/1/events/event-resource
+  where: safe("log.eventTypeId", "") == 3

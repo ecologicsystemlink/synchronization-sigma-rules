@@ -1,0 +1,17 @@
+- dataTypes:
+  - macos
+  name: MacOS Scripting Interpreter AppleScript
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1059.002
+  adversary: UNKNOWN
+  description: Detects execution of AppleScript of the macOS scripting language AppleScript.
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1059.002/T1059.002.md
+  - https://redcanary.com/blog/applescript/
+  where: safe("log.image", "").endsWith("/osascript") && (safe("log.commandLine",
+    "").contains(" -e ") || safe("log.commandLine", "").contains(".scpt") || safe("log.commandLine",
+    "").contains(".js"))

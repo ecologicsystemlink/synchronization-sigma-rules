@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Usage of CVE_2021_34484 or CVE 2022_21919
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: During exploitation of this vulnerability, two logs (Provider_Name:Microsoft-Windows-User
+    Profiles Service) with EventID 1511 and 1515 (maybe lot of false positives with
+    this event) are created. Moreover, it appears the directory \Users\TEMP is created
+    may be created during the exploitation. Viewed on 2008 Server
+  references:
+  - https://packetstormsecurity.com/files/166692/Windows-User-Profile-Service-Privlege-Escalation.html
+  where: safe("log.eventCode", 0.0) == double(1511) && safe("log.providerName", "")
+    == "Microsoft-Windows-User Profiles Service"

@@ -1,0 +1,20 @@
+- dataTypes:
+  - generic
+  name: Potential Java WebShell Upload in SAP NetViewer Server
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1505.003
+  adversary: UNKNOWN
+  description: Detects potential Java webshell uploads via HTTP requests with Content-Type
+    'application/octet-stream' and Java file extensions. This behavior might indicate
+    exploitation of vulnerabilities like CVE-2025-31324, which allows remote code
+    execution through webshells in SAP NetViewer.
+  references:
+  - https://blog.eclecticiq.com/china-nexus-nation-state-actors-exploit-sap-netweaver-cve-2025-31324-to-target-critical-infrastructures
+  where: safe("log.csContentType", "") == "application/octet-stream" && safe("log.csMethod",
+    "") == "POST" && safe("log.csUriStem", "").contains("/irj/") && safe("log.csUriStem",
+    "").contains(".jsp") && (safe("log.csUriStem", "").endsWith(".class") || safe("log.csUriStem",
+    "").endsWith(".java") || safe("log.csUriStem", "").endsWith(".jsp"))

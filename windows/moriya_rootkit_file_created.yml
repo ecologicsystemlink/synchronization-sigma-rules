@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Moriya Rootkit File Created
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1543.003
+  adversary: UNKNOWN
+  description: Detects the creation of a file named "MoriyaStreamWatchmen.sys" in
+    a specific location. This filename was reported to be related to the Moriya rootkit
+    as described in the securelist's Operation TunnelSnake report.
+  references:
+  - https://securelist.com/operation-tunnelsnake-and-moriya-rootkit/101831
+  where: safe("log.targetFileName", "") == "C:\\Windows\\System32\\drivers\\MoriyaStreamWatchmen.sys"

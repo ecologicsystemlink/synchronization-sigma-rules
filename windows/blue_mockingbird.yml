@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Blue Mockingbird
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1112, T1047
+  adversary: UNKNOWN
+  description: Attempts to detect system changes made by Blue Mockingbird
+  references:
+  - https://redcanary.com/blog/blue-mockingbird-cryptominer/
+  where: safe("log.image", "").endsWith("\\cmd.exe") && safe("log.commandLine", "").contains("sc
+    config") && safe("log.commandLine", "").contains("wercplsupporte.dll") || safe("log.image",
+    "").endsWith("\\wmic.exe") && safe("log.commandLine", "").endsWith("COR_PROFILER")

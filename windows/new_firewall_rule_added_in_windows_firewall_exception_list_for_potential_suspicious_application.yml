@@ -1,0 +1,23 @@
+- dataTypes:
+  - wineventlog
+  name: New Firewall Rule Added In Windows Firewall Exception List For Potential Suspicious
+    Application
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1562.004
+  adversary: UNKNOWN
+  description: Detects the addition of a new rule to the Windows Firewall exception
+    list for an application located in a potentially suspicious location.
+  references:
+  - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/dd364427(v=ws.10)
+  - https://app.any.run/tasks/7123e948-c91e-49e0-a813-00e8d72ab393/#
+  where: (safe("log.eventCode", 0.0) == double(2004) || safe("log.eventCode", 0.0)
+    == double(2071) || safe("log.eventCode", 0.0) == double(2097)) && (safe("log.applicationPath",
+    "").contains(":\\PerfLogs\\") || safe("log.applicationPath", "").contains(":\\Temp\\")
+    || safe("log.applicationPath", "").contains(":\\Tmp\\") || safe("log.applicationPath",
+    "").contains(":\\Users\\Public\\") || safe("log.applicationPath", "").contains(":\\Windows\\Tasks\\")
+    || safe("log.applicationPath", "").contains(":\\Windows\\Temp\\") || safe("log.applicationPath",
+    "").contains("\\AppData\\Local\\Temp\\")) && !(safe("action", "") == 2)

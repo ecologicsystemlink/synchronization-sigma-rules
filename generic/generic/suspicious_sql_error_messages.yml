@@ -1,0 +1,23 @@
+- dataTypes:
+  - generic
+  name: Suspicious SQL Error Messages
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects SQL error messages that indicate probing for an injection attack
+  references:
+  - http://www.sqlinjection.net/errors
+  where: '""safe("log.quoted", "") safe("log.string", "") !safe("log.properly", "")
+    safe("log.terminated", "")"" || ""safe("log.you", "") safe("log.have", "") safe("log.an",
+    "") safe("log.error", "") safe("log.in", "") safe("log.your", "") safe("log.sQL",
+    "") safe("log.syntax", "")"" || ""safe("log.unclosed", "") safe("log.quotation",
+    "") safe("log.mark", "")"" || ""safe("log.near", "") \".*\": safe("log.syntax",
+    "") safe("log.error", "")"" || ""safe("log.sELECTs", "") safe("log.to", "") safe("log.the",
+    "") safe("log.left", "") && safe("log.right", "") safe("log.of", "") safe("log.uNION",
+    "") safe("log.do", "") !safe("log.have", "") safe("log.the", "") safe("log.same",
+    "") safe("log.number", "") safe("log.of", "") safe("log.result", "") safe("log.columns",
+    "")""'

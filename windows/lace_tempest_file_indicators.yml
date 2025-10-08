@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Lace Tempest File Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects PowerShell script file creation with specific names or suffixes
+    which was seen being used often in PowerShell scripts by FIN7
+  references:
+  - https://www.sysaid.com/blog/service-desk/on-premise-software-security-vulnerability-notification
+  where: safe("log.targetFileName", "").endsWith(":\\Program Files\\SysAidServer\\tomcat\\webapps\\usersfiles\\user.exe")
+    || safe("log.targetFileName", "").endsWith(":\\Program Files\\SysAidServer\\tomcat\\webapps\\usersfiles.war")
+    || safe("log.targetFileName", "").endsWith(":\\Program Files\\SysAidServer\\tomcat\\webapps\\leave")
+    || safe("log.targetFileName", "").contains(":\\Program Files\\SysAidServer\\tomcat\\webapps\\user.")

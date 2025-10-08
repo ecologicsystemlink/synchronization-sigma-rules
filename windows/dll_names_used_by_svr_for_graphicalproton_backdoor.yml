@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: DLL Names Used By SVR For GraphicalProton Backdoor
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: Hunts known SVR-specific DLL names.
+  references:
+  - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-347a
+  where: safe("log.imageLoaded", "").endsWith("\\AclNumsInvertHost.dll") || safe("log.imageLoaded",
+    "").endsWith("\\AddressResourcesSpec.dll") || safe("log.imageLoaded", "").endsWith("\\BlendMonitorStringBuild.dll")
+    || safe("log.imageLoaded", "").endsWith("\\ChildPaletteConnected.dll") || safe("log.imageLoaded",
+    "").endsWith("\\DeregisterSeekUsers.dll") || safe("log.imageLoaded", "").endsWith("\\HandleFrequencyAll.dll")
+    || safe("log.imageLoaded", "").endsWith("\\HardSwapColor.dll") || safe("log.imageLoaded",
+    "").endsWith("\\LengthInMemoryActivate.dll") || safe("log.imageLoaded", "").endsWith("\\ModeBitmapNumericAnimate.dll")
+    || safe("log.imageLoaded", "").endsWith("\\ModeFolderSignMove.dll") || safe("log.imageLoaded",
+    "").endsWith("\\ParametersNamesPopup.dll") || safe("log.imageLoaded", "").endsWith("\\PerformanceCaptionApi.dll")
+    || safe("log.imageLoaded", "").endsWith("\\ScrollbarHandleGet.dll") || safe("log.imageLoaded",
+    "").endsWith("\\UnregisterAncestorAppendAuto.dll") || safe("log.imageLoaded",
+    "").endsWith("\\WowIcmpRemoveReg.dll")

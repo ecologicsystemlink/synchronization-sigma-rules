@@ -1,0 +1,18 @@
+- dataTypes:
+  - linux
+  name: Shell Invocation via Apt - Linux
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Discovery
+  technique: T1083
+  adversary: UNKNOWN
+  description: Detects the use of the "apt" and "apt-get" commands to execute a shell
+    or proxy commands. Such behavior may be associated with privilege escalation,
+    unauthorized command execution, or to break out from restricted environments.
+  references:
+  - https://gtfobins.github.io/gtfobins/apt/
+  - https://gtfobins.github.io/gtfobins/apt-get/
+  where: (safe("log.image", "").endsWith("/apt") || safe("log.image", "").endsWith("/apt-get"))
+    && safe("log.commandLine", "").contains("APT::Update::Pre-Invoke::=")

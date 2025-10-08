@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: F5 BIG-IP iControl Rest API Command Execution - Webserver
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects POST requests to the F5 BIG-IP iControl Rest API "bash" endpoint,
+    which allows the execution of commands on the BIG-IP
+  references:
+  - https://f5-sdk.readthedocs.io/en/latest/apidoc/f5.bigip.tm.util.html#module-f5.bigip.tm.util.bash
+  - https://community.f5.com/t5/technical-forum/icontrolrest-11-5-execute-bash-command/td-p/203029
+  - https://community.f5.com/t5/technical-forum/running-bash-commands-via-rest-api/td-p/272516
+  where: safe("log.csMethod", "") == "POST" && safe("log.csUriQuery", "").endsWith("/mgmt/tm/util/bash")

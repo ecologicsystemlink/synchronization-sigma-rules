@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: DMP/HDMP File Creation
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects the creation of a file with the ".dmp"/".hdmp" extension. Often
+    created by software during a crash. Memory dumps can sometimes contain sensitive
+    information such as credentials. It's best to determine the source of the crash.
+  references:
+  - https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps
+  where: safe("log.targetFileName", "").endsWith(".dmp") || safe("log.targetFileName",
+    "").endsWith(".dump") || safe("log.targetFileName", "").endsWith(".hdmp")

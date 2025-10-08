@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: Non-DLL Extension File Renamed With DLL Extension
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1036.008
+  adversary: UNKNOWN
+  description: Detects rename operations of files with non-DLL extensions to files
+    with a DLL extension. This is often performed by malware in order to avoid initial
+    detections based on extensions.
+  references:
+  - https://twitter.com/ffforward/status/1481672378639912960
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1036/T1036.md#atomic-test-1---system-file-copied-to-unusual-location
+  where: safe("log.targetFileName", "").endsWith(".dll") && !(safe("origin.filename",
+    "").endsWith(".dll") || safe("origin.filename", "").endsWith(".tmp") || safe("origin.filename",
+    "") == "" || safe("origin.filename", "") == safe("log.nil", "") || safe("log.image",
+    "").contains(":\\Windows\\WinSxS\\") && safe("log.image", "").endsWith("\\TiWorker.exe")
+    || safe("log.image", "").endsWith(":\\Windows\\System32\\wuauclt.exe") || safe("log.targetFileName",
+    "").contains(":\\$WINDOWS.~BT\\Sources\\") || safe("log.image", "").contains(":\\Program
+    Files (x86)\\") || safe("log.image", "").contains(":\\Program Files\\")) && !(safe("origin.filename",
+    "").contains("\\SquirrelTemp\\temp"))

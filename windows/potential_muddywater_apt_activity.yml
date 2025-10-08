@@ -1,0 +1,25 @@
+- dataTypes:
+  - wineventlog
+  name: Potential MuddyWater APT Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects potential Muddywater APT activity
+  references:
+  - https://www.mandiant.com/resources/blog/iranian-threat-group-updates-ttps-in-spear-phishing-campaign
+  where: safe("log.commandLine", "").contains("vbscript:Close(Execute(\")safe("log.createObject",
+    "")(" && CommandLine contains "safe("log.powershell", "")" && CommandLine contains
+    "-safe("log.w", "") 1 -safe("log.exec", "") safe("log.bypass", "")" && CommandLine
+    contains "\\safe("log.programData", "")\\" || CommandLine contains "safe("log.win32Operatingsystem",
+    "")" && CommandLine contains "safe("log.win32Networkadapterconfiguration", "")"
+    && CommandLine contains "safe("log.root", "")\\safe("log.securityCenter2", "")"
+    && CommandLine contains "[safe("log.SystemNetDns", "")]" || CommandLine contains
+    "[safe("log.convert", "")]::safe("log.toBase64String", "")" && CommandLine contains
+    "[safe("log.SystemTextEncoding", "")]::safe("log.UTF8Getstring", "")]" && CommandLine
+    contains "safe("log.getResponse", "")().safe("log.getResponseStream", "")()" &&
+    CommandLine contains "[safe("log.SystemNetHttpwebrequest", "")]::safe("log.create",
+    "")(" && CommandLine contains "-safe("log.bxor", "") "

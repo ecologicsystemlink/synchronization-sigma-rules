@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Restricted Software Access By SRP
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1072
+  adversary: UNKNOWN
+  description: Detects restricted access to applications by the Software Restriction
+    Policies (SRP) policy
+  references:
+  - https://learn.microsoft.com/en-us/windows-server/identity/software-restriction-policies/software-restriction-policies
+  - https://github.com/nasbench/EVTX-ETW-Resources/blob/7a806a148b3d9d381193d4a80356016e6e8b1ee8/ETWEventsList/CSV/Windows11/22H2/W11_22H2_Pro_20220920_22621.382/Providers/Microsoft-Windows-AppXDeployment-Server.csv
+  where: safe("log.providerName", "") == "Microsoft-Windows-SoftwareRestrictionPolicies"
+    && (safe("log.eventCode", 0.0) == double(865) || safe("log.eventCode", 0.0) ==
+    double(866) || safe("log.eventCode", 0.0) == double(867) || safe("log.eventCode",
+    0.0) == double(868) || safe("log.eventCode", 0.0) == double(882))

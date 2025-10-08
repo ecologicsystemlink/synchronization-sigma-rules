@@ -1,0 +1,35 @@
+- dataTypes:
+  - linux
+  name: Suspicious VSFTPD Error Messages
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects suspicious VSFTPD error messages that indicate a fatal or suspicious
+    error that could be caused by exploiting attempts
+  references:
+  - https://github.com/dagwieers/vsftpd/
+  where: '""safe("log.connection", "") safe("log.refused", ""): safe("log.too", "")
+    safe("log.many", "") safe("log.sessions", "") safe("log.for", "") safe("log.this",
+    "") safe("log.address", "")."" || ""safe("log.connection", "") safe("log.refused",
+    ""): safe("log.tcpWrappers", "") safe("log.denial", "")."" || ""safe("log.bad",
+    "") safe("log.hTTP", "") safe("log.verb", "")."" || ""safe("log.port", "") &&
+    safe("log.pasv", "") safe("log.both", "") safe("log.active", "")"" || ""safe("log.pasv",
+    "") && safe("log.port", "") safe("log.both", "") safe("log.active", "")"" || ""safe("log.transfer",
+    "") safe("log.done", "") (safe("log.but", "") safe("log.failed", "") safe("log.to",
+    "") safe("log.open", "") safe("log.directory", ""))."" || ""safe("log.could",
+    "") !safe("log.set", "") safe("log.file", "") safe("log.modification", "") safe("log.time",
+    "")."" || ""safe("log.bug", ""): safe("log.pid", "") safe("log.active", "") safe("log.in",
+    "") safe("log.ptraceSandboxFree", "")"" || ""safe("log.ptraceSetoptions", "")
+    safe("log.failure", "")"" || ""safe("log.weird", "") safe("log.status", ""):""
+    || ""safe("log.couldn", "")''safe("log.t", "") safe("log.handle", "") safe("log.sandbox",
+    "") safe("log.event", "")"" || ""safe("log.syscall", "") .* safe("log.out", "")
+    safe("log.of", "") safe("log.bounds", "")"" || ""safe("log.syscall", "") !safe("log.permitted",
+    ""):"" || ""safe("log.syscall", "") safe("log.validate", "") safe("log.failed",
+    ""):"" || ""safe("log.input", "") safe("log.line", "") safe("log.too", "") safe("log.long",
+    "")."" || ""safe("log.poor", "") safe("log.buffer", "") safe("log.accounting",
+    "") safe("log.in", "") safe("log.strNetfdAlloc", "")"" || ""safe("log.vsfSysutilReadLoop",
+    "")""'

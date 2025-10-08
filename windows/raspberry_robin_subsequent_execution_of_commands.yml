@@ -1,0 +1,27 @@
+- dataTypes:
+  - wineventlog
+  name: Raspberry Robin Subsequent Execution of Commands
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects raspberry robin subsequent execution of commands.
+  references:
+  - https://redcanary.com/blog/raspberry-robin/
+  where: safe("log.parentImage", "").endsWith("\\fodhelper.exe") && (safe("log.image",
+    "").endsWith("\\rundll32.exe") || safe("log.image", "").endsWith("\\regsvr32.exe"))
+    && safe("log.commandLine", "").contains("odbcconf.exe") && safe("log.commandLine",
+    "").contains("regsvr") && safe("log.commandLine", "").contains("shellexec_rundll")
+    && (safe("log.commandLine", "").contains("installdriver") || safe("log.commandLine",
+    "").contains("setfiledsndir") || safe("log.commandLine", "").contains("vkipdse"))
+    && (safe("log.commandLine", "").endsWith("-a") || safe("log.commandLine", "").endsWith("/a")
+    || safe("log.commandLine", "").endsWith("–a") || safe("log.commandLine", "").endsWith("—a")
+    || safe("log.commandLine", "").endsWith("―a") || safe("log.commandLine", "").endsWith("-f")
+    || safe("log.commandLine", "").endsWith("/f") || safe("log.commandLine", "").endsWith("–f")
+    || safe("log.commandLine", "").endsWith("—f") || safe("log.commandLine", "").endsWith("―f")
+    || safe("log.commandLine", "").endsWith("-s") || safe("log.commandLine", "").endsWith("/s")
+    || safe("log.commandLine", "").endsWith("–s") || safe("log.commandLine", "").endsWith("—s")
+    || safe("log.commandLine", "").endsWith("―s"))

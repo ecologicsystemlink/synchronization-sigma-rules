@@ -1,0 +1,41 @@
+- dataTypes:
+  - wineventlog
+  name: Potential PlugX Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1574.001
+  adversary: UNKNOWN
+  description: Detects the execution of an executable that is typically used by PlugX
+    for DLL side loading starting from an uncommon location
+  references:
+  - http://www.hexacorn.com/blog/2016/03/10/beyond-good-ol-run-key-part-36/
+  - https://countuponsecurity.com/2017/06/07/threat-hunting-in-the-enterprise-with-appcompatprocessor/
+  where: safe("log.image", "").endsWith("\\CamMute.exe") && !(safe("log.image", "").contains("\\Lenovo\\Communication
+    Utility\\") || safe("log.image", "").contains("\\Lenovo\\Communications Utility\\"))
+    || safe("log.image", "").endsWith("\\chrome_frame_helper.exe") && !(safe("log.image",
+    "").contains("\\Google\\Chrome\\application\\")) || safe("log.image", "").endsWith("\\dvcemumanager.exe")
+    && !(safe("log.image", "").contains("\\Microsoft Device Emulator\\")) || safe("log.image",
+    "").endsWith("\\Gadget.exe") && !(safe("log.image", "").contains("\\Windows Media
+    Player\\")) || safe("log.image", "").endsWith("\\hcc.exe") && !(safe("log.image",
+    "").contains("\\HTML Help Workshop\\")) || safe("log.image", "").endsWith("\\hkcmd.exe")
+    && !(safe("log.image", "").contains("\\System32\\") || safe("log.image", "").contains("\\SysNative\\")
+    || safe("log.image", "").contains("\\SysWow64\\")) || safe("log.image", "").endsWith("\\Mc.exe")
+    && !(safe("log.image", "").contains("\\Microsoft Visual Studio") || safe("log.image",
+    "").contains("\\Microsoft SDK") || safe("log.image", "").contains("\\Windows Kit"))
+    || safe("log.image", "").endsWith("\\MsMpEng.exe") && !(safe("log.image", "").contains("\\Microsoft
+    Security Client\\") || safe("log.image", "").contains("\\Windows Defender\\")
+    || safe("log.image", "").contains("\\AntiMalware\\")) || safe("log.image", "").endsWith("\\msseces.exe")
+    && !(safe("log.image", "").contains("\\Microsoft Security Center\\") || safe("log.image",
+    "").contains("\\Microsoft Security Client\\") || safe("log.image", "").contains("\\Microsoft
+    Security Essentials\\")) || safe("log.image", "").endsWith("\\OInfoP11.exe") &&
+    !(safe("log.image", "").contains("\\Common Files\\Microsoft Shared\\")) || safe("log.image",
+    "").endsWith("\\OleView.exe") && !(safe("log.image", "").contains("\\Microsoft
+    Visual Studio") || safe("log.image", "").contains("\\Microsoft SDK") || safe("log.image",
+    "").contains("\\Windows Kit") || safe("log.image", "").contains("\\Windows Resource
+    Kit\\")) || safe("log.image", "").endsWith("\\rc.exe") && !(safe("log.image",
+    "").contains("\\Microsoft Visual Studio") || safe("log.image", "").contains("\\Microsoft
+    SDK") || safe("log.image", "").contains("\\Windows Kit") || safe("log.image",
+    "").contains("\\Windows Resource Kit\\") || safe("log.image", "").contains("\\Microsoft.NET\\"))

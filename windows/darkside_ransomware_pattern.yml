@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: DarkSide Ransomware Pattern
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1204
+  adversary: UNKNOWN
+  description: Detects DarkSide Ransomware and helpers
+  references:
+  - https://www.fireeye.com/blog/threat-research/2021/05/shining-a-light-on-darkside-ransomware-operations.html
+  - https://app.any.run/tasks/8b9a571b-bcc1-4783-ba32-df4ba623b9c0/
+  - https://www.joesandbox.com/analysis/411752/0/html#7048BB9A06B8F2DD9D24C77F389D7B2B58D2
+  where: safe("log.commandLine", "").contains("=[char][byte]('0x'+") || safe("log.commandLine",
+    "").contains(" -work worker0 -path ") || safe("log.parentCommandLine", "").contains("DllHost.exe
+    /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}") && safe("log.image", "").contains("\\AppData\\Local\\Temp\\")

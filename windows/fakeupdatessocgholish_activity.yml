@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: FakeUpdates/SocGholish Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects initial execution of FakeUpdates/SocGholish malware via wscript
+    that later executes commands via cmd or powershell.
+  references:
+  - https://twitter.com/th3_protoCOL/status/1536788652889497600
+  - https://twitter.com/1ZRR4H/status/1537501582727778304
+  where: safe("log.parentImage", "").endsWith("\\wscript.exe") && safe("log.parentCommandLine",
+    "").contains("\\AppData\\Local\\Temp") && safe("log.parentCommandLine", "").contains(".zip")
+    && safe("log.parentCommandLine", "").contains("update") && safe("log.parentCommandLine",
+    "").contains(".js") && (safe("log.parentCommandLine", "").contains("Chrome") ||
+    safe("log.parentCommandLine", "").contains("Edge") || safe("log.parentCommandLine",
+    "").contains("Firefox") || safe("log.parentCommandLine", "").contains("Opera")
+    || safe("log.parentCommandLine", "").contains("Brave") || safe("log.parentCommandLine",
+    "").contains("Vivaldi")) && (safe("log.image", "").endsWith("\\cmd.exe") || safe("log.image",
+    "").endsWith("\\powershell.exe") || safe("log.image", "").endsWith("\\pwsh.exe"))

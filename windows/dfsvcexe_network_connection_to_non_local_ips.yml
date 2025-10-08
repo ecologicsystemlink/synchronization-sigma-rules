@@ -1,0 +1,29 @@
+- dataTypes:
+  - wineventlog
+  name: Dfsvc.EXE Network Connection To Non-Local IPs
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1203
+  adversary: UNKNOWN
+  description: Detects network connections from "dfsvc.exe" used to handled ClickOnce
+    applications to non-local IPs
+  references:
+  - https://posts.specterops.io/less-smartscreen-more-caffeine-ab-using-clickonce-for-trusted-code-execution-1446ea8051c5
+  where: safe("log.image", "").endsWith("\\dfsvc.exe") && safe("log.initiated", "")
+    == "true" && !(safe("target.ip", "").startsWith("127.") || safe("target.ip", "").startsWith("10.")
+    || safe("target.ip", "").startsWith("169.254.") || safe("target.ip", "").startsWith("172.16.")
+    || safe("target.ip", "").startsWith("172.17.") || safe("target.ip", "").startsWith("172.18.")
+    || safe("target.ip", "").startsWith("172.19.") || safe("target.ip", "").startsWith("172.20.")
+    || safe("target.ip", "").startsWith("172.21.") || safe("target.ip", "").startsWith("172.22.")
+    || safe("target.ip", "").startsWith("172.23.") || safe("target.ip", "").startsWith("172.24.")
+    || safe("target.ip", "").startsWith("172.25.") || safe("target.ip", "").startsWith("172.26.")
+    || safe("target.ip", "").startsWith("172.27.") || safe("target.ip", "").startsWith("172.28.")
+    || safe("target.ip", "").startsWith("172.29.") || safe("target.ip", "").startsWith("172.30.")
+    || safe("target.ip", "").startsWith("172.31.") || safe("target.ip", "").startsWith("192.168.")
+    || safe("target.ip", "") == "::1/128" || safe("target.ip", "").startsWith("fe8")
+    || safe("target.ip", "").startsWith("fe9") || safe("target.ip", "").startsWith("fea")
+    || safe("target.ip", "").startsWith("feb") || safe("target.ip", "").startsWith("fc")
+    || safe("target.ip", "").startsWith("fd"))

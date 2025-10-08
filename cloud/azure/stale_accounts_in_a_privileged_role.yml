@@ -1,0 +1,15 @@
+- dataTypes:
+  - azure
+  name: Stale Accounts In A Privileged Role
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: T1078
+  adversary: UNKNOWN
+  description: Identifies when an account hasn't signed in during the past n number
+    of days.
+  references:
+  - https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-how-to-configure-security-alerts#potential-stale-accounts-in-a-privileged-role
+  where: safe("log.riskeventtype", "") == "staleSignInAlertIncident"

@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Bumblebee Remote Thread Creation
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1218.011, T1059.001
+  adversary: UNKNOWN
+  description: Detects remote thread injection events based on action seen used by
+    bumblebee
+  references:
+  - https://thedfirreport.com/2022/09/26/bumblebee-round-two/
+  where: (safe("log.sourceImage", "").endsWith("\\wabmig.exe") || safe("log.sourceImage",
+    "").endsWith("\\wab.exe") || safe("log.sourceImage", "").endsWith("\\ImagingDevices.exe"))
+    && safe("log.targetImage", "").endsWith("\\rundll32.exe")

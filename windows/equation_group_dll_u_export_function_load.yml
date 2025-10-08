@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Equation Group DLL_U Export Function Load
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.011
+  adversary: UNKNOWN
+  description: Detects a specific export function name used by one of EquationGroup
+    tools
+  references:
+  - https://github.com/00derp/EquationGroupLeak/search?utf8=%E2%9C%93&q=dll_u&type=
+  - https://twitter.com/cyb3rops/status/972186477512839170
+  where: safe("log.commandLine", "").contains("-export dll_u") || safe("log.commandLine",
+    "").endsWith(",dll_u") || safe("log.commandLine", "").endsWith(" dll_u")

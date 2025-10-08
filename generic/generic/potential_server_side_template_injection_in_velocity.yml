@@ -1,0 +1,17 @@
+- dataTypes:
+  - generic
+  name: Potential Server Side Template Injection In Velocity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects exceptions in velocity template renderer, this most likely
+    happens due to dynamic rendering of user input and may lead to RCE.
+  references:
+  - https://antgarsil.github.io/posts/velocity/
+  - https://www.wix.engineering/post/threat-and-vulnerability-hunting-with-application-server-error-logs
+  where: '""safe("log.parseErrorException", "")"" || ""safe("log.velocityException",
+    "")"" || ""safe("log.templateInitException", "")""'

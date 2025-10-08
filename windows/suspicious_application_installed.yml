@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious Application Installed
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects suspicious application installed by looking at the added shortcut
+    to the app resolver cache
+  references:
+  - https://nasbench.medium.com/finding-forensic-goodness-in-obscure-windows-event-logs-60e978ea45a3
+  where: safe("log.eventCode", 0.0) == double(28115) && (safe("log.name", "").contains("Zenmap")
+    || safe("log.name", "").contains("AnyDesk") || safe("log.name", "").contains("wireshark")
+    || safe("log.name", "").contains("openvpn")) || safe("log.eventCode", 0.0) ==
+    double(28115) && (safe("log.appID", "").contains("zenmap.exe") || safe("log.appID",
+    "").contains("prokzult ad") || safe("log.appID", "").contains("wireshark") ||
+    safe("log.appID", "").contains("openvpn"))

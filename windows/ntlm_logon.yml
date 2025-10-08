@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: NTLM Logon
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Security Detection
+  technique: T1550.002
+  adversary: UNKNOWN
+  description: Detects logons using NTLM, which could be caused by a legacy source
+    or attackers
+  references:
+  - https://twitter.com/JohnLaTwC/status/1004895028995477505
+  where: safe("log.eventCode", 0.0) == double(8002)

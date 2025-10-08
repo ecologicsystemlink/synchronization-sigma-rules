@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: MSSQL Add Account To Sysadmin Role
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Persistence
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects when an attacker tries to backdoor the MSSQL server by adding
+    a backdoor account to the sysadmin fixed server role
+  references:
+  - https://www.netspi.com/blog/technical/network-penetration-testing/sql-server-persistence-part-1-startup-stored-procedures/
+  where: safe("log.providerName", "").contains("MSSQL") && safe("log.eventCode", 0.0)
+    == double(33205) && safe("log.data", "").contains("object_name:sysadmin") && safe("log.data",
+    "").contains("statement:alter server role [sysadmin] add member ")

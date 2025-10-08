@@ -1,0 +1,28 @@
+- dataTypes:
+  - wineventlog
+  name: UNC2452 Process Creation Patterns
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001
+  adversary: UNKNOWN
+  description: Detects a specific process creation patterns as seen used by UNC2452
+    and provided by Microsoft as Microsoft Defender ATP queries
+  references:
+  - https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/
+  where: (safe("log.commandLine", "").contains("7z.exe a -v500m -mx9 -r0 -p") || safe("log.commandLine",
+    "").contains("7z.exe a -mx9 -r0 -p")) && safe("log.commandLine", "").contains(".zip")
+    && safe("log.commandLine", "").contains(".txt") || (safe("log.commandLine", "").contains("7z.exe
+    a -v500m -mx9 -r0 -p") || safe("log.commandLine", "").contains("7z.exe a -mx9
+    -r0 -p")) && safe("log.commandLine", "").contains(".zip") && safe("log.commandLine",
+    "").contains(".log") || safe("log.parentCommandLine", "").contains("wscript.exe")
+    && safe("log.parentCommandLine", "").contains(".vbs") && safe("log.commandLine",
+    "").contains("rundll32.exe") && safe("log.commandLine", "").contains("C:\\Windows")
+    && safe("log.commandLine", "").contains(".dll,Tk_") || safe("log.parentImage",
+    "").endsWith("\\rundll32.exe") && safe("log.parentCommandLine", "").contains("C:\\Windows")
+    && safe("log.parentCommandLine", "").contains(".dll") && safe("log.commandLine",
+    "").contains("cmd.exe /C ") || safe("log.parentImage", "").endsWith("\\rundll32.exe")
+    && safe("log.image", "").endsWith("\\dllhost.exe") && safe("log.commandLine",
+    "") == ""
