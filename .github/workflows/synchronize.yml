@@ -70,7 +70,6 @@ jobs:
           else
             echo "Looking for changes since ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}..."
             
-            # Execute git diff and capture output
             DIFF_OUTPUT=$(git diff --name-only ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }} HEAD -- '*.yml')
             DIFF_EXIT=$?
             
@@ -86,7 +85,6 @@ jobs:
               echo "Found modified .yml files, filtering for rules directories..."
               echo "$DIFF_OUTPUT"
               
-              # Filter through grep and handle its exit codes properly
               echo "$DIFF_OUTPUT" | grep -E '^rules/|/rules/|rules-[^/]+/' > ${{ github.workspace }}/modified_files.txt
               GREP_EXIT=$?
               
@@ -139,13 +137,10 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           
-          # Use git to detect all changed files
           git add .
           
-          # Get only YAML files that were changed
           git status --porcelain | grep -E "\.(yml|yaml)$" > changed_files.txt
           
-          # Check if we have YAML changes
           if [ ! -s "changed_files.txt" ]; then
             echo "No YAML files were changed after conversion"
             exit 0
@@ -153,10 +148,8 @@ jobs:
           
           echo "Found $(wc -l < changed_files.txt) YAML files changed"
           
-          # Reset staging area to start fresh
           git reset HEAD
           
-          # Create batches of 10 files each
           split -l 10 changed_files.txt batch_
           
           batch_count=1
@@ -165,10 +158,8 @@ jobs:
           for batch_file in batch_*; do
             echo "Processing batch $batch_count of $total_batches..."
             
-            # Add files from this batch to staging
             files_added=0
             while read -r status_line; do
-              # Extract file path from git status output
               file_path=$(echo "$status_line" | awk '{print $NF}')
               
               if [ -f "$file_path" ]; then
@@ -177,7 +168,6 @@ jobs:
               fi
             done < "$batch_file"
             
-            # Commit this batch if files were added
             if [ $files_added -gt 0 ]; then
               git commit -m "Batch $batch_count/$total_batches: Convert $files_added Sigma rules to UTMSTACK format"
               echo "Committed batch $batch_count with $files_added files"
@@ -188,7 +178,6 @@ jobs:
             batch_count=$((batch_count + 1))
           done
           
-          # Clean up temporary files
           rm -f batch_* changed_files.txt
           
           echo "All batches processed successfully"
