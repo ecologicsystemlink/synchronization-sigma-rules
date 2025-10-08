@@ -1,0 +1,16 @@
+- dataTypes:
+  - aws
+  name: AWS CloudTrail Important Change
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1562.008
+  adversary: UNKNOWN
+  description: Detects disabling, deleting and updating of a Trail
+  references:
+  - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html
+  where: safe("log.eventsource", "") == "cloudtrail.amazonaws.com" && (safe("log.eventname",
+    "") == "StopLogging" || safe("log.eventname", "") == "UpdateTrail" || safe("log.eventname",
+    "") == "DeleteTrail")
