@@ -1,0 +1,28 @@
+- dataTypes:
+  - wineventlog
+  name: Suspicious CrushFTP Child Process
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Execution
+  technique: T1059.001, T1059.003, T1190
+  adversary: UNKNOWN
+  description: Detects suspicious child processes spawned by the CrushFTP service
+    that may indicate exploitation of remote code execution vulnerabilities such as
+    CVE-2025-31161, where attackers can achieve RCE through crafted HTTP requests.
+    The detection focuses on commonly abused Windows executables (like powershell.exe,
+    cmd.exe etc.) that attackers typically use post-exploitation to execute malicious
+    commands.
+  references:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-2825
+  - https://www.crushftp.com/crush11wiki/Wiki.jsp?page=Update
+  - https://outpost24.com/blog/crushftp-auth-bypass-vulnerability/
+  - https://attackerkb.com/topics/k0EgiL9Psz/cve-2025-2825/rapid7-analysis
+  - https://projectdiscovery.io/blog/crushftp-authentication-bypass
+  where: safe("log.parentImage", "").endsWith("\\crushftpservice.exe") && (safe("log.image",
+    "").endsWith("\\bash.exe") || safe("log.image", "").endsWith("\\cmd.exe") || safe("log.image",
+    "").endsWith("\\cscript.exe") || safe("log.image", "").endsWith("\\mshta.exe")
+    || safe("log.image", "").endsWith("\\powershell.exe") || safe("log.image", "").endsWith("\\powershell_ise.exe")
+    || safe("log.image", "").endsWith("\\pwsh.exe") || safe("log.image", "").endsWith("\\sh.exe")
+    || safe("log.image", "").endsWith("\\wscript.exe"))
