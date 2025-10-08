@@ -1,0 +1,18 @@
+- dataTypes:
+  - linux
+  name: Terminate Linux Process Via Kill
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1562
+  adversary: UNKNOWN
+  description: Detects usage of command line tools such as "kill", "pkill" or "killall"
+    to terminate or signal a running process.
+  references:
+  - https://www.trendmicro.com/en_us/research/23/c/iron-tiger-sysupdate-adds-linux-targeting.html
+  - https://www.cyberciti.biz/faq/how-force-kill-process-linux/
+  - https://www.geeksforgeeks.org/how-to-kill-processes-on-the-linux-desktop-with-xkill/
+  where: safe("log.image", "").endsWith("/kill") || safe("log.image", "").endsWith("/killall")
+    || safe("log.image", "").endsWith("/pkill") || safe("log.image", "").endsWith("/xkill")
