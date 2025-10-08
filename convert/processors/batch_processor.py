@@ -8,8 +8,6 @@ error handling, and resume capabilities for large-scale processing operations.
 import asyncio
 import logging
 import json
-import time
-import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
@@ -91,83 +89,6 @@ def save_progress(progress_file: Path, completed_files: List[str], current_file:
     with open(progress_file, 'w') as f:
         json.dump(progress_data, f, indent=2)
     logging.debug(f"Progress saved: {len(completed_files)} files completed")
-
-
-async def verify_files_created(tech_folder: Path, expected_rules: List[str], start_id: int) -> int:
-    """
-    Verify that rule files were successfully created.
-    
-    Args:
-        tech_folder: Technology folder to check
-        expected_rules: List of expected rule names
-        start_id: Starting ID for rule numbering
-        
-    Returns:
-        Number of files successfully created
-    """
-    if not tech_folder.exists():
-        logging.error(f"Technology folder does not exist: {tech_folder}")
-        return 0
-
-    # Get current files in the directory
-    current_files = list(tech_folder.glob("*.yml"))
-    logging.info(f"Checking {tech_folder} - found {len(current_files)} total YAML files")
-
-    # Track files created
-    created_count = 0
-    created_files = []
-
-    # Check each expected rule
-    for idx, rule in enumerate(expected_rules):
-        rule_id = 1000 + start_id + idx + 1
-        rule_found = False
-
-        # Look for files that might contain this rule
-        for file_path in current_files:
-            try:
-                with open(file_path, "r") as f:
-                    content = f.read()
-
-                # Check if this file contains the expected rule ID or name
-                if (
-                    f"id: {rule_id}" in content
-                    or rule.lower() in content.lower()
-                    or
-                    # Check for variations of the rule name
-                    rule.replace(" ", "_").lower() in file_path.name.lower()
-                    or rule.replace(" ", "-").lower() in file_path.name.lower()
-                ):
-
-                    rule_found = True
-                    created_files.append(file_path.name)
-                    logging.debug(f"Found rule '{rule}' (ID: {rule_id}) in file: {file_path.name}")
-
-                    # Verify file is not empty and has valid YAML structure
-                    if len(content.strip()) < 50:
-                        logging.warning(f"File {file_path.name} seems too small ({len(content)} bytes)")
-
-                    break
-
-            except Exception as e:
-                logging.error(f"Error reading file {file_path}: {e}")
-
-        if rule_found:
-            created_count += 1
-        else:
-            logging.warning(f"Could not find file for rule: '{rule}' (expected ID: {rule_id})")
-
-    # Log summary
-    if created_count > 0:
-        logging.info(f"Verified {created_count}/{len(expected_rules)} rules were created")
-        logging.info(f"Created files: {', '.join(created_files[:5])}{'...' if len(created_files) > 5 else ''}")
-    else:
-        logging.error(f"NO FILES were created for any of the {len(expected_rules)} expected rules!")
-
-        # Additional debugging
-        logging.debug(f"Expected rules: {expected_rules[:3]}..." if len(expected_rules) > 3 else expected_rules)
-        logging.debug(f"Files in directory: {[f.name for f in current_files[:5]]}{'...' if len(current_files) > 5 else ''}")
-
-    return created_count
 
 
 class BatchProcessor:

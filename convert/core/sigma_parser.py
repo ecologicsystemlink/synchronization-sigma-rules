@@ -137,11 +137,32 @@ class SigmaParser:
     def _is_sigma_rule(self, file_path: Path) -> bool:
         """
         Determine if a YAML file is a Sigma rule.
+        Optimized to check essential Sigma rule structure.
         """
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read(1000)  # Read first 1000 chars
-                return 'detection:' in content and ('logsource:' in content or 'title:' in content)
+                # Read line by line for efficiency and better detection
+                has_detection = False
+                has_identifier = False
+                
+                for line_num, line in enumerate(f):
+                    line_stripped = line.strip().lower()
+                    
+                    # Check for required fields
+                    if line_stripped.startswith('detection:'):
+                        has_detection = True
+                    elif line_stripped.startswith(('title:', 'logsource:')):
+                        has_identifier = True
+                    
+                    # Early return if both conditions met
+                    if has_detection and has_identifier:
+                        return True
+                    
+                    # Limit search to first 50 lines for performance
+                    if line_num > 50:
+                        break
+                
+                return False
         except:
             return False
     

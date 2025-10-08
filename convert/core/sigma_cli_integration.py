@@ -315,45 +315,6 @@ class SigmaCLIIntegration:
         
         return predominant_field, predominant_operator
     
-    def _extract_predominant_field(self, expression: str) -> str:
-        """
-        Extract the most frequently used field in the expression to use as base field
-        for double-quoted literal conversions.
-        
-        Args:
-            expression: CEL expression
-            
-        Returns:
-            The predominant field name (without safe() wrapper if present)
-        """
-        # Pattern to find field references (both raw fields and safe() wrapped)
-        field_patterns = [
-            r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*(?:==|!=|>|<|>=|<=)',  # field == value
-            r'lower\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)\s*\)',         # lower(field)
-            r'safe\s*\(\s*"([^"]+)"\s*,',                             # safe("field", ...)
-            r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*\.(?:contains|startsWith|endsWith|matches)'  # field.method
-        ]
-        
-        field_counts = {}
-        
-        for pattern in field_patterns:
-            matches = re.findall(pattern, expression)
-            for match in matches:
-                field = match.strip()
-                # Remove log. prefix if present for counting
-                clean_field = field.replace('log.', '') if field.startswith('log.') else field
-                field_counts[clean_field] = field_counts.get(clean_field, 0) + 1
-        
-        if not field_counts:
-            return ""
-        
-        # Return the most frequent field
-        predominant_field = max(field_counts, key=field_counts.get)
-        
-        # If it's a simple field name, return as is for now (will be converted later)
-        # If it already has log. prefix, return as is
-        return predominant_field
-    
     def _convert_field_references(self, expression: str) -> str:
         """
         Convert field references to safe() wrapper format.
@@ -404,46 +365,6 @@ class SigmaCLIIntegration:
         expression = expression.strip()
         
         return expression
-    
-    def _split_preserving_strings(self, expression: str) -> list:
-        """
-        Split expression into segments, preserving string literals.
-        
-        Returns:
-            List of tuples (segment, is_string_literal)
-        """
-        segments = []
-        current_segment = ""
-        in_string = False
-        i = 0
-        
-        while i < len(expression):
-            char = expression[i]
-            
-            # Check for escaped quotes
-            if char == '"' and (i == 0 or expression[i-1] != '\\'):
-                if in_string:
-                    # End of string literal
-                    current_segment += char
-                    segments.append((current_segment, True))
-                    current_segment = ""
-                    in_string = False
-                else:
-                    # Start of string literal
-                    if current_segment:
-                        segments.append((current_segment, False))
-                    current_segment = char
-                    in_string = True
-            else:
-                current_segment += char
-            
-            i += 1
-        
-        # Add remaining segment if any
-        if current_segment:
-            segments.append((current_segment, in_string))
-        
-        return segments
     
     def _process_field_references_in_segment(self, segment: str) -> str:
         """
@@ -513,35 +434,6 @@ class SigmaCLIIntegration:
             result = result.replace(placeholder, method_call)
         
         return result
-    
-    def _clean_expression(self, expression: str) -> str:
-        """
-        Clean up the expression by removing lower() calls and fixing syntax.
-        
-        Examples:
-        lower(safe("log.field", "")) -> safe("log.field", "")
-        lower("string") -> "string"
-        safe("log.eventCode", 0.0) == 325 -> safe("log.eventCode", 0.0) == double(325)
-        """
-        # Remove lower() function calls
-        expression = re.sub(r'lower\((safe\("[^"]*",\s*"[^"]*")\)', r'\1', expression)
-        expression = re.sub(r'lower\("([^"]*)"\)', r'"\1"', expression)
-        expression = re.sub(r'lower\(([^)]+)\)', r'\1', expression)
-        
-        # Add double() wrapper for numeric comparisons
-        expression = self._add_double_wrappers(expression)
-        
-        # Fix method syntax (add dots before methods)
-        expression = self._fix_method_syntax(expression)
-        
-        # Fix negation operator spacing
-        expression = self._fix_negation_syntax(expression)
-        
-        # Clean up extra spaces
-        expression = re.sub(r'\s+', ' ', expression)
-        expression = expression.strip()
-        
-        return expression
     
     def _add_double_wrappers(self, expression: str) -> str:
         """

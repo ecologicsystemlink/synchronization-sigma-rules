@@ -127,20 +127,7 @@ def get_filter_fields_for_technology(tech_category: str, tech_name: str, base_di
                 filter_file_name = filter_path
                 break
     
-    # Fallback to manual mappings for any missing ones
-    if not filter_file_name:
-        filter_mappings = {
-            ("antivirus", "bitdefender_gz"): "filters_from_github/antivirus/bitdefender_gz.yml",
-            ("antivirus", "sentinel-one"): "filters_from_github/antivirus/sentinel-one.yml",
-            ("antivirus", "kaspersky"): "filters_from_github/antivirus/kaspersky.yml",
-            ("antivirus", "esmc-eset"): "filters_from_github/antivirus/esmc-eset.yml",
-            ("antivirus", "deceptive-bytes"): "filters_from_github/deceptivebytes/deceptive-bytes.yml",
-            ("aws", "aws"): "filters_from_github/aws/aws.yml",
-            ("cloud", "azure"): "filters_from_github/azure/azure-eventhub.yml",
-            ("cloud", "google"): "filters_from_github/google/gcp.yml",
-        }
-        filter_file_name = filter_mappings.get((tech_category, tech_name))
-    
+    # All mappings are already in get_technology_mappings()
     if not filter_file_name:
         return None, []
     

@@ -20,11 +20,8 @@ from pathlib import Path
 # Import the conversion components
 from .core.sigma_parser import SigmaParser
 from .core.sigma_cli_integration import SigmaCLIIntegration
-from .core.field_mapper import FieldMapper
 from .processors.rule_converter import RuleConverter
 from .processors.batch_processor import BatchProcessor
-from .utils.yaml_validator import YAMLValidator
-from .utils.file_handler import FileHandler
 
 
 def setup_logging(verbose: bool = False):
@@ -93,7 +90,6 @@ async def main():
     batch_processor = BatchProcessor(base_dir)
     rule_converter = RuleConverter(base_dir)
     sigma_cli = SigmaCLIIntegration()
-    yaml_validator = YAMLValidator()
     
     try:
         # Handle different operation modes

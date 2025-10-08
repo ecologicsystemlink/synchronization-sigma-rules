@@ -16,61 +16,6 @@ from ..core.sigma_cli_integration import SigmaCLIIntegration
 from ..core.field_mapper import FieldMapper
 
 
-def check_existing_rules(tech_folder: Path, rules: List[str]) -> int:
-    """
-    Check how many rules already exist in the technology folder.
-    
-    Args:
-        tech_folder: Technology folder to check
-        rules: List of rule names to check for
-        
-    Returns:
-        Number of existing rules found
-    """
-    if not tech_folder.exists():
-        return 0
-
-    existing_count = 0
-    existing_files = list(tech_folder.glob("*.yml"))
-
-    # Create a list of rule names from existing files
-    existing_rule_names = []
-    for file in existing_files:
-        try:
-            with open(file, "r") as f:
-                content = f.read()
-                # Try to extract rule name from the file
-                for line in content.split("\n"):
-                    if line.strip().startswith("name:"):
-                        rule_name = line.split("name:", 1)[1].strip()
-                        existing_rule_names.append(rule_name.lower())
-                        break
-        except:
-            continue
-
-    # Check each rule in the batch
-    for rule in rules:
-        rule_lower = rule.lower()
-        # Check if this rule name already exists (fuzzy match)
-        for existing_name in existing_rule_names:
-            # Check for exact match or significant similarity
-            if (
-                rule_lower == existing_name
-                or rule_lower in existing_name
-                or existing_name in rule_lower
-                or
-                # Check if key words match
-                all(word in existing_name for word in rule_lower.split()[:3])
-            ):
-                existing_count += 1
-                logging.debug(
-                    f"Rule '{rule}' appears to already exist as '{existing_name}'"
-                )
-                break
-
-    return existing_count
-
-
 class RuleConverter:
     """
     Converts Sigma rules to UTMStack SIEM format.
@@ -259,15 +204,3 @@ class RuleConverter:
         
         logging.info(f"Saved converted rule to: {output_file}")
         return output_file
-    
-    def get_next_rule_id(self) -> int:
-        """
-        Get the next available rule ID.
-        """
-        return self.next_rule_id
-    
-    def set_next_rule_id(self, rule_id: int):
-        """
-        Set the next rule ID to use.
-        """
-        self.next_rule_id = rule_id

@@ -179,6 +179,10 @@ Thumbs.db
 # Project specific files
 # =====================
 
+# Temporary test files created by convert.py
+test_rule.yml
+temp_test_rule.yml
+
 # Progress and state tracking files
 conversion_progress.json
 conversion_state.json
