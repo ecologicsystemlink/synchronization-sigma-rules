@@ -1,0 +1,24 @@
+- dataTypes:
+  - wineventlog
+  name: CobaltStrike Service Installations - System
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1021.002, T1543.003, T1569.002
+  adversary: UNKNOWN
+  description: Detects known malicious service installs that appear in cases in which
+    a Cobalt Strike beacon elevates privileges or lateral movement
+  references:
+  - https://www.sans.org/webcasts/119395
+  - https://www.crowdstrike.com/blog/getting-the-bacon-from-cobalt-strike-beacon/
+  - https://thedfirreport.com/2021/08/29/cobalt-strike-a-defenders-guide/
+  where: safe("log.providerName", "") == "Service Control Manager" && safe("log.eventCode",
+    0.0) == double(7045) && (safe("log.imagePath", "").contains("ADMIN$") && safe("log.imagePath",
+    "").contains(".exe") || safe("log.imagePath", "").contains("%COMSPEC%") && safe("log.imagePath",
+    "").contains("start") && safe("log.imagePath", "").contains("powershell") || safe("log.imagePath",
+    "").contains("powershell -nop -w hidden -encodedcommand") || safe("log.imagePath",
+    "").contains("SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO")
+    || safe("log.imagePath", "").contains("lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT")
+    || safe("log.imagePath", "").contains("JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6"))

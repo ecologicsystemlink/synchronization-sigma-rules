@@ -1,0 +1,62 @@
+- dataTypes:
+  - wineventlog
+  name: CodeIntegrity - Unmet Signing Level Requirements By File Under Validation
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects attempted file load events that did not meet the signing level
+    requirements. It often means the file's signature is revoked or a signature with
+    the Lifetime Signing EKU has expired. This event is best correlated with EID 3089
+    to determine the error of the validation.
+  references:
+  - https://twitter.com/SBousseaden/status/1483810148602814466
+  - https://github.com/MicrosoftDocs/windows-itpro-docs/blob/40fe118976734578f83e5e839b9c63ae7a4af82d/windows/security/threat-protection/windows-defender-application-control/event-id-explanations.md#windows-codeintegrity-operational-log
+  - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/windows-defender-application-control/operations/event-tag-explanations
+  - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/windows-defender-application-control/operations/event-id-explanations
+  where: (safe("log.eventCode", 0.0) == double(3033) || safe("log.eventCode", 0.0)
+    == double(3034)) && !(safe("log.fileNameBuffer", "").contains("\\Windows\\assembly\\GAC\\")
+    && safe("log.processNameBuffer", "").endsWith("\\mscorsvw.exe") && safe("log.processNameBuffer",
+    "").contains("\\Windows\\Microsoft.NET\\") && safe("log.requestedPolicy", "")
+    == 8) && !(safe("log.fileNameBuffer", "").endsWith("\\Program Files\\DTrace\\dtrace.dll")
+    && safe("log.processNameBuffer", "").endsWith("\\Windows\\System32\\svchost.exe")
+    && safe("log.requestedPolicy", "") == 12 || safe("log.fileNameBuffer", "").contains("\\Windows\\System32\\DriverStore\\FileRepository\\")
+    && safe("log.fileNameBuffer", "").endsWith("\\igd10iumd64.dll") && safe("log.requestedPolicy",
+    "") == 7 || safe("log.fileNameBuffer", "").endsWith("\\Windows\\System32\\nvspcap64.dll")
+    && (safe("log.processNameBuffer", "").endsWith("\\AppData\\Local\\Keybase\\Gui\\Keybase.exe")
+    || safe("log.processNameBuffer", "").endsWith("\\Microsoft\\Teams\\stage\\Teams.exe"))
+    && safe("log.requestedPolicy", "") == 8 || safe("log.fileNameBuffer", "").endsWith("\\Program
+    Files\\Bonjour\\mdnsNSP.dll") && (safe("log.processNameBuffer", "").endsWith("\\Windows\\System32\\svchost.exe")
+    || safe("log.processNameBuffer", "").endsWith("\\Windows\\System32\\SIHClient.exe"))
+    && (safe("log.requestedPolicy", "") == 8 || safe("log.requestedPolicy", "") ==
+    12) || safe("log.fileNameBuffer", "").contains("\\Microsoft Office\\root\\vfs\\ProgramFilesCommonX64\\Microsoft
+    Shared\\OFFICE") && safe("log.fileNameBuffer", "").endsWith("\\MSOXMLMF.DLL")
+    && safe("log.requestedPolicy", "") == 7 || safe("log.fileNameBuffer", "").endsWith("\\Windows\\System32\\nvspcap64.dll")
+    && safe("log.processNameBuffer", "").contains("\\AppData\\Local\\slack\\app-")
+    && safe("log.processNameBuffer", "").endsWith("\\slack.exe") && safe("log.requestedPolicy",
+    "") == 8 || (safe("log.fileNameBuffer", "").endsWith("\\Mozilla Firefox\\mozavcodec.dll")
+    || safe("log.fileNameBuffer", "").endsWith("\\Mozilla Firefox\\mozavutil.dll"))
+    && safe("log.processNameBuffer", "").endsWith("\\Mozilla Firefox\\firefox.exe")
+    && safe("log.requestedPolicy", "") == 8 || (safe("log.fileNameBuffer", "").endsWith("\\Program
+    Files\\Avast Software\\Avast\\aswAMSI.dll") || safe("log.fileNameBuffer", "").endsWith("\\Program
+    Files (x86)\\Avast Software\\Avast\\aswAMSI.dll")) && (safe("log.requestedPolicy",
+    "") == 8 || safe("log.requestedPolicy", "") == 12) || safe("log.fileNameBuffer",
+    "").contains("\\Program Files\\Google\\Drive File Stream\\") && safe("log.fileNameBuffer",
+    "").endsWith("\\crashpad_handler.exe") && safe("log.processNameBuffer", "").endsWith("\\Windows\\ImmersiveControlPanel\\SystemSettings.exe")
+    && safe("log.requestedPolicy", "") == 8 || safe("log.fileNameBuffer", "").endsWith("\\Trend
+    Micro\\Client Server Security Agent\\perficrcperfmonmgr.dll") && safe("log.requestedPolicy",
+    "") == 8 || safe("log.fileNameBuffer", "").endsWith("\\Program Files\\National
+    Instruments\\Shared\\mDNS Responder\\nimdnsNSP.dll ") || safe("log.fileNameBuffer",
+    "").endsWith("\\Program Files\\McAfee\\Endpoint Security\\Threat Prevention\\MfeAmsiProvider.dll")
+    || safe("log.fileNameBuffer", "").endsWith("\\Program Files\\McAfee\\MfeAV\\AMSIExt.dll")
+    || safe("log.fileNameBuffer", "").endsWith("\\Program Files\\ESET\\ESET Security\\eamsi.dll")
+    || safe("log.fileNameBuffer", "").endsWith("\\Program Files\\comodo\\comodo internet
+    security\\amsiprovider_x64.dll") || safe("log.fileNameBuffer", "").contains("\\Program
+    Files\\SentinelOne\\Sentinel Agent") || safe("log.processNameBuffer", "").contains("\\Program
+    Files\\SentinelOne\\Sentinel Agent") || safe("log.fileNameBuffer", "").contains("\\National
+    Instruments\\Shared\\mDNS Responder\\") || safe("log.processNameBuffer", "").contains("\\Kaspersky
+    Lab\\") && safe("log.processNameBuffer", "").contains("\\avp.exe") || safe("log.fileNameBuffer",
+    "").contains("\\Kaspersky Lab\\") && safe("log.fileNameBuffer", "").contains("\\antimalware_provider.dll"))

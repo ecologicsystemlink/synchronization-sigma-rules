@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: Certificate Exported From Local Certificate Store
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1649
+  adversary: UNKNOWN
+  description: Detects when an application exports a certificate (and potentially
+    the private key as well) from the local Windows certificate store.
+  references:
+  - https://www.splunk.com/en_us/blog/security/breaking-the-chain-defending-against-certificate-services-abuse.html
+  where: safe("log.eventCode", 0.0) == double(1007)

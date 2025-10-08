@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Compress-Archive Cmdlet Execution
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Exfiltration
+  technique: T1560
+  adversary: UNKNOWN
+  description: Detects PowerShell scripts that make use of the "Compress-Archive"
+    cmdlet in order to compress folders and files. An adversary might compress data
+    (e.g., sensitive documents) that is collected prior to exfiltration in order to
+    make it portable and minimize the amount of data sent over the network.
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1560/T1560.md
+  where: safe("log.scriptBlockText", "").contains("Compress-Archive")
