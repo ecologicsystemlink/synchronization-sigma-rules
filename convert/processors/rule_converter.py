@@ -187,7 +187,7 @@ class RuleConverter:
             'category': metadata['category'],
             'technique': metadata['technique'],
             'adversary': "UNKNOWN",
-            'description': metadata['description'],
+            'description': ' '.join(metadata['description'].split()),
             'references': metadata['references'],
             'where': cel_expression
         }
@@ -326,7 +326,7 @@ class RuleConverter:
         output_file = tech_dir / filename
         with open(output_file, 'w', encoding='utf-8') as f:
             yaml.dump([rule_data], f, default_flow_style=False, 
-                     allow_unicode=True, sort_keys=False, width=200, indent=2)
+                     allow_unicode=True, sort_keys=False, width=None, indent=2)
         
         logging.info(f"Saved converted rule to: {output_file}")
         return output_file
