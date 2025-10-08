@@ -1,0 +1,16 @@
+- dataTypes:
+  - generic
+  name: .Class Extension URI Ending Request
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects requests to URI ending with the ".class" extension in proxy
+    logs. This could rules can be used to hunt for potential downloads of Java classes
+    as seen for example in Log4shell exploitation attacks against Log4j.
+  references:
+  - https://web.archive.org/web/20231230220738/https://www.lunasec.io/docs/blog/log4j-zero-day/
+  where: safe("log.cUri", "").endsWith(".class")
