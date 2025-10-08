@@ -1,0 +1,47 @@
+- dataTypes:
+  - wineventlog
+  name: Relevant Anti-Virus Signature Keywords In Application Log
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1588
+  adversary: UNKNOWN
+  description: Detects potentially highly relevant antivirus events in the application
+    log based on known virus signature names and malware keywords.
+  references:
+  - https://www.virustotal.com/gui/file/13828b390d5f58b002e808c2c4f02fdd920e236cc8015480fa33b6c1a9300e31
+  - https://www.virustotal.com/gui/file/15b57c1b68cd6ce3c161042e0f3be9f32d78151fe95461eedc59a79fc222c7ed
+  - https://www.virustotal.com/gui/file/5092b2672b4cb87a8dd1c2e6047b487b95995ad8ed5e9fc217f46b8bfb1b8c01
+  - https://www.nextron-systems.com/?s=antivirus
+  where: (""safe("log.adfind", "")"" || ""safe("log.aSP", "")/safe("log.backDoor",
+    "") "" || ""safe("log.aTK", "")/"" || ""safe("log.BackdoorAsp", "")"" || ""safe("log.BackdoorCobalt",
+    "")"" || ""safe("log.BackdoorJsp", "")"" || ""safe("log.BackdoorPhp", "")"" ||
+    ""safe("log.blackworm", "")"" || ""safe("log.brutel", "")"" || ""safe("log.bruteR",
+    "")"" || ""safe("log.chopper", "")"" || ""safe("log.cobalt", "")"" || ""safe("log.cOBEACON",
+    "")"" || ""safe("log.cometer", "")"" || ""safe("log.cRYPTES", "")"" || ""safe("log.cryptor",
+    "")"" || ""safe("log.destructor", "")"" || ""safe("log.dumpCreds", "")"" || ""safe("log.ExploitScriptCve",
+    "")"" || ""safe("log.fastReverseProxy", "")"" || ""safe("log.filecoder", "")""
+    || ""safe("log.grandCrab", "") "" || ""safe("log.hackTool", "")"" || ""safe("log.hKTL",
+    "")"" || ""safe("log.hTool", "")-"" || ""/safe("log.hTool", "")"" || "".safe("log.hTool",
+    "")"" || ""safe("log.iISExchgSpawnCMD", "")"" || ""safe("log.impacket", "")""
+    || ""safe("log.jSP", "")/safe("log.backDoor", "") "" || ""safe("log.keylogger",
+    "")"" || ""safe("log.koadic", "")"" || ""safe("log.krypt", "")"" || ""safe("log.lazagne",
+    "")"" || ""safe("log.metasploit", "")"" || ""safe("log.meterpreter", "")"" ||
+    ""safe("log.meteTool", "")"" || ""safe("log.mikatz", "")"" || ""safe("log.mimikatz",
+    "")"" || ""safe("log.mpreter", "")"" || ""safe("log.msfShell", "")"" || ""safe("log.nighthawk",
+    "")"" || ""safe("log.PackedGeneric", "").347"" || ""safe("log.pentestPowerShell",
+    "")"" || ""safe("log.phobos", "")"" || ""safe("log.pHP", "")/safe("log.backDoor",
+    "") "" || ""safe("log.potato", "")"" || ""safe("log.powerSploit", "")"" || ""safe("log.powerSSH",
+    "")"" || ""safe("log.pshlSpy", "")"" || ""safe("log.pSWTool", "")"" || ""safe("log.pWCrack",
+    "")"" || ""safe("log.pWDump", "")"" || ""safe("log.ransom", "")"" || ""safe("log.rozena",
+    "")"" || ""safe("log.ryzerlo", "")"" || ""safe("log.sbelt", "")"" || ""safe("log.seatbelt",
+    "")"" || ""safe("log.securityTool", "") "" || ""safe("log.sharpDump", "")"" ||
+    ""safe("log.shellcode", "")"" || ""safe("log.sliver", "")"" || ""safe("log.splinter",
+    "")"" || ""safe("log.swrort", "")"" || ""safe("log.tescrypt", "")"" || ""safe("log.teslaCrypt",
+    "")"" || ""safe("log.turtleLoader", "")"" || ""safe("log.valyria", "")"" || ""safe("log.webshell",
+    "")"") && !(""safe("log.anti_ransomware_serviceExe", "")"" || ""safe("log.antiRansomware",
+    "")"" || ""safe("log.crack", "")"" || ""safe("log.cyber-protect-serviceExe", "")""
+    || ""safe("log.encryptor", "")"" || ""safe("log.keygen", "")"" || safe("log.level",
+    "") == 4 || safe("log.providerName", "") == "Microsoft-Windows-RestartManager")

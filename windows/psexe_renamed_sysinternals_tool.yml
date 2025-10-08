@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Ps.exe Renamed SysInternals Tool
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1036.003
+  adversary: UNKNOWN
+  description: Detects renamed SysInternals tool execution with a binary named ps.exe
+    as used by Dragonfly APT group and documented in TA17-293A report
+  references:
+  - https://www.us-cert.gov/ncas/alerts/TA17-293A
+  where: safe("log.commandLine", "").contains("ps.exe -accepteula") && safe("log.commandLine",
+    "").contains("-s cmd /c netstat")
