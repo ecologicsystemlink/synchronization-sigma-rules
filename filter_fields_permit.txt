@@ -1,0 +1,121 @@
+type Event struct {
+	state            protoimpl.MessageState       `protogen:"open.v1"`
+	Id               string                       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Timestamp        string                       `protobuf:"bytes,2,opt,name=timestamp,json=@timestamp,proto3" json:"timestamp,omitempty"`
+	DeviceTime       string                       `protobuf:"bytes,3,opt,name=deviceTime,proto3" json:"deviceTime,omitempty"`
+	DataType         string                       `protobuf:"bytes,4,opt,name=dataType,proto3" json:"dataType,omitempty"`
+	DataSource       string                       `protobuf:"bytes,5,opt,name=dataSource,proto3" json:"dataSource,omitempty"`
+	TenantId         string                       `protobuf:"bytes,6,opt,name=tenantId,proto3" json:"tenantId,omitempty"`
+	TenantName       string                       `protobuf:"bytes,7,opt,name=tenantName,proto3" json:"tenantName,omitempty"`
+	Raw              string                       `protobuf:"bytes,8,opt,name=raw,proto3" json:"raw,omitempty"`
+	Log              map[string]*structpb.Value   `protobuf:"bytes,9,rep,name=log,proto3" json:"log,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Target           *Side                        `protobuf:"bytes,10,opt,name=target,proto3" json:"target,omitempty"`
+	Origin           *Side                        `protobuf:"bytes,11,opt,name=origin,proto3" json:"origin,omitempty"`
+	Protocol         string                       `protobuf:"bytes,12,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	ConnectionStatus string                       `protobuf:"bytes,13,opt,name=connectionStatus,proto3" json:"connectionStatus,omitempty"`
+	StatusCode       uint32                       `protobuf:"varint,14,opt,name=statusCode,proto3" json:"statusCode,omitempty"`
+	ActionResult     string                       `protobuf:"bytes,15,opt,name=actionResult,proto3" json:"actionResult,omitempty"`
+	Action           string                       `protobuf:"bytes,16,opt,name=action,proto3" json:"action,omitempty"`
+	Severity         string                       `protobuf:"bytes,17,opt,name=severity,proto3" json:"severity,omitempty"`
+	Errors           []string                     `protobuf:"bytes,18,rep,name=errors,proto3" json:"errors,omitempty"`
+	Compliance       map[string]*ComplianceValues `protobuf:"bytes,19,rep,name=compliance,proto3" json:"compliance,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+
+type Side struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Network traffic attributes
+	BytesSent        float64 `protobuf:"fixed64,1,opt,name=bytesSent,proto3" json:"bytesSent,omitempty"`
+	BytesReceived    float64 `protobuf:"fixed64,2,opt,name=bytesReceived,proto3" json:"bytesReceived,omitempty"`
+	PackagesSent     uint64  `protobuf:"varint,3,opt,name=packagesSent,proto3" json:"packagesSent,omitempty"`
+	PackagesReceived uint64  `protobuf:"varint,4,opt,name=packagesReceived,proto3" json:"packagesReceived,omitempty"`
+	// Network identification attributes
+	Ip          string       `protobuf:"bytes,5,opt,name=ip,proto3" json:"ip,omitempty"`
+	Host        string       `protobuf:"bytes,6,opt,name=host,proto3" json:"host,omitempty"`
+	User        string       `protobuf:"bytes,7,opt,name=user,proto3" json:"user,omitempty"`
+	Group       string       `protobuf:"bytes,8,opt,name=group,proto3" json:"group,omitempty"`
+	Port        uint32       `protobuf:"varint,9,opt,name=port,proto3" json:"port,omitempty"`
+	Domain      string       `protobuf:"bytes,10,opt,name=domain,proto3" json:"domain,omitempty"`
+	Mac         string       `protobuf:"bytes,11,opt,name=mac,proto3" json:"mac,omitempty"`
+	Geolocation *Geolocation `protobuf:"bytes,12,opt,name=geolocation,proto3" json:"geolocation,omitempty"`
+	Url         string       `protobuf:"bytes,13,opt,name=url,proto3" json:"url,omitempty"`
+	Cidr        string       `protobuf:"bytes,14,opt,name=cidr,proto3" json:"cidr,omitempty"`
+	// Certificate and fingerprint attributes
+	CertificateFingerprint string `protobuf:"bytes,15,opt,name=certificateFingerprint,proto3" json:"certificateFingerprint,omitempty"`
+	Ja3Fingerprint         string `protobuf:"bytes,16,opt,name=ja3Fingerprint,proto3" json:"ja3Fingerprint,omitempty"`
+	JarmFingerprint        string `protobuf:"bytes,17,opt,name=jarmFingerprint,proto3" json:"jarmFingerprint,omitempty"`
+	SshBanner              string `protobuf:"bytes,18,opt,name=sshBanner,proto3" json:"sshBanner,omitempty"`
+	SshFingerprint         string `protobuf:"bytes,19,opt,name=sshFingerprint,proto3" json:"sshFingerprint,omitempty"`
+	// Web attributes
+	Cookie   string `protobuf:"bytes,20,opt,name=cookie,proto3" json:"cookie,omitempty"`
+	JabberId string `protobuf:"bytes,21,opt,name=jabberId,proto3" json:"jabberId,omitempty"`
+	// Email attributes
+	Email            string `protobuf:"bytes,22,opt,name=email,proto3" json:"email,omitempty"`
+	Dkim             string `protobuf:"bytes,23,opt,name=dkim,proto3" json:"dkim,omitempty"`
+	DkimSignature    string `protobuf:"bytes,24,opt,name=dkimSignature,proto3" json:"dkimSignature,omitempty"`
+	EmailAddress     string `protobuf:"bytes,25,opt,name=emailAddress,proto3" json:"emailAddress,omitempty"`
+	EmailBody        string `protobuf:"bytes,26,opt,name=emailBody,proto3" json:"emailBody,omitempty"`
+	EmailDisplayName string `protobuf:"bytes,27,opt,name=emailDisplayName,proto3" json:"emailDisplayName,omitempty"`
+	EmailSubject     string `protobuf:"bytes,28,opt,name=emailSubject,proto3" json:"emailSubject,omitempty"`
+	EmailThreadIndex string `protobuf:"bytes,29,opt,name=emailThreadIndex,proto3" json:"emailThreadIndex,omitempty"`
+	EmailXMailer     string `protobuf:"bytes,30,opt,name=emailXMailer,proto3" json:"emailXMailer,omitempty"`
+	// WHOIS attributes
+	WhoisRegistrant string `protobuf:"bytes,31,opt,name=whoisRegistrant,proto3" json:"whoisRegistrant,omitempty"`
+	WhoisRegistrar  string `protobuf:"bytes,32,opt,name=whoisRegistrar,proto3" json:"whoisRegistrar,omitempty"`
+	// Process-related attributes
+	Process                   string `protobuf:"bytes,33,opt,name=process,proto3" json:"process,omitempty"`
+	ProcessState              string `protobuf:"bytes,34,opt,name=processState,proto3" json:"processState,omitempty"`
+	Command                   string `protobuf:"bytes,35,opt,name=command,proto3" json:"command,omitempty"`
+	WindowsScheduledTask      string `protobuf:"bytes,36,opt,name=windowsScheduledTask,proto3" json:"windowsScheduledTask,omitempty"`
+	WindowsServiceDisplayName string `protobuf:"bytes,37,opt,name=windowsServiceDisplayName,proto3" json:"windowsServiceDisplayName,omitempty"`
+	WindowsServiceName        string `protobuf:"bytes,38,opt,name=windowsServiceName,proto3" json:"windowsServiceName,omitempty"`
+	// File-related attributes
+	File        string `protobuf:"bytes,39,opt,name=file,proto3" json:"file,omitempty"`
+	Path        string `protobuf:"bytes,40,opt,name=path,proto3" json:"path,omitempty"`
+	Filename    string `protobuf:"bytes,41,opt,name=filename,proto3" json:"filename,omitempty"`
+	SizeInBytes string `protobuf:"bytes,42,opt,name=sizeInBytes,proto3" json:"sizeInBytes,omitempty"`
+	MimeType    string `protobuf:"bytes,43,opt,name=mimeType,proto3" json:"mimeType,omitempty"`
+	// Hash-related attributes
+	Hash         string `protobuf:"bytes,44,opt,name=hash,proto3" json:"hash,omitempty"`
+	Authentihash string `protobuf:"bytes,45,opt,name=authentihash,proto3" json:"authentihash,omitempty"`
+	Cdhash       string `protobuf:"bytes,46,opt,name=cdhash,proto3" json:"cdhash,omitempty"`
+	Md5          string `protobuf:"bytes,47,opt,name=md5,proto3" json:"md5,omitempty"`
+	Sha1         string `protobuf:"bytes,48,opt,name=sha1,proto3" json:"sha1,omitempty"`
+	Sha224       string `protobuf:"bytes,49,opt,name=sha224,proto3" json:"sha224,omitempty"`
+	Sha256       string `protobuf:"bytes,50,opt,name=sha256,proto3" json:"sha256,omitempty"`
+	Sha384       string `protobuf:"bytes,51,opt,name=sha384,proto3" json:"sha384,omitempty"`
+	Sha3224      string `protobuf:"bytes,52,opt,name=sha3224,proto3" json:"sha3224,omitempty"`
+	Sha3256      string `protobuf:"bytes,53,opt,name=sha3256,proto3" json:"sha3256,omitempty"`
+	Sha3384      string `protobuf:"bytes,54,opt,name=sha3384,proto3" json:"sha3384,omitempty"`
+	Sha3512      string `protobuf:"bytes,55,opt,name=sha3512,proto3" json:"sha3512,omitempty"`
+	Sha512       string `protobuf:"bytes,56,opt,name=sha512,proto3" json:"sha512,omitempty"`
+	Sha512224    string `protobuf:"bytes,57,opt,name=sha512224,proto3" json:"sha512224,omitempty"`
+	Sha512256    string `protobuf:"bytes,58,opt,name=sha512256,proto3" json:"sha512256,omitempty"`
+	Hex          string `protobuf:"bytes,59,opt,name=hex,proto3" json:"hex,omitempty"`
+	Base64       string `protobuf:"bytes,60,opt,name=base64,proto3" json:"base64,omitempty"`
+	// System-related attributes
+	OperatingSystem string `protobuf:"bytes,61,opt,name=operatingSystem,proto3" json:"operatingSystem,omitempty"`
+	ChromeExtension string `protobuf:"bytes,62,opt,name=chromeExtension,proto3" json:"chromeExtension,omitempty"`
+	MobileAppId     string `protobuf:"bytes,63,opt,name=mobileAppId,proto3" json:"mobileAppId,omitempty"`
+	// Vulnerability-related attributes
+	Cpe string `protobuf:"bytes,64,opt,name=cpe,proto3" json:"cpe,omitempty"`
+	Cve string `protobuf:"bytes,65,opt,name=cve,proto3" json:"cve,omitempty"`
+	// Malware-related attributes
+	Malware       string `protobuf:"bytes,66,opt,name=malware,proto3" json:"malware,omitempty"`
+	MalwareFamily string `protobuf:"bytes,67,opt,name=malwareFamily,proto3" json:"malwareFamily,omitempty"`
+	MalwareType   string `protobuf:"bytes,68,opt,name=malwareType,proto3" json:"malwareType,omitempty"`
+	// Key-related attributes
+	PgpPrivateKey string `protobuf:"bytes,69,opt,name=pgpPrivateKey,proto3" json:"pgpPrivateKey,omitempty"`
+	PgpPublicKey  string `protobuf:"bytes,70,opt,name=pgpPublicKey,proto3" json:"pgpPublicKey,omitempty"`
+	// Resources attributes
+	Connections    uint64      `protobuf:"varint,71,opt,name=connections,proto3" json:"connections,omitempty"`
+	UsedCpuPercent uint32      `protobuf:"varint,72,opt,name=usedCpuPercent,proto3" json:"usedCpuPercent,omitempty"`
+	UsedMemPercent uint32      `protobuf:"varint,73,opt,name=usedMemPercent,proto3" json:"usedMemPercent,omitempty"`
+	TotalCpuUnits  uint32      `protobuf:"varint,74,opt,name=totalCpuUnits,proto3" json:"totalCpuUnits,omitempty"`
+	TotalMem       uint64      `protobuf:"varint,75,opt,name=totalMem,proto3" json:"totalMem,omitempty"`
+	Disks          []*DiskInfo `protobuf:"bytes,76,rep,name=disks,proto3" json:"disks,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}

@@ -1,0 +1,177 @@
+name: Synchronize and Convert Rules
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout My Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.3'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Sigma Backend Plugin
+        run: |
+          sigma plugin install golangexpr
+
+      - name: Verify Tools Installation
+        run: |
+          sigma version
+          python3 --version
+
+      - name: Clone Source Repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          owner: 'SigmaHQ'
+          repository: 'sigma'
+          branch: 'master'
+          
+      - name: Move cloned repository
+        run: |
+          mv ${{ github.workspace }}/sigma ${{ github.workspace }}/source-repo
+
+      - name: Get last synchronized commit
+        id: last-commit
+        run: |
+          cd ${{ github.workspace }}
+          if [ -f ".last_synced_commit" ]; then
+            echo "LAST_KNOWN_COMMIT=$(cat .last_synced_commit)" >> $GITHUB_OUTPUT
+          else
+            echo "LAST_KNOWN_COMMIT=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Find modified files
+        id: diff
+        run: |
+          cd ${{ github.workspace }}/source-repo
+          if [ -z "${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}" ]; then
+            echo "First execution, processing all files..."
+            find . -name "*.yml" \( -path "*/rules/*" -o -path "*/rules-*/*" \) > ${{ github.workspace }}/modified_files.txt
+          else
+            echo "Looking for changes since ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}..."
+            git diff --name-only ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }} HEAD -- '*.yml' | grep -E '/(rules|rules-[^/]+)/' > ${{ github.workspace }}/modified_files.txt || true
+          fi
+
+      - name: Validate modified files
+        run: |
+          cd ${{ github.workspace }}
+          if [ ! -f "modified_files.txt" ]; then
+            echo "Error: modified_files.txt not found"
+            exit 1
+          fi
+          
+          if [ ! -s "modified_files.txt" ]; then
+            echo "No modified files found, skipping conversion"
+            echo "SKIP_CONVERSION=true" >> $GITHUB_ENV
+          else
+            echo "Found $(wc -l < modified_files.txt) files to process"
+            echo "SKIP_CONVERSION=false" >> $GITHUB_ENV
+          fi
+
+      - name: Execute Conversion Script
+        run: |
+          cd ${{ github.workspace }}
+          if [ "$SKIP_CONVERSION" = "false" ]; then
+            echo "Starting conversion process..."
+            if ! python convert_entry.py ${{ github.workspace }}/modified_files.txt; then
+              echo "Error: Conversion script failed"
+              exit 1
+            fi
+            echo "Conversion completed successfully"
+          else
+            echo "Skipping conversion - no files to process"
+          fi
+
+      - name: Create batches and commit files
+        run: |
+          cd ${{ github.workspace }}
+          if [ "$SKIP_CONVERSION" = "false" ]; then
+            # Split input files into batches of 10
+            split -l 10 modified_files.txt batch_
+            echo "Batches created:"
+            ls -la batch_*
+            
+            # Configure git (usar configuración predeterminada del repositorio)
+            git config --local user.name "${{ github.actor }}"
+            git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+            
+            batch_count=1
+            total_batches=$(ls batch_* | wc -l)
+            
+            for batch_file in batch_*; do
+              echo "Processing batch $batch_count of $total_batches..."
+              
+              # Add current batch files to staging
+              files_added=0
+              while read -r file; do
+                # Remove leading ./ if present and convert to workspace path
+                clean_file=$(echo "$file" | sed 's|^\./||')
+                workspace_file="$clean_file"
+                
+                if [ -f "$workspace_file" ]; then
+                  git add "$workspace_file"
+                  files_added=$((files_added + 1))
+                fi
+              done < "$batch_file"
+              
+              # Create commit for this batch only if files were added
+              if [ $files_added -gt 0 ]; then
+                git commit -m "Batch $batch_count/$total_batches: Convert $files_added Sigma rules to UTMSTACK format" || echo "No changes in batch $batch_count"
+                echo "Committed batch $batch_count with $files_added files"
+              else
+                echo "No files to commit in batch $batch_count"
+              fi
+              
+              batch_count=$((batch_count + 1))
+            done
+            
+            # Clean up batch files
+            rm -f batch_*
+            
+            echo "All batches processed successfully"
+          else
+            echo "Skipping batch processing - no files to process"
+          fi
+
+      - name: Save new synchronization point
+        run: |
+          cd ${{ github.workspace }}/source-repo
+          git rev-parse HEAD > ${{ github.workspace }}/.last_synced_commit
+          cd ${{ github.workspace }}
+          git add .last_synced_commit
+          git commit -m "Update synchronization state" || echo "No state changes to commit"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT }}
+          title: "Sync: New Sigma rules from source repository"
+          body: |
+            **Automatic synchronization from source repository**
+            
+            **Summary:**
+            - Source commit: `${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}`
+            - Timestamp: ${{ github.run_id }} - ${{ github.run_number }}
+            - Workflow: ${{ github.workflow }}
+            
+            **This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.**
+            
+            _Generated automatically by GitHub Actions_
+          branch: sync/automatic-update
+          base: feat/convert-rules
+          delete-branch: true
