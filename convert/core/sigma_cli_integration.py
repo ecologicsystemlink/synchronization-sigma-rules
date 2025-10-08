@@ -99,6 +99,7 @@ class SigmaCLIIntegration:
         2. Convert operators (and -> &&, or -> ||, not -> !)
         3. Remove lower() function calls
         4. Handle numeric fields with proper defaults
+        5. Handle double-quoted literal strings without base fields
         
         Args:
             raw_cel: Raw CEL expression from sigma-cli
@@ -114,10 +115,13 @@ class SigmaCLIIntegration:
         # Step 2: FIRST remove lower() function calls to avoid conflicts
         processed_cel = self._remove_lower_functions(processed_cel)
         
-        # Step 3: Convert field references to safe() format
+        # Step 3: Handle double-quoted literal strings (""value"") before field conversion
+        processed_cel = self._handle_double_quoted_literals(processed_cel)
+        
+        # Step 4: Convert field references to safe() format
         processed_cel = self._convert_field_references(processed_cel)
         
-        # Step 4: Final cleanup and fix syntax
+        # Step 5: Final cleanup and fix syntax
         processed_cel = self._final_cleanup(processed_cel)
         
         logging.info(f"Post-processed CEL: {processed_cel}")
@@ -158,6 +162,197 @@ class SigmaCLIIntegration:
         expression = re.sub(r'lower\s*\(\s*("([^"\\]|\\.)*")\s*\)', r'\1', expression)
         
         return expression
+    
+    def _handle_double_quoted_literals(self, expression: str) -> str:
+        """
+        Handle double-quoted literal strings (""value"") that appear without a base field.
+        Convert them to proper field comparisons using the predominant field and operator in the expression.
+        
+        Examples:
+        lower(type) == lower("EXECVE") and (""truncate"" and ""-s"" or ""dd"" and ""if="" and not (""of=""))
+        ->
+        type == "EXECVE" && ("truncate" && "-s" || "dd" && "if=" && !"of=")
+        
+        ProcessName contains "cmd.exe" and (""powershell"" or ""wscript"")
+        ->
+        ProcessName contains "cmd.exe" && (ProcessName contains "powershell" || ProcessName contains "wscript")
+        
+        This handles any operator or function: ==, !=, contains, matches, startsWith, endsWith, etc.
+        
+        Args:
+            expression: CEL expression that may contain double-quoted literals
+            
+        Returns:
+            Expression with double-quoted literals converted to proper field comparisons
+        """
+        # Pattern to find double-quoted literals: ""value""
+        double_quote_pattern = r'""([^"]*?)""'
+        
+        # Check if there are any double-quoted literals
+        if not re.search(double_quote_pattern, expression):
+            return expression
+        
+        # Find the predominant field and operator in the expression
+        base_field, predominant_operator = self._extract_predominant_field_and_operator(expression)
+        
+        if not base_field:
+            # If no base field found, just clean up the double quotes
+            return re.sub(double_quote_pattern, r'"\1"', expression)
+        
+        # Convert double-quoted literals to field comparisons
+        def replace_double_quoted_literal(match):
+            literal_value = match.group(1)
+            
+            # Get the context around this literal to determine the operation
+            start_pos = match.start()
+            end_pos = match.end()
+            
+            # Look for context around the literal
+            before_context = expression[:start_pos].rstrip()
+            after_context = expression[end_pos:].lstrip()
+            
+            # Check if this literal is in a standalone logical context
+            logical_contexts = ['&&', '||', '(', ')', 'and', 'or', 'not', '!']
+            
+            # Check what comes before and after this literal
+            is_standalone = False
+            
+            # If it starts the expression or follows logical operators/parentheses
+            if (not before_context or 
+                any(before_context.endswith(ctx) for ctx in logical_contexts) or
+                before_context.endswith(' ')):
+                is_standalone = True
+            
+            # If it's followed by logical operators/parentheses
+            if (not after_context or 
+                any(after_context.startswith(ctx) for ctx in logical_contexts) or
+                after_context.startswith(' ')):
+                is_standalone = True
+            
+            # If it's a standalone literal, convert to field comparison using predominant operator
+            if is_standalone:
+                if predominant_operator == 'contains':
+                    return f'{base_field}.contains("{literal_value}")'
+                elif predominant_operator == 'startsWith':
+                    return f'{base_field}.startsWith("{literal_value}")'
+                elif predominant_operator == 'endsWith':
+                    return f'{base_field}.endsWith("{literal_value}")'
+                elif predominant_operator == 'matches':
+                    return f'{base_field}.matches("{literal_value}")'
+                else:
+                    # Default to equality comparison
+                    return f'{base_field} == "{literal_value}"'
+            else:
+                # Just clean the quotes (it might be part of a function call)
+                return f'"{literal_value}"'
+        
+        # Apply the replacement
+        result = re.sub(double_quote_pattern, replace_double_quoted_literal, expression)
+        
+        logging.debug(f"Double-quoted literals handling: {expression} -> {result}")
+        return result
+    
+    def _extract_predominant_field_and_operator(self, expression: str) -> Tuple[str, str]:
+        """
+        Extract the most frequently used field and operator in the expression to use as base 
+        for double-quoted literal conversions.
+        
+        Args:
+            expression: CEL expression
+            
+        Returns:
+            Tuple of (predominant_field_name, predominant_operator)
+        """
+        # Pattern to find field references with their operators/functions
+        field_operator_patterns = [
+            # Equality and comparison operators
+            (r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*(==|!=|>|<|>=|<=)', 'comparison'),
+            # lower() function calls with comparison
+            (r'lower\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)\s*\)\s*(==|!=|>|<|>=|<=)', 'comparison'),
+            # Method calls (contains, startsWith, etc.)
+            (r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*\.\s*(contains|startsWith|endsWith|matches)', 'method'),
+            (r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s+(contains|startsWith|endsWith|matches)', 'method'),
+            # safe() calls with operators
+            (r'safe\s*\(\s*"([^"]+)"\s*,\s*[^)]+\)\s*(==|!=|>|<|>=|<=)', 'comparison'),
+            (r'safe\s*\(\s*"([^"]+)"\s*,\s*[^)]+\)\s*\.\s*(contains|startsWith|endsWith|matches)', 'method'),
+        ]
+        
+        field_counts = {}
+        operator_counts = {}
+        
+        for pattern, pattern_type in field_operator_patterns:
+            matches = re.findall(pattern, expression)
+            for match in matches:
+                field = match[0].strip()
+                operator = match[1].strip()
+                
+                # Clean field name (remove log. prefix for counting)
+                clean_field = field.replace('log.', '') if field.startswith('log.') else field
+                field_counts[clean_field] = field_counts.get(clean_field, 0) + 1
+                
+                # Count operators/methods
+                if pattern_type == 'method':
+                    operator_counts[operator] = operator_counts.get(operator, 0) + 1
+                elif pattern_type == 'comparison':
+                    # Group all comparison operators as 'comparison'
+                    operator_counts['comparison'] = operator_counts.get('comparison', 0) + 1
+        
+        # Get predominant field
+        predominant_field = ""
+        if field_counts:
+            predominant_field = max(field_counts, key=field_counts.get)
+        
+        # Get predominant operator
+        predominant_operator = "=="  # Default
+        if operator_counts:
+            most_frequent_op_type = max(operator_counts, key=operator_counts.get)
+            
+            if most_frequent_op_type == 'comparison':
+                predominant_operator = "=="
+            else:
+                # It's a method like contains, startsWith, etc.
+                predominant_operator = most_frequent_op_type
+        
+        return predominant_field, predominant_operator
+    
+    def _extract_predominant_field(self, expression: str) -> str:
+        """
+        Extract the most frequently used field in the expression to use as base field
+        for double-quoted literal conversions.
+        
+        Args:
+            expression: CEL expression
+            
+        Returns:
+            The predominant field name (without safe() wrapper if present)
+        """
+        # Pattern to find field references (both raw fields and safe() wrapped)
+        field_patterns = [
+            r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*(?:==|!=|>|<|>=|<=)',  # field == value
+            r'lower\s*\(\s*([A-Za-z_][A-Za-z0-9_.-]*)\s*\)',         # lower(field)
+            r'safe\s*\(\s*"([^"]+)"\s*,',                             # safe("field", ...)
+            r'\b([A-Za-z_][A-Za-z0-9_.-]*)\s*\.(?:contains|startsWith|endsWith|matches)'  # field.method
+        ]
+        
+        field_counts = {}
+        
+        for pattern in field_patterns:
+            matches = re.findall(pattern, expression)
+            for match in matches:
+                field = match.strip()
+                # Remove log. prefix if present for counting
+                clean_field = field.replace('log.', '') if field.startswith('log.') else field
+                field_counts[clean_field] = field_counts.get(clean_field, 0) + 1
+        
+        if not field_counts:
+            return ""
+        
+        # Return the most frequent field
+        predominant_field = max(field_counts, key=field_counts.get)
+        
+        # If it's a simple field name, return as is for now (will be converted later)
+        # If it already has log. prefix, return as is
+        return predominant_field
     
     def _convert_field_references(self, expression: str) -> str:
         """
@@ -260,7 +455,26 @@ class SigmaCLIIntegration:
         Returns:
             Processed segment with field references converted to safe() format
         """
-        # Pattern to match field references (including hyphens, underscores, nested with ? operators)
+        # First, identify and protect existing method calls (field.method format)
+        method_calls = []
+        method_pattern = r'\b([A-Za-z_][A-Za-z0-9_-]*)\.(contains|startsWith|endsWith|matches)\s*\('
+        
+        # Find all method calls and replace them with placeholders
+        def protect_method_call(match):
+            field_name = match.group(1)
+            method_name = match.group(2)
+            placeholder = f"__METHOD_CALL_{len(method_calls)}__"
+            
+            # Convert field to safe() format but preserve the method call
+            utmstack_field = self._map_field_to_utmstack(field_name)
+            safe_call = f'safe("{utmstack_field}", "").{method_name}('
+            method_calls.append(safe_call)
+            
+            return placeholder
+        
+        protected_segment = re.sub(method_pattern, protect_method_call, segment)
+        
+        # Now process remaining field references (simple fields without methods)
         field_pattern = r'\b([A-Za-z_][A-Za-z0-9_-]*(?:\??\.[A-Za-z_][A-Za-z0-9_-]*)*)\b'
         
         def replace_field(match):
@@ -269,6 +483,17 @@ class SigmaCLIIntegration:
             # Skip if it's already a function call or reserved word
             if field_name in ['lower', 'upper', 'contains', 'startsWith', 'endsWith', 'matches', 'safe', 'double', 'and', 'or', 'not']:
                 return field_name
+            
+            # Skip if it's a placeholder
+            if field_name.startswith('__METHOD_CALL_'):
+                return field_name
+            
+            # Skip if it's already wrapped in safe() (avoid double wrapping)
+            if 'safe(' in protected_segment and field_name in protected_segment:
+                # Check if this field is already inside a safe() call
+                safe_pattern = rf'safe\s*\(\s*"[^"]*{re.escape(field_name)}[^"]*"\s*,'
+                if re.search(safe_pattern, protected_segment):
+                    return field_name
             
             # Map to UTMStack field
             utmstack_field = self._map_field_to_utmstack(field_name)
@@ -280,7 +505,12 @@ class SigmaCLIIntegration:
                 return f'safe("{utmstack_field}", "")'
         
         # Replace field references
-        result = re.sub(field_pattern, replace_field, segment)
+        result = re.sub(field_pattern, replace_field, protected_segment)
+        
+        # Restore method calls
+        for i, method_call in enumerate(method_calls):
+            placeholder = f"__METHOD_CALL_{i}__"
+            result = result.replace(placeholder, method_call)
         
         return result
     

@@ -67,7 +67,7 @@ def main():
         successful = len(successful_results)
         failed = len(results) - successful
         
-        print(f"\nRESUMEN: {successful} exitosas, {failed} fallidas de {len(modified_files)} archivos procesados")
+        print(f"\nSummary: {successful} successful, {failed} failed out of {len(modified_files)} files processed")
         logging.info(f"Conversion completed: {successful} successful, {failed} failed")
         
         if failed > 0:
