@@ -1,0 +1,22 @@
+- dataTypes:
+  - generic
+  name: Django Framework Exceptions
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects suspicious Django web application framework exceptions that
+    could indicate exploitation attempts
+  references:
+  - https://docs.djangoproject.com/en/1.11/ref/exceptions/
+  - https://docs.djangoproject.com/en/1.11/topics/logging/#django-security
+  where: '""safe("log.suspiciousOperation", "")"" || ""safe("log.disallowedHost",
+    "")"" || ""safe("log.disallowedModelAdminLookup", "")"" || ""safe("log.disallowedModelAdminToField",
+    "")"" || ""safe("log.disallowedRedirect", "")"" || ""safe("log.invalidSessionKey",
+    "")"" || ""safe("log.requestDataTooBig", "")"" || ""safe("log.suspiciousFileOperation",
+    "")"" || ""safe("log.suspiciousMultipartForm", "")"" || ""safe("log.suspiciousSession",
+    "")"" || ""safe("log.tooManyFieldsSent", "")"" || ""safe("log.permissionDenied",
+    "")""'
