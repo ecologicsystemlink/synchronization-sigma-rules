@@ -1,8 +1,8 @@
 """
-Sigma-CLI Integration Module
+Sigma-CLI Integration
 
-Handles integration with sigma-cli tool and post-processing of CEL expressions
-to convert them to UTMStack standard format based on standarConversion.txt patterns.
+Executes sigma-cli for rule conversion and post-processes CEL expressions
+to conform to UTMStack Event structure and field mapping standards.
 """
 
 import subprocess

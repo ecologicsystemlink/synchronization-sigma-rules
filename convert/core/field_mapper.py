@@ -1,8 +1,8 @@
 """
-Technology Mapping Module
+Technology Field Mapping
 
-Copied functions from existing project utilities for technology mapping.
-Contains functions from generate_correlation_rules.py and import_utmstack_rules.py
+Maps technologies to their corresponding filter fields and provides
+technology-specific field extraction from filter configuration files.
 """
 
 import logging
@@ -12,8 +12,10 @@ from typing import Dict, List, Tuple, Optional
 
 def get_technology_mappings() -> Dict[str, List[Tuple[str, str]]]:
     """
-    COPIED FROM: generate_correlation_rules.py
-    Returns a mapping of technology folders to their subdirectories and corresponding filters
+    Returns technology folder mappings to their subdirectories and filter files.
+    
+    Returns:
+        Dictionary mapping technology categories to (subdirectory, filter_path) tuples
     """
     return {
         "antivirus": [
@@ -105,9 +107,15 @@ def get_technology_mappings() -> Dict[str, List[Tuple[str, str]]]:
 
 def get_filter_fields_for_technology(tech_category: str, tech_name: str, base_dir: Path) -> Tuple[Optional[str], List[str]]:
     """
-    COPIED FROM: verify_correlation_rules.py
-    Get the filter fields for a given technology from the filter_fields_output.txt file
-    Returns: (filter_file_name, list_of_fields)
+    Extract filter fields for a technology from filter configuration files.
+    
+    Args:
+        tech_category: Technology category (e.g., 'antivirus', 'firewall')
+        tech_name: Specific technology name
+        base_dir: Base directory containing filter_fields_output.txt
+        
+    Returns:
+        Tuple of (filter_file_name, list_of_fields)
     """
     tech_mappings = get_technology_mappings()
     filter_file_name = None
@@ -193,89 +201,14 @@ def get_filter_fields_for_technology(tech_category: str, tech_name: str, base_di
     return filter_file_name, fields
 
 
-def map_repo_tech_to_local(repo_tech: str) -> Tuple[str, str]:
-    """
-    COPIED FROM: import_utmstack_rules.py
-    Map repository technology name to local category and technology
-    """
-    # Mapping from repo names to local structure
-    tech_mappings = {
-        # Direct mappings
-        'aws': ('aws', 'aws'),
-        'azure': ('cloud', 'azure'),
-        'gcp': ('cloud', 'google'),
-        'windows': ('windows', 'windows'),
-        'linux': ('linux', 'debian_family'),
-        'macos': ('macos', 'macos'),
-        'office365': ('office365', 'office365'),
-        'github': ('github', 'github'),
-        
-        # Network devices
-        'cisco': ('cisco', 'asa'),
-        'cisco-asa': ('cisco', 'asa'),
-        'cisco-firepower': ('cisco', 'firepower'),
-        'fortinet': ('fortinet', 'fortinet'),
-        'paloalto': ('paloalto', 'pa_firewall'),
-        'sonicwall': ('sonicwall', 'sonicwall_firewall'),
-        'pfsense': ('pfsense', 'pfsense'),
-        
-        # Antivirus
-        'bitdefender': ('antivirus', 'bitdefender_gz'),
-        'kaspersky': ('antivirus', 'kaspersky'),
-        'eset': ('antivirus', 'esmc-eset'),
-        'sentinelone': ('antivirus', 'sentinel-one'),
-        
-        # Security tools
-        'wazuh': ('hids', 'hids'),
-        'suricata': ('nids', 'nids'),
-        'snort': ('nids', 'nids'),
-    }
-    
-    # Try exact match first
-    if repo_tech.lower() in tech_mappings:
-        return tech_mappings[repo_tech.lower()]
-    
-    # Try partial matches
-    for key, value in tech_mappings.items():
-        if key in repo_tech.lower() or repo_tech.lower() in key:
-            return value
-    
-    # Default to generic
-    return ('generic', 'generic')
-
-
-def extract_technology_from_path(file_path: Path, base_dir: Path) -> Tuple[str, str]:
-    """
-    COPIED FROM: verify_correlation_rules.py
-    Extract technology category and name from file path
-    """
-    parts = file_path.relative_to(base_dir).parts
-    if len(parts) >= 2:
-        return parts[0], parts[1]
-    return "unknown", "unknown"
-
-
 class FieldMapper:
     """
-    Field mapping utilities copied from existing project functions.
+    Field mapping utilities for technology mapping.
     """
     
     def __init__(self, base_dir: Path):
         self.base_dir = base_dir
-        self.tech_mappings = get_technology_mappings()
-    
-    def get_technology_mapping(self) -> Dict[str, List[Tuple[str, str]]]:
-        """Get technology mappings"""
-        return self.tech_mappings
     
     def get_filter_fields(self, tech_category: str, tech_name: str) -> Tuple[Optional[str], List[str]]:
         """Get filter fields for technology"""
         return get_filter_fields_for_technology(tech_category, tech_name, self.base_dir)
-    
-    def map_repository_tech(self, repo_tech: str) -> Tuple[str, str]:
-        """Map repository technology to local structure"""
-        return map_repo_tech_to_local(repo_tech)
-    
-    def extract_tech_from_path(self, file_path: Path) -> Tuple[str, str]:
-        """Extract technology from file path"""
-        return extract_technology_from_path(file_path, self.base_dir)

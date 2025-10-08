@@ -1,8 +1,8 @@
 """
-Batch Processor Module
+Batch Rule Processor
 
-Processes multiple Sigma rules in batch operations.
-Uses existing project utilities for file handling and progress tracking.
+Handles batch conversion of multiple Sigma rules with progress tracking,
+error handling, and resume capabilities for large-scale processing operations.
 """
 
 import asyncio
@@ -22,8 +22,13 @@ from ..utils.yaml_validator import YAMLValidator
 
 def save_execution_state(state_file: Path, tech_name: str, status: str, files_created: int = 0):
     """
-    COPIED FROM: generate_correlation_rules.py
-    Save the execution state to track progress and detect issues
+    Save execution state for progress tracking and issue detection.
+    
+    Args:
+        state_file: Path to state file
+        tech_name: Technology name being processed
+        status: Current status ('success', 'error', etc.)
+        files_created: Number of files created
     """
     state = {}
     if state_file.exists():
@@ -50,9 +55,13 @@ def save_execution_state(state_file: Path, tech_name: str, status: str, files_cr
 
 def load_progress(progress_file: Path) -> tuple[List[str], Optional[str]]:
     """
-    COPIED FROM: verify_correlation_rules.py
-    Load progress from JSON file
-    Returns: (completed_files, last_current_file)
+    Load conversion progress from JSON file.
+    
+    Args:
+        progress_file: Path to progress tracking file
+        
+    Returns:
+        Tuple of (completed_files, last_current_file)
     """
     if progress_file.exists():
         try:
@@ -66,8 +75,12 @@ def load_progress(progress_file: Path) -> tuple[List[str], Optional[str]]:
 
 def save_progress(progress_file: Path, completed_files: List[str], current_file: str = None):
     """
-    COPIED FROM: verify_correlation_rules.py
-    Save progress to a JSON file
+    Save conversion progress to JSON file.
+    
+    Args:
+        progress_file: Path to progress tracking file
+        completed_files: List of completed file paths
+        current_file: Currently processing file path
     """
     progress_data = {
         'timestamp': datetime.now().isoformat(),
@@ -82,9 +95,15 @@ def save_progress(progress_file: Path, completed_files: List[str], current_file:
 
 async def verify_files_created(tech_folder: Path, expected_rules: List[str], start_id: int) -> int:
     """
-    COPIED FROM: generate_correlation_rules.py
-    Verify that files were actually created for the expected rules
-    Returns the number of files successfully created
+    Verify that rule files were successfully created.
+    
+    Args:
+        tech_folder: Technology folder to check
+        expected_rules: List of expected rule names
+        start_id: Starting ID for rule numbering
+        
+    Returns:
+        Number of files successfully created
     """
     if not tech_folder.exists():
         logging.error(f"Technology folder does not exist: {tech_folder}")

@@ -1,8 +1,8 @@
 """
-Sigma Parser Module
+Sigma Rule Parser
 
-Parses Sigma YAML rules and extracts detection logic, metadata, and field mappings.
-Uses existing YAML validation utilities from the parent project.
+Parses Sigma YAML detection rules and extracts metadata, detection logic, and technology mappings.
+Handles MITRE ATT&CK technique extraction and automatic categorization.
 """
 
 import yaml

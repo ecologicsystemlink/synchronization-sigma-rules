@@ -62,35 +62,8 @@ def main():
             base_dir=base_dir
         )
         
-        # Show first 5 converted rules for debugging
         successful_results = [r for r in results if r['status'] == 'success']
-        if successful_results:
-            print("\n" + "="*80)
-            print("PRIMERAS 5 REGLAS CONVERTIDAS")
-            print("="*80)
-            
-            for i, result in enumerate(successful_results[:5], 1):
-                print(f"\n[{i}] {result['sigma_file']}")
-                print(f"    Tecnología: {result.get('technology', 'N/A')}")
-                print(f"    CEL: {result.get('cel_expression', 'N/A')[:100]}...")
-                
-                if 'rule_data' in result:
-                    import yaml
-                    yaml_output = yaml.dump([result['rule_data']], 
-                                          default_flow_style=False, 
-                                          allow_unicode=True, 
-                                          sort_keys=False, 
-                                          width=120, 
-                                          indent=2)
-                    print("    Contenido:")
-                    for line in yaml_output.split('\n')[:20]:  # Limit to first 20 lines
-                        print(f"      {line}")
-                    if len(yaml_output.split('\n')) > 20:
-                        print("      ... (contenido truncado)")
-            
-            print("="*80)
         
-        # Log results
         successful = len(successful_results)
         failed = len(results) - successful
         

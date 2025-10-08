@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Main Sigma to UTMStack SIEM Rule Converter
+Sigma to UTMStack SIEM Rule Converter
 
-This is the main entry point for converting Sigma rules to UTMStack SIEM format.
-Uses the professional architecture with copied functions from existing project utilities.
+Command-line interface for converting Sigma detection rules to UTMStack SIEM format.
+Supports single file conversion, batch processing, and validation operations.
 
 Usage:
     python convert.py --input sigma_rules/ --output converted_rules/
@@ -18,29 +18,13 @@ import sys
 from pathlib import Path
 
 # Import the conversion components
-try:
-    # Try relative imports first
-    from .core.sigma_parser import SigmaParser
-    from .core.sigma_cli_integration import SigmaCLIIntegration
-    from .core.field_mapper import FieldMapper
-    from .processors.rule_converter import RuleConverter
-    from .processors.batch_processor import BatchProcessor
-    from .utils.yaml_validator import YAMLValidator
-    from .utils.file_handler import FileHandler
-except ImportError:
-    # Fallback to absolute imports
-    import sys
-    from pathlib import Path
-    project_root = Path(__file__).parent.parent
-    sys.path.insert(0, str(project_root))
-    
-    from convert.core.sigma_parser import SigmaParser
-    from convert.core.sigma_cli_integration import SigmaCLIIntegration
-    from convert.core.field_mapper import FieldMapper
-    from convert.processors.rule_converter import RuleConverter
-    from convert.processors.batch_processor import BatchProcessor
-    from convert.utils.yaml_validator import YAMLValidator
-    from convert.utils.file_handler import FileHandler
+from .core.sigma_parser import SigmaParser
+from .core.sigma_cli_integration import SigmaCLIIntegration
+from .core.field_mapper import FieldMapper
+from .processors.rule_converter import RuleConverter
+from .processors.batch_processor import BatchProcessor
+from .utils.yaml_validator import YAMLValidator
+from .utils.file_handler import FileHandler
 
 
 def setup_logging(verbose: bool = False):

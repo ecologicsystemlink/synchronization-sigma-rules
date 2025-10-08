@@ -1,15 +1,15 @@
 """
-Sigma to UTMStack SIEM Rule Converter Package
+Sigma to UTMStack SIEM Rule Converter
 
-This package provides functionality to convert Sigma rules to UTMStack SIEM format.
-Organized following professional software architecture patterns.
+This package converts Sigma detection rules to UTMStack SIEM correlation rules.
+It uses sigma-cli for initial conversion and applies UTMStack-specific post-processing
+to ensure compatibility with the UTMStack Event structure and CEL expressions.
 """
 
 __version__ = "1.0.0"
-__author__ = "UTMStack Team"
+__author__ = "JocLRojas"
 
 from .core.sigma_parser import SigmaParser
-from .core.cel_generator import CELExpressionGenerator
 from .core.field_mapper import FieldMapper
 from .processors.rule_converter import RuleConverter
 from .processors.batch_processor import BatchProcessor
@@ -18,7 +18,6 @@ from .utils.file_handler import FileHandler
 
 __all__ = [
     'SigmaParser',
-    'CELExpressionGenerator', 
     'FieldMapper',
     'RuleConverter',
     'BatchProcessor',

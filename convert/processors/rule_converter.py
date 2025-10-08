@@ -1,8 +1,8 @@
 """
-Rule Converter Module
+Sigma Rule Converter
 
-Converts parsed Sigma rules to UTMStack SIEM format.
-Uses components from the core modules and existing project utilities.
+Converts individual Sigma detection rules to UTMStack correlation rule format.
+Integrates sigma-cli conversion with UTMStack-specific post-processing and metadata handling.
 """
 
 import logging
@@ -18,8 +18,14 @@ from ..core.field_mapper import FieldMapper
 
 def check_existing_rules(tech_folder: Path, rules: List[str]) -> int:
     """
-    COPIED FROM: generate_correlation_rules.py
-    Check how many rules from the batch already exist in the technology folder
+    Check how many rules already exist in the technology folder.
+    
+    Args:
+        tech_folder: Technology folder to check
+        rules: List of rule names to check for
+        
+    Returns:
+        Number of existing rules found
     """
     if not tech_folder.exists():
         return 0
@@ -63,29 +69,6 @@ def check_existing_rules(tech_folder: Path, rules: List[str]) -> int:
                 break
 
     return existing_count
-
-
-def check_impact_scores(rule_content: str) -> tuple[bool, Dict[str, int]]:
-    """
-    COPIED FROM: verify_correlation_rules.py
-    Check if any impact score is greater than 3
-    Returns: (has_high_scores, scores_dict)
-    """
-    try:
-        rules = yaml.safe_load(rule_content)
-        if isinstance(rules, list) and len(rules) > 0:
-            rule = rules[0]
-            impact = rule.get('impact', {})
-            scores = {
-                'confidentiality': impact.get('confidentiality', 0),
-                'integrity': impact.get('integrity', 0),
-                'availability': impact.get('availability', 0)
-            }
-            has_high = any(score > 3 for score in scores.values())
-            return has_high, scores
-    except:
-        pass
-    return False, {}
 
 
 class RuleConverter:
@@ -252,60 +235,6 @@ class RuleConverter:
 
         # Return the mapped dataType or default based on tech_name
         return tech_to_datatypes.get((tech_category, tech_name), [tech_name])
-    
-    def _needs_after_events(self, detection: Dict[str, Any]) -> bool:
-        """
-        Determine if the rule needs afterEvents (historical correlation).
-        """
-        # Rules that typically need historical correlation
-        condition = detection.get('condition', '').lower()
-        
-        # Look for indicators that suggest need for historical analysis
-        needs_history_keywords = [
-            'brute', 'force', 'multiple', 'repeated', 'suspicious frequency',
-            'anomalous', 'baseline', 'threshold', 'count', 'rate'
-        ]
-        
-        detection_str = str(detection).lower()
-        return any(keyword in detection_str for keyword in needs_history_keywords)
-    
-    def _build_after_events(self, tech_category: str, tech_name: str) -> List[Dict[str, Any]]:
-        """
-        Build afterEvents configuration for historical correlation.
-        """
-        # Determine appropriate index pattern
-        index_pattern = f"v11-log-{tech_category}-{tech_name}-*"
-        
-        return [{
-            'indexPattern': index_pattern,
-            'with': [
-                {
-                    'field': 'origin.ip.keyword',
-                    'operator': 'filter_term',
-                    'value': '{{origin.ip}}'
-                }
-            ],
-            'within': 'now-1h',
-            'count': 3
-        }]
-    
-    def _determine_deduplication_fields(self, detection: Dict[str, Any]) -> List[str]:
-        """
-        Determine appropriate deduplication fields based on detection logic.
-        """
-        # Default deduplication fields
-        dedup_fields = ['origin.ip']
-        
-        # Look for user-related fields
-        detection_str = str(detection).lower()
-        if 'user' in detection_str or 'account' in detection_str:
-            dedup_fields.append('origin.user')
-        
-        # Look for host-related fields
-        if 'host' in detection_str or 'computer' in detection_str:
-            dedup_fields.append('origin.host')
-        
-        return dedup_fields
     
     def _save_rule(self, rule_data: Dict[str, Any], output_dir: Path, 
                   tech_category: str, tech_name: str, rule_name: str) -> Path:
