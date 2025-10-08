@@ -1,0 +1,21 @@
+- dataTypes:
+  - generic
+  name: Kubernetes Admission Controller Modification
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Persistence
+  technique: T1078, T1552, T1552.007
+  adversary: UNKNOWN
+  description: Detects when a modification (create, update or replace) action is taken
+    that affects mutating or validating webhook configurations, as they can be used
+    by an adversary to achieve persistence or exfiltrate access credentials.
+  references:
+  - https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/
+  - https://security.padok.fr/en/blog/kubernetes-webhook-attackers
+  where: safe("log.objectRefApigroup", "") == "admissionregistration.k8s.io" && (safe("log.objectRefResource",
+    "") == "mutatingwebhookconfigurations" || safe("log.objectRefResource", "") ==
+    "validatingwebhookconfigurations") && (safe("log.verb", "") == "create" || safe("log.verb",
+    "") == "delete" || safe("log.verb", "") == "patch" || safe("log.verb", "") ==
+    "replace" || safe("log.verb", "") == "update")
