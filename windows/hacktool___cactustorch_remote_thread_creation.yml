@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: HackTool - CACTUSTORCH Remote Thread Creation
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1055.012, T1059.005, T1059.007, T1218.005
+  adversary: UNKNOWN
+  description: Detects remote thread creation from CACTUSTORCH as described in references.
+  references:
+  - https://twitter.com/SBousseaden/status/1090588499517079552
+  - https://github.com/mdsecactivebreach/CACTUSTORCH
+  where: (safe("log.sourceImage", "").endsWith("\\System32\\cscript.exe") || safe("log.sourceImage",
+    "").endsWith("\\System32\\wscript.exe") || safe("log.sourceImage", "").endsWith("\\System32\\mshta.exe")
+    || safe("log.sourceImage", "").endsWith("\\winword.exe") || safe("log.sourceImage",
+    "").endsWith("\\excel.exe")) && safe("log.targetImage", "").contains("\\SysWOW64\\")
+    && safe("log.startModule", "") == safe("log.nil", "")

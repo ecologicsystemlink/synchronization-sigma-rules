@@ -1,0 +1,15 @@
+- dataTypes:
+  - wineventlog
+  name: Hidden Executable In NTFS Alternate Data Stream
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1564.004
+  adversary: UNKNOWN
+  description: Detects the creation of an ADS (Alternate Data Stream) that contains
+    an executable by looking at a non-empty Imphash
+  references:
+  - https://twitter.com/0xrawsec/status/1002478725605273600?s=21
+  where: safe("log.hash", "").contains("IMPHASH=") && !(safe("log.hash", "").contains("IMPHASH=00000000000000000000000000000000"))

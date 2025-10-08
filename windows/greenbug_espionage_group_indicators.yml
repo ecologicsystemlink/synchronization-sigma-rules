@@ -1,0 +1,28 @@
+- dataTypes:
+  - wineventlog
+  name: Greenbug Espionage Group Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.001, T1105, T1036.005
+  adversary: UNKNOWN
+  description: Detects tools and process executions used by Greenbug in their May
+    2020 campaign as reported by Symantec
+  references:
+  - https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/greenbug-espionage-telco-south-asia
+  where: safe("log.image", "").endsWith(":\\ProgramData\\adobe\\Adobe.exe") || safe("log.image",
+    "").endsWith(":\\ProgramData\\oracle\\local.exe") || safe("log.image", "").endsWith("\\revshell.exe")
+    || safe("log.image", "").endsWith("\\infopagesbackup\\ncat.exe") || safe("log.image",
+    "").endsWith(":\\ProgramData\\comms\\comms.exe") || safe("log.commandLine", "").contains("-ExecutionPolicy
+    Bypass -File") && safe("log.commandLine", "").contains("\\msf.ps1") || safe("log.commandLine",
+    "").contains("infopagesbackup") && safe("log.commandLine", "").contains("\\ncat")
+    && safe("log.commandLine", "").contains("-e cmd.exe") || safe("log.commandLine",
+    "").contains("system.Data.SqlClient.SqlDataAdapter($cmd); [void]$da.fill") ||
+    safe("log.commandLine", "").contains("-nop -w hidden -c $k=new-object") || safe("log.commandLine",
+    "").contains("[Net.CredentialCache]::DefaultCredentials;IEX ") || safe("log.commandLine",
+    "").contains(" -nop -w hidden -c $m=new-object net.webclient;$m") || safe("log.commandLine",
+    "").contains("-noninteractive -executionpolicy bypass whoami") || safe("log.commandLine",
+    "").contains("-noninteractive -executionpolicy bypass netstat -a") || safe("log.commandLine",
+    "").contains("L3NlcnZlcj1")

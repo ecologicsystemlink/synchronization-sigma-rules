@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Goofy Guineapig Backdoor IOC
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects malicious indicators seen used by the Goofy Guineapig malware
+  references:
+  - https://www.ncsc.gov.uk/static-assets/documents/malware-analysis-reports/goofy-guineapig/NCSC-MAR-Goofy-Guineapig.pdf
+  where: safe("log.targetFileName", "") == "C:\\ProgramData\\GoogleUpdate\\config.dat"
+    || safe("log.targetFileName", "") == "C:\\ProgramData\\GoogleUpdate\\GoogleUpdate.exe"
+    || safe("log.targetFileName", "") == "C:\\ProgramData\\GoogleUpdate\\GoogleUpdate\\tmp.bat"
+    || safe("log.targetFileName", "") == "C:\\ProgramData\\GoogleUpdate\\goopdate.dll"
