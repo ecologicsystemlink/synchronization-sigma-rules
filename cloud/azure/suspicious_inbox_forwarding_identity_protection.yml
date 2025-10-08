@@ -1,0 +1,16 @@
+- dataTypes:
+  - azure
+  name: Suspicious Inbox Forwarding Identity Protection
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Collection
+  technique: T1114.003
+  adversary: UNKNOWN
+  description: Indicates suspicious rules such as an inbox rule that forwards a copy
+    of all emails to an external address
+  references:
+  - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks#suspicious-inbox-forwarding
+  - https://learn.microsoft.com/en-us/entra/architecture/security-operations-user-accounts#unusual-sign-ins
+  where: safe("log.riskeventtype", "") == "suspiciousInboxForwarding"
