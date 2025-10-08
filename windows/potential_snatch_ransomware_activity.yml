@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Snatch Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1204
+  adversary: UNKNOWN
+  description: Detects specific process characteristics of Snatch ransomware word
+    document droppers
+  references:
+  - https://news.sophos.com/en-us/2019/12/09/snatch-ransomware-reboots-pcs-into-safe-mode-to-bypass-protection/
+  where: safe("log.commandLine", "").contains("shutdown /r /f /t 00") || safe("log.commandLine",
+    "").contains("net stop SuperBackupMan")
