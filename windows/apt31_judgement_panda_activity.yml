@@ -1,0 +1,20 @@
+- dataTypes:
+  - wineventlog
+  name: APT31 Judgement Panda Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1003.001, T1560.001
+  adversary: UNKNOWN
+  description: Detects APT31 Judgement Panda activity as described in the Crowdstrike
+    2019 Global Threat Report
+  references:
+  - https://www.documentcloud.org/documents/5743766-Global-Threat-Report-2019.html
+  where: safe("log.commandLine", "").contains("ldifde") && safe("log.commandLine",
+    "").contains("-f -n") && safe("log.commandLine", "").contains("eprod.ldf") ||
+    safe("log.commandLine", "").contains("copy \\\\") && safe("log.commandLine", "").contains("c$")
+    && (safe("log.commandLine", "").contains("\\aaaa\\procdump64.exe") || safe("log.commandLine",
+    "").contains("\\aaaa\\netsess.exe") || safe("log.commandLine", "").contains("\\aaaa\\7za.exe")
+    || safe("log.commandLine", "").contains("\\c$\\aaaa\\"))

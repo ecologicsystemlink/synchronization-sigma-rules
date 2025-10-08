@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: APT29 2018 Phishing Campaign File Indicators
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1218.011
+  adversary: UNKNOWN
+  description: Detects indicators of APT 29 (Cozy Bear) phishing-campaign as reported
+    by mandiant
+  references:
+  - https://twitter.com/DrunkBinary/status/1063075530180886529
+  - https://www.mandiant.com/resources/blog/not-so-cozy-an-uncomfortable-examination-of-a-suspected-apt29-phishing-campaign
+  where: safe("log.targetFileName", "").contains("ds7002.lnk") || safe("log.targetFileName",
+    "").contains("ds7002.pdf") || safe("log.targetFileName", "").contains("ds7002.zip")

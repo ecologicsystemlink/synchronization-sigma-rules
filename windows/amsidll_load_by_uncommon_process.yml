@@ -1,0 +1,27 @@
+- dataTypes:
+  - wineventlog
+  name: Amsi.DLL Load By Uncommon Process
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Impact
+  technique: T1490
+  adversary: UNKNOWN
+  description: Detects loading of Amsi.dll by uncommon processes
+  references:
+  - https://infosecwriteups.com/amsi-bypass-new-way-2023-d506345944e9
+  - https://github.com/TheD1rkMtr/AMSI_patch
+  - https://github.com/surya-dev-singh/AmsiBypass-OpenSession
+  where: safe("log.imageLoaded", "").endsWith("\\amsi.dll") && !(safe("log.image",
+    "").endsWith(":\\Windows\\explorer.exe") || safe("log.image", "").endsWith(":\\Windows\\Sysmon64.exe")
+    || safe("log.image", "").contains(":\\Program Files (x86)\\") || safe("log.image",
+    "").contains(":\\Program Files\\") || safe("log.image", "").contains(":\\Windows\\System32\\")
+    || safe("log.image", "").contains(":\\Windows\\SysWOW64\\") || safe("log.image",
+    "").contains(":\\Windows\\WinSxS\\") || (safe("log.image", "").contains(":\\Windows\\Microsoft.NET\\Framework\\")
+    || safe("log.image", "").contains(":\\Windows\\Microsoft.NET\\Framework64\\")
+    || safe("log.image", "").contains(":\\Windows\\Microsoft.NET\\FrameworkArm\\")
+    || safe("log.image", "").contains(":\\Windows\\Microsoft.NET\\FrameworkArm64\\"))
+    && safe("log.image", "").endsWith("\\ngentask.exe") || safe("log.image", "") ==
+    safe("log.nil", "") || safe("log.image", "") == "") && !(safe("log.image", "").contains(":\\ProgramData\\Microsoft\\Windows
+    Defender\\Platform\\") && safe("log.image", "").endsWith("\\MsMpEng.exe"))
