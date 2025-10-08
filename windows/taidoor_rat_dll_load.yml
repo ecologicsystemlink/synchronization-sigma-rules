@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: TAIDOOR RAT DLL Load
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1055.001
+  adversary: UNKNOWN
+  description: Detects specific process characteristics of Chinese TAIDOOR RAT malware
+    load
+  references:
+  - https://us-cert.cisa.gov/ncas/analysis-reports/ar20-216a
+  where: safe("log.commandLine", "").contains("dll,MyStart") || safe("log.commandLine",
+    "").contains("dll MyStart") || safe("log.commandLine", "").endsWith(" MyStart")
+    && safe("log.commandLine", "").contains("rundll32.exe")

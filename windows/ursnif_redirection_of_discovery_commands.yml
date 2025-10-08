@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Ursnif Redirection Of Discovery Commands
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059
+  adversary: UNKNOWN
+  description: Detects the redirection of Ursnif discovery commands as part of the
+    initial execution of the malware.
+  references:
+  - Internal Research
+  where: safe("log.parentImage", "").endsWith("\\explorer.exe") && safe("log.image",
+    "").endsWith("\\cmd.exe") && safe("log.commandLine", "").contains("/C ") && safe("log.commandLine",
+    "").matches(".* >> .*\\\\AppData\\\\local\\\\temp\\*\\.bin.*")
