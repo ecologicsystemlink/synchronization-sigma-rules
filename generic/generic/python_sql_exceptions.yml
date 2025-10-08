@@ -1,0 +1,15 @@
+- dataTypes:
+  - generic
+  name: Python SQL Exceptions
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Generic rule for SQL exceptions in Python according to PEP 249
+  references:
+  - https://www.python.org/dev/peps/pep-0249/#exceptions
+  where: '""safe("log.dataError", "")"" || ""safe("log.integrityError", "")"" || ""safe("log.programmingError",
+    "")"" || ""safe("log.operationalError", "")""'

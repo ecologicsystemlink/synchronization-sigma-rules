@@ -1,0 +1,22 @@
+- dataTypes:
+  - generic
+  name: Pulse Connect Secure RCE Attack CVE-2021-22893
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: This rule detects exploitation attempts using Pulse Connect Secure(PCS)
+    vulnerability (CVE-2021-22893)
+  references:
+  - https://www.fireeye.com/blog/threat-research/2021/04/suspected-apt-actors-leverage-bypass-techniques-pulse-secure-zero-day.html
+  - https://kb.pulsesecure.net/articles/Pulse_Security_Advisories/SA44784
+  where: (safe("log.csUriQuery", "").contains("/dana-na/auth/") || safe("log.csUriQuery",
+    "").contains("/dana-ws/") || safe("log.csUriQuery", "").contains("/dana-cached/"))
+    && (safe("log.csUriQuery", "").matches(".*.id=.*") || safe("log.csUriQuery", "").matches(".*.token=.*")
+    || safe("log.csUriQuery", "").contains("Secid_canceltoken.cgi") || safe("log.csUriQuery",
+    "").contains("CGI::param") || safe("log.csUriQuery", "").contains("meeting") ||
+    safe("log.csUriQuery", "").contains("smb") || safe("log.csUriQuery", "").contains("namedusers")
+    || safe("log.csUriQuery", "").contains("metric"))
