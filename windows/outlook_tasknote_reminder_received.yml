@@ -1,0 +1,19 @@
+- dataTypes:
+  - wineventlog
+  name: Outlook Task/Note Reminder Received
+  impact:
+    confidentiality: 1
+    integrity: 1
+    availability: 2
+  category: Persistence
+  technique: T1137
+  adversary: UNKNOWN
+  description: Detects changes to the registry values related to outlook that indicates
+    that a reminder was triggered for a Note or Task item. This could be a sign of
+    exploitation of CVE-2023-23397. Further investigation is required to determine
+    the success of an exploitation.
+  references:
+  - https://www.microsoft.com/en-us/security/blog/2023/03/24/guidance-for-investigating-attacks-using-cve-2023-23397/
+  where: safe("log.targetObject", "").contains("\\SOFTWARE\\Microsoft\\Office\\")
+    && safe("log.targetObject", "").contains("\\Outlook\\") && (safe("log.targetObject",
+    "").contains("\\Tasks\\") || safe("log.targetObject", "").contains("\\Notes\\"))

@@ -1,0 +1,18 @@
+- dataTypes:
+  - wineventlog
+  name: Potential Active Directory Enumeration Using AD Module - PsModule
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Discovery
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects usage of the "Import-Module" cmdlet to load the "Microsoft.ActiveDirectory.Management.dl"
+    DLL. Which is often used by attackers to perform AD enumeration.
+  references:
+  - https://github.com/samratashok/ADModule
+  - https://twitter.com/cyb3rops/status/1617108657166061568?s=20
+  - https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/active-directory-enumeration-with-ad-module-without-rsat-or-admin-privileges
+  where: (safe("log.payload", "").contains("Import-Module ") || safe("log.payload",
+    "").contains("ipmo ")) && safe("log.payload", "").contains("Microsoft.ActiveDirectory.Management.dll")
