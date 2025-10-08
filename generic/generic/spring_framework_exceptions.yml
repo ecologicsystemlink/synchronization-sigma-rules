@@ -1,0 +1,18 @@
+- dataTypes:
+  - generic
+  name: Spring Framework Exceptions
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects suspicious Spring framework exceptions that could indicate
+    exploitation attempts
+  references:
+  - https://docs.spring.io/spring-security/site/docs/current/api/overview-tree.html
+  where: '""safe("log.accessDeniedException", "")"" || ""safe("log.csrfException",
+    "")"" || ""safe("log.invalidCsrfTokenException", "")"" || ""safe("log.missingCsrfTokenException",
+    "")"" || ""safe("log.cookieTheftException", "")"" || ""safe("log.invalidCookieException",
+    "")"" || ""safe("log.requestRejectedException", "")""'

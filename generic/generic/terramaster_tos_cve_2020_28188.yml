@@ -1,0 +1,20 @@
+- dataTypes:
+  - generic
+  name: TerraMaster TOS CVE-2020-28188
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1190
+  adversary: UNKNOWN
+  description: Detects the exploitation of the TerraMaster TOS vulnerability described
+    in CVE-2020-28188
+  references:
+  - https://www.ihteam.net/advisory/terramaster-tos-multiple-vulnerabilities/
+  - https://research.checkpoint.com/2021/freakout-leveraging-newest-vulnerabilities-for-creating-a-botnet/
+  where: safe("log.csMethod", "") == "GET" && safe("log.csUriQuery", "").contains("/include/makecvs.php")
+    && safe("log.csUriQuery", "").matches(".*.Event=.*") && (safe("log.csUriQuery",
+    "").contains("curl") || safe("log.csUriQuery", "").contains("wget") || safe("log.csUriQuery",
+    "").contains(".py") || safe("log.csUriQuery", "").contains(".sh") || safe("log.csUriQuery",
+    "").contains("chmod") || safe("log.csUriQuery", "").contains("_GET"))

@@ -1,0 +1,20 @@
+- dataTypes:
+  - generic
+  name: Successful Exchange ProxyShell Attack
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects URP patterns and status codes that indicate a successful ProxyShell
+    exploitation attack against Exchange servers
+  references:
+  - https://youtu.be/5mqid-7zp8k?t=2231
+  - https://blog.orange.tw/2021/08/proxylogon-a-new-attack-surface-on-ms-exchange-part-1.html
+  - https://peterjson.medium.com/reproducing-the-proxyshell-pwn2own-exploit-49743a4ea9a1
+  where: safe("log.csUriQuery", "").contains("/autodiscover.json") && (safe("log.csUriQuery",
+    "").contains("/powershell") || safe("log.csUriQuery", "").contains("/mapi/nspi")
+    || safe("log.csUriQuery", "").contains("/EWS") || safe("log.csUriQuery", "").contains("X-Rps-CAT"))
+    && (safe("log.scStatus", "") == 200 || safe("log.scStatus", "") == 301)
