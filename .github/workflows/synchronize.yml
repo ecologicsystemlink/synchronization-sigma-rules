@@ -43,7 +43,7 @@ jobs:
           
       - name: Move cloned repository
         run: |
-          mv ${{ github.workspace }}/sigma ${{ github.workspace }}/source-repo
+          mv ${{ github.workspace }}/sigma-simple ${{ github.workspace }}/source-repo
 
       - name: Get last synchronized commit
         id: last-commit
