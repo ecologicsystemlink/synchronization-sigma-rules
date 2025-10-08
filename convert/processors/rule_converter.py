@@ -186,7 +186,8 @@ class RuleConverter:
             'impact': metadata['impact'],
             'category': metadata['category'],
             'technique': metadata['technique'],
-            'description': self._build_description(metadata['description'], sigma_data.get('falsepositives', [])),
+            'adversary': "UNKNOWN",
+            'description': metadata['description'],
             'references': metadata['references'],
             'where': cel_expression
         }
@@ -251,26 +252,6 @@ class RuleConverter:
 
         # Return the mapped dataType or default based on tech_name
         return tech_to_datatypes.get((tech_category, tech_name), [tech_name])
-    
-    def _build_description(self, original_desc: str, false_positives: List[str]) -> str:
-        """
-        Build enhanced description with investigation steps.
-        """
-        description = original_desc
-        
-        if false_positives:
-            description += "\\n\\nKnown False Positives:\\n"
-            for fp in false_positives:
-                description += f"- {fp}\\n"
-        
-        # Add investigation steps
-        description += "\\n\\nNext Steps:\\n"
-        description += "- Investigate the source of the activity\\n"
-        description += "- Check for additional suspicious activities from the same source\\n"
-        description += "- Verify if the activity is authorized\\n"
-        description += "- Consider blocking the source if malicious activity is confirmed"
-        
-        return description
     
     def _needs_after_events(self, detection: Dict[str, Any]) -> bool:
         """
