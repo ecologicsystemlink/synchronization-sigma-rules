@@ -1,0 +1,18 @@
+- dataTypes:
+  - linux
+  name: Binary Padding - Linux
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1027.001
+  adversary: UNKNOWN
+  description: Adversaries may use binary padding to add junk data and change the
+    on-disk representation of malware. This rule detect using dd and truncate to add
+    a junk data to file.
+  references:
+  - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1027.001/T1027.001.md
+  where: safe("log.type", "") == "EXECVE" && (""safe("log.truncate", "")"" && ""-safe("log.s",
+    "")"" || ""safe("log.dd", "")"" && ""safe("log.if", "")="" && !(""safe("log.of",
+    "")=""))

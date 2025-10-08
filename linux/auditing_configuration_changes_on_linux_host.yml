@@ -1,0 +1,16 @@
+- dataTypes:
+  - linux
+  name: Auditing Configuration Changes on Linux Host
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Security Detection
+  technique: T1562.006
+  adversary: UNKNOWN
+  description: Detect changes in auditd configuration files
+  references:
+  - https://github.com/Neo23x0/auditd/blob/master/audit.rules
+  - Self Experience
+  where: safe("log.type", "") == "PATH" && (safe("log.name", "").startsWith("/etc/audit/")
+    || safe("log.name", "") == "/etc/libaudit.conf" || safe("log.name", "").startsWith("/etc/audisp/"))
