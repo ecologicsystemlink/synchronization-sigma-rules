@@ -1,0 +1,17 @@
+- dataTypes:
+  - linux
+  name: BPFDoor Abnormal Process ID or Lock File Accessed
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1106, T1059
+  adversary: UNKNOWN
+  description: detects BPFDoor .lock and .pid files access in temporary file storage
+    facility
+  references:
+  - https://www.sandflysecurity.com/blog/bpfdoor-an-evasive-linux-backdoor-technical-analysis/
+  - https://www.elastic.co/security-labs/a-peek-behind-the-bpfdoor
+  where: safe("log.type", "") == "PATH" && (safe("log.name", "") == "/var/run/haldrund.pid"
+    || safe("log.name", "") == "/var/run/xinetd.lock" || safe("log.name", "") == "/var/run/kdevrund.pid")
