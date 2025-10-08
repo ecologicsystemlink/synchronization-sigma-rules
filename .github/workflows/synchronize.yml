@@ -159,19 +159,13 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PAT }}
           title: "Sync: New Sigma rules from source repository"
           body: |
             **Automatic synchronization from source repository**
-            
-            **Summary:**
-            - Source commit: `${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}`
-            - Timestamp: ${{ github.run_id }} - ${{ github.run_number }}
-            - Workflow: ${{ github.workflow }}
-            
-            **This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.**
-            
+
+            This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.
+
             _Generated automatically by GitHub Actions_
           branch: sync/automatic-update
-          base: feat/convert-rules
+          base: main
           delete-branch: true
