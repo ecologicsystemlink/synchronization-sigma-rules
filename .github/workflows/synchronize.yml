@@ -161,16 +161,27 @@ jobs:
           git add .last_synced_commit
           git commit -m "Update synchronization state" || echo "No state changes to commit"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          title: "Sync: New Sigma rules from source repository"
-          body: |
-            **Automatic synchronization from source repository**
+      - name: Create branch and push commits
+        run: |
+          git checkout -b sync/automatic-update
+          git push origin sync/automatic-update --force
 
-            This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.
+      - name: Create Pull Request with gh CLI
+        run: |
+          gh pr create \
+            --title "Sync: New Sigma rules from source repository" \
+            --body "**Automatic synchronization from source repository**
 
-            _Generated automatically by GitHub Actions_
-          branch: sync/automatic-update
-          base: main
-          delete-branch: true
+          This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.
+
+          _Generated automatically by GitHub Actions_"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Handle existing PR (if any)
+        run: |
+          if gh pr view sync/automatic-update --repo ${{ github.repository }} >/dev/null 2>&1; then
+            echo "PR already exists, updating..."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
