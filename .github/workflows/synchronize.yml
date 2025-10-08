@@ -73,6 +73,7 @@ jobs:
           fi
 
       - name: Validate modified files
+        id: modified-files
         run: |
           cd ${{ github.workspace }}
           if [ ! -f "modified_files.txt" ]; then
@@ -82,76 +83,70 @@ jobs:
           
           if [ ! -s "modified_files.txt" ]; then
             echo "No modified files found, skipping conversion"
-            echo "SKIP_CONVERSION=true" >> $GITHUB_ENV
+            echo "skip_conversion=true" >> $GITHUB_OUTPUT
           else
             echo "Found $(wc -l < modified_files.txt) files to process"
-            echo "SKIP_CONVERSION=false" >> $GITHUB_ENV
+            echo "skip_conversion=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Execute Conversion Script
+        if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
           cd ${{ github.workspace }}
-          if [ "$SKIP_CONVERSION" = "false" ]; then
-            echo "Starting conversion process..."
-            if ! python convert_entry.py ${{ github.workspace }}/modified_files.txt; then
-              echo "Error: Conversion script failed"
-              exit 1
-            fi
-            echo "Conversion completed successfully"
-          else
-            echo "Skipping conversion - no files to process"
+          echo "Starting conversion process..."
+          if ! python convert_entry.py ${{ github.workspace }}/modified_files.txt; then
+            echo "Error: Conversion script failed"
+            exit 1
           fi
+          echo "Conversion completed successfully"
 
       - name: Create batches and commit files
+        if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
           cd ${{ github.workspace }}
-          if [ "$SKIP_CONVERSION" = "false" ]; then
-            # Split input files into batches of 10
-            split -l 10 modified_files.txt batch_
-            echo "Batches created:"
-            ls -la batch_*
+          # Split input files into batches of 10
+          split -l 10 modified_files.txt batch_
+          echo "Batches created:"
+          ls -la batch_*
+          
+          # Configure git
+          git config --local user.name "${{ github.actor }}"
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          
+          batch_count=1
+          total_batches=$(ls batch_* | wc -l)
+          
+          for batch_file in batch_*; do
+            echo "Processing batch $batch_count of $total_batches..."
             
-            # Configure git (usar configuración predeterminada del repositorio)
-            git config --local user.name "${{ github.actor }}"
-            git config --local user.email "${{ github.actor }}@users.noreply.github.com"
-            
-            batch_count=1
-            total_batches=$(ls batch_* | wc -l)
-            
-            for batch_file in batch_*; do
-              echo "Processing batch $batch_count of $total_batches..."
+            # Add current batch files to staging
+            files_added=0
+            while read -r file; do
+              # Remove leading ./ if present and convert to workspace path
+              clean_file=$(echo "$file" | sed 's|^\./||')
+              workspace_file="$clean_file"
               
-              # Add current batch files to staging
-              files_added=0
-              while read -r file; do
-                # Remove leading ./ if present and convert to workspace path
-                clean_file=$(echo "$file" | sed 's|^\./||')
-                workspace_file="$clean_file"
-                
-                if [ -f "$workspace_file" ]; then
-                  git add "$workspace_file"
-                  files_added=$((files_added + 1))
-                fi
-              done < "$batch_file"
-              
-              # Create commit for this batch only if files were added
-              if [ $files_added -gt 0 ]; then
-                git commit -m "Batch $batch_count/$total_batches: Convert $files_added Sigma rules to UTMSTACK format" || echo "No changes in batch $batch_count"
-                echo "Committed batch $batch_count with $files_added files"
-              else
-                echo "No files to commit in batch $batch_count"
+              if [ -f "$workspace_file" ]; then
+                git add "$workspace_file"
+                files_added=$((files_added + 1))
               fi
-              
-              batch_count=$((batch_count + 1))
-            done
+            done < "$batch_file"
             
-            # Clean up batch files
-            rm -f batch_*
+            # Create commit for this batch only if files were added
+            if [ $files_added -gt 0 ]; then
+              git commit -m "Batch $batch_count/$total_batches: Convert $files_added Sigma rules to UTMSTACK format" || echo "No changes in batch $batch_count"
+              echo "Committed batch $batch_count with $files_added files"
+            else
+              echo "No files to commit in batch $batch_count"
+            fi
             
-            echo "All batches processed successfully"
-          else
-            echo "Skipping batch processing - no files to process"
-          fi
+            batch_count=$((batch_count + 1))
+          done
+            
+          # Clean up batch files
+          rm -f batch_*
+            
+          echo "All batches processed successfully"
 
       - name: Save new synchronization point
         run: |
@@ -161,27 +156,66 @@ jobs:
           git add .last_synced_commit
           git commit -m "Update synchronization state" || echo "No state changes to commit"
 
-      - name: Create branch and push commits
+      - name: Generate unique branch name
+        id: branch
+        if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
-          git checkout -b sync/automatic-update
-          git push origin sync/automatic-update --force
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          BRANCH_NAME="sync/automatic-update-${TIMESTAMP}"
+          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "Generated branch name: ${BRANCH_NAME}"
 
-      - name: Create Pull Request with gh CLI
+      - name: Create and push commits to new branch
+        id: push-branch
+        if: steps.modified-files.outputs.skip_conversion == 'false'
         run: |
+          cd ${{ github.workspace }}
+          echo "Creating branch: ${{ steps.branch.outputs.BRANCH_NAME }}"
+          git checkout -b ${{ steps.branch.outputs.BRANCH_NAME }}
+          git push origin ${{ steps.branch.outputs.BRANCH_NAME }}
+          echo "Successfully pushed commits to branch"
+          echo "should_create_pr=true" >> $GITHUB_OUTPUT
+          echo "No changes to push, skipping branch creation"
+          echo "should_create_pr=false" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.push-branch.outputs.should_create_pr == 'true'
+        run: |
+          cd ${{ github.workspace }}
+          
+          # Count commits in this branch vs main
+          COMMIT_COUNT=$(git rev-list --count main..${{ steps.branch.outputs.BRANCH_NAME }})
+          
+          # Generate dynamic PR body with metadata
+          TIMESTAMP=$(date '+%Y-%m-%d at %H:%M UTC')
+          
+          PR_BODY="**Automatic synchronization from source repository**
+
+          **Execution Details:**
+          - **Timestamp:** ${TIMESTAMP}
+          - **Branch:** \`${{ steps.branch.outputs.BRANCH_NAME }}\`
+          - **Commits:** ${COMMIT_COUNT} commits with batches of 10 files each
+          - **Source commit:** \`${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT || 'Initial sync' }}\`
+
+          **Summary:**
+          This PR contains converted Sigma rules organized in batches for easier review. Each commit represents a batch of up to 10 converted files.
+
+          **Review Guide:**
+          - Each commit can be reviewed independently
+          - Files are organized by data source (antivirus, aws, cisco, etc.)
+          - All rules follow UTMSTACK format standards
+
+          ---
+          _Generated automatically by GitHub Actions - Workflow run #${{ github.run_number }}_"
+          
           gh pr create \
-            --title "Sync: New Sigma rules from source repository" \
-            --body "**Automatic synchronization from source repository**
-
-          This PR contains converted Sigma rules organized in batches of 10 files per commit for easier review.
-
-          _Generated automatically by GitHub Actions_"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Handle existing PR (if any)
-        run: |
-          if gh pr view sync/automatic-update --repo ${{ github.repository }} >/dev/null 2>&1; then
-            echo "PR already exists, updating..."
-          fi
+            --title "Sync: Sigma rules (${TIMESTAMP})" \
+            --body "${PR_BODY}" \
+            --base main \
+            --head ${{ steps.branch.outputs.BRANCH_NAME }} \
+            --label "automation,sigma-rules,sync" \
+            --assignee "${{ github.actor }}"
+          
+          echo "Pull Request created successfully"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
