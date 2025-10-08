@@ -1,0 +1,16 @@
+- dataTypes:
+  - generic
+  name: OpenCanary - FTP Login Attempt
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Exfiltration
+  technique: T1190, T1021
+  adversary: UNKNOWN
+  description: Detects instances where an FTP service on an OpenCanary node has had
+    a login attempt.
+  references:
+  - https://opencanary.readthedocs.io/en/latest/starting/configuration.html#services-configuration
+  - https://github.com/thinkst/opencanary/blob/a0896adfcaf0328cfd5829fe10d2878c7445138e/opencanary/logger.py#L52
+  where: safe("log.logtype", "") == 2000

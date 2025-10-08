@@ -1,0 +1,18 @@
+- dataTypes:
+  - generic
+  name: Okta 2023 Breach Indicator Of Compromise
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: General Security
+  technique: Unknown
+  adversary: UNKNOWN
+  description: Detects new user account creation or activation with specific names
+    related to the Okta Support System 2023 breach. This rule can be enhanced by filtering
+    out known and legitimate username used in your environnement.
+  references:
+  - https://www.beyondtrust.com/blog/entry/okta-support-unit-breach
+  - https://developer.okta.com/docs/reference/api/event-types/
+  where: (safe("log.eventtype", "") == "user.lifecycle.create" || safe("log.eventtype",
+    "") == "user.lifecycle.activate") && safe("log.targetUserDisplayName", "").contains("svc_network_backup")
