@@ -1,0 +1,21 @@
+- dataTypes:
+  - wineventlog
+  name: Potential BlackByte Ransomware Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1485, T1498, T1059.001, T1140
+  adversary: UNKNOWN
+  description: Detects command line patterns used by BlackByte ransomware in different
+    operations
+  references:
+  - https://redcanary.com/blog/blackbyte-ransomware/
+  where: safe("log.image", "").startsWith("C:\\Users\\Public\\") && safe("log.commandLine",
+    "").contains(" -single ") || safe("log.commandLine", "").contains("del C:\\Windows\\System32\\Taskmgr.exe")
+    || safe("log.commandLine", "").contains(";Set-Service -StartupType Disabled $")
+    || safe("log.commandLine", "").contains("powershell -command \")$safe("log.x",
+    "") =[safe("log.SystemTextEncoding", "")]::safe("log.UnicodeGetstring", "")([safe("log.SystemConvert",
+    "")]::safe("log.fromBase64String", "")(" || CommandLine contains " safe("log.do",
+    "") safe("log.start", "") safe("log.wordpadExe", "") /safe("log.p", "") "

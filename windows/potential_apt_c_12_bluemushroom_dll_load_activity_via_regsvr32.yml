@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Potential APT-C-12 BlueMushroom DLL Load Activity Via Regsvr32
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1218.010
+  adversary: UNKNOWN
+  description: Detects potential BlueMushroom DLL loading activity via regsvr32 from
+    AppData Local
+  references:
+  - https://pbs.twimg.com/media/EF3yLGoWkAEGeLa?format=jpg
+  where: safe("log.commandLine", "").contains("regsvr32") && safe("log.commandLine",
+    "").contains("\\AppData\\Local\\") && safe("log.commandLine", "").contains(".dll")
+    && safe("log.commandLine", "").contains(",DllEntry")

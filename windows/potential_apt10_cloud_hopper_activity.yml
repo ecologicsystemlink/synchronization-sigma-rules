@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Potential APT10 Cloud Hopper Activity
+  impact:
+    confidentiality: 3
+    integrity: 3
+    availability: 3
+  category: Execution
+  technique: T1059.005
+  adversary: UNKNOWN
+  description: Detects potential process and execution activity related to APT10 Cloud
+    Hopper operation
+  references:
+  - https://web.archive.org/web/20180725233601/https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf
+  where: safe("log.image", "").endsWith("\\cscript.exe") && safe("log.commandLine",
+    "").contains(".vbs /shell ") || safe("log.commandLine", "").contains("csvde -f
+    C:\\windows\\web\\") && safe("log.commandLine", "").contains(".log")
