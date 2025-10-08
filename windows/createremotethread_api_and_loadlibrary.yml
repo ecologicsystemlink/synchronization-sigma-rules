@@ -1,0 +1,16 @@
+- dataTypes:
+  - wineventlog
+  name: CreateRemoteThread API and LoadLibrary
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Security Detection
+  technique: T1055.001
+  adversary: UNKNOWN
+  description: Detects potential use of CreateRemoteThread api and LoadLibrary function
+    to inject DLL into a process
+  references:
+  - https://threathunterplaybook.com/hunts/windows/180719-DLLProcessInjectionCreateRemoteThread/notebook.html
+  where: safe("log.startModule", "").endsWith("\\kernel32.dll") && safe("log.startFunction",
+    "") == "LoadLibraryA"

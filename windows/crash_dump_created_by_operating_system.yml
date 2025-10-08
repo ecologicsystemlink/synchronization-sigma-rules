@@ -1,0 +1,17 @@
+- dataTypes:
+  - wineventlog
+  name: Crash Dump Created By Operating System
+  impact:
+    confidentiality: 2
+    integrity: 2
+    availability: 2
+  category: Collection
+  technique: T1003.002, T1005
+  adversary: UNKNOWN
+  description: Detects "BugCheck" errors indicating the system rebooted due to a crash,
+    capturing the bugcheck code, dump file path, and report ID.
+  references:
+  - https://www.sans.edu/cyber-research/from-crash-compromise-unlocking-potential-windows-crash-dumps-offensive-security/
+  - https://jasonmull.com/articles/offensive/2025-05-12-windows-crash-dumps-offensive-security/
+  where: safe("log.providerName", "") == "Microsoft-Windows-WER-SystemErrorReporting"
+    && safe("log.eventCode", 0.0) == double(1001)
