@@ -66,7 +66,7 @@ jobs:
           cd ${{ github.workspace }}/source-repo
           if [ -z "${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}" ]; then
             echo "First execution, processing all files..."
-            find . -name "*.yml" \( -path "*/rules/*" -o -path "*/rules-*/*" \) > ${{ github.workspace }}/modified_files.txt
+            find . -name "*.yml" -path "*/rules-emerging-threats/*" > ${{ github.workspace }}/modified_files.txt
           else
             echo "Looking for changes since ${{ steps.last-commit.outputs.LAST_KNOWN_COMMIT }}..."
             
@@ -85,7 +85,7 @@ jobs:
               echo "Found modified .yml files, filtering for rules directories..."
               echo "$DIFF_OUTPUT"
               
-              echo "$DIFF_OUTPUT" | grep -E '^rules/|/rules/|rules-[^/]+/' > ${{ github.workspace }}/modified_files.txt
+              echo "$DIFF_OUTPUT" | grep -E '^rules-emerging-threats/|/rules-emerging-threats/' > ${{ github.workspace }}/modified_files.txt
               GREP_EXIT=$?
               
               if [ $GREP_EXIT -eq 0 ]; then
