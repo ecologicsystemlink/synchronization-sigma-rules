@@ -12,4 +12,5 @@
   references:
   - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html
   where: safe("log.eventsource", "") == "cloudtrail.amazonaws.com" && (safe("log.eventname",
-    "") == "StopLogging" || safe("log.eventname", "") == "UpdateTrail")
+    "") == "StopLogging" || safe("log.eventname", "") == "UpdateTrail" || safe("log.eventname",
+    "") == "StorageFile")
