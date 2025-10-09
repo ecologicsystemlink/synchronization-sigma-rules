@@ -291,6 +291,8 @@ class SigmaParser:
         """
         # Map common Sigma tactics to categories
         tactic_mappings = {
+            'attack.resource_development': 'Resource Development',
+            'attack.reconnaissance': 'Reconnaissance',
             'attack.initial_access': 'Initial Access',
             'attack.execution': 'Execution',
             'attack.persistence': 'Persistence',
