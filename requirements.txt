@@ -1,2 +1,4 @@
 sigma-cli==1.0.6
 pyyaml==6.0.2
+pysigma==0.11.19
+pySigma-backend-golangexpr==0.1.2

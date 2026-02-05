@@ -30,9 +30,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Sigma Backend Plugin
-        run: |
-          sigma plugin install golangexpr
+      #- name: Install Sigma Backend Plugin
+      #  run: |
+      #    sigma plugin install golangexpr
 
       - name: Verify Tools Installation
         run: |
